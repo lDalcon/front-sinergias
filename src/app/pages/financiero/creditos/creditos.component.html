@@ -1,0 +1,149 @@
+<p-toast></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+
+<div class="card">
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <p-button label="Crear Crédito" icon="pi pi-plus" (onClick)="agregarCredito()"></p-button>
+        </div>
+    </p-toolbar>
+
+    <!-- <p-table [value]="creditos">
+
+    </p-table> -->
+</div>
+
+<p-dialog #cred [modal]="true" header="Nuevo Crédito" [(visible)]="displayCredito" [style]="{width:'90vw'}">
+    <p-tabView [(activeIndex)]="indexTab">
+        <p-tabPanel header="Información del Crédito">
+            <div class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-4">
+                    <label>Empresa</label>
+                    <ut-regional [nit]="'860026895'" [appendTo]="cred" (onSelect)="credito.regional = $event"></ut-regional>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Moneda</label>
+                    <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="cred" (onSelect)="credito.moneda = $event"></ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Entidad Financiera</label>
+                    <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="cred" (onSelect)="credito.entfinanciera = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Linea Crédito</label>
+                    <ut-catalogo [idCatalogo]="'LINCRE'" [appendTo]="cred" (onSelect)="credito.lineacredito = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Pagaré</label>
+                    <input pInputText id="pagare" type="text" [(ngModel)]="credito.pagare" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Tipo de Garantía</label>
+                    <ut-catalogo [idCatalogo]="'TIPGAR'" [appendTo]="cred" (onSelect)="credito.tipogarantia = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Fecha Desembolso</label>
+                    <p-calendar [appendTo]="cred" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-3" *ngIf="credito.moneda">
+                    <label>Monto Deuda</label>
+                    <p-inputNumber inputId="currency-us" mode="currency" currency="USD" [prefix]="credito.moneda.config.prefix"
+                        locale="en-US" [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
+                        [(ngModel)]="credito.capital"></p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Periodo (Meses)</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="periodo" spinnerMode="horizontal"
+                        [step]="1" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="1" [max]="120"
+                        [(ngModel)]="credito.plazo">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Indexado</label>
+                    <ut-catalogo [idCatalogo]="'INDEX'" [appendTo]="cred" (onSelect)="credito.indexado = $event"></ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Spread</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="spread" spinnerMode="horizontal"
+                        [step]="0.25" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="5" suffix="%"
+                        [(ngModel)]="credito.spread">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Tipo de Interes</label>
+                    <ut-catalogo [idCatalogo]="'TIPINT'" [appendTo]="cred" (onSelect)="credito.tipointeres = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Amortización Capital</label>
+                    <ut-catalogo [idCatalogo]="'AMOCAP'" [appendTo]="cred" (onSelect)="credito.amortizacionk = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Amortización Interes</label>
+                    <ut-catalogo [idCatalogo]="'AMOINT'" [appendTo]="cred" (onSelect)="credito.amortizacionint = $event">
+                    </ut-catalogo>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Amortización" [disabled]="credito.amortizacion.length === 0">
+            <div class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-3">
+                    <label>Tasa Indx</label>
+                    <input pInputText id="tasa" type="text" [(ngModel)]="macroEconomico.tipo" [disabled]="true"/>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Fecha Tasa</label>
+                    <p-calendar [(ngModel)]="macroEconomico.fecha" [disabled]="true" dateFormat="dd/mm/yy" ></p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Valor</label>
+                    <p-inputNumber inputId="valor" mode="decimal" [disabled]="true" [suffix]="macroEconomico.unidad" [(ngModel)]="macroEconomico.valor">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <p-table [value]="credito.amortizacion" [scrollable]="true" [scrollHeight]="'500px'">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Periodo</th>
+                        <th>Fecha</th>
+                        <th>Tasa IdxEA</th>
+                        <th>Spread EA</th>
+                        <th>Tasa EA</th>
+                        <th>Saldo Deuda</th>
+                        <th>Pago Interes</th>
+                        <th>Pago Capital</th>
+                        <th>Pago Total</th>
+                        <th>Interes Causado</th>
+                        <th>Actualiza Indx</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-amortizacion>
+                    <tr>
+                        <td>{{amortizacion.nper}}</td>
+                        <td>{{amortizacion.fechaPeriodo | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{amortizacion.tasaIdxEA | number: '1.2-2'}}%</td>
+                        <td>{{amortizacion.spreadEA | number: '1.2-2'}}%</td>
+                        <td>{{amortizacion.tasaEA | number: '1.2-2'}}%</td>
+                        <td>{{credito.moneda.config.prefix}}${{amortizacion.saldoCapital | number: '1.2-2'}}</td>
+                        <td>{{credito.moneda.config.prefix}}${{amortizacion.valorInteres | number: '1.2-2'}}</td>
+                        <td>{{credito.moneda.config.prefix}}${{amortizacion.abonoCapital | number: '1.2-2'}}</td>
+                        <td>{{credito.moneda.config.prefix}}${{amortizacion.pagoTotal | number: '1.2-2'}}</td>
+                        <td>{{credito.moneda.config.prefix}}${{amortizacion.interesCausado | number: '1.2-2'}}</td>
+                        <td><p-tag *ngIf="amortizacion.actualizaIdx" icon="pi pi-check"></p-tag></td>
+                    </tr>
+                </ng-template>            
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+    
+    <ng-template pTemplate="footer">
+        <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-save'" (click)="procesarCredito()" [label]="indexTab === 0 ? 'Siguiente': 'Guardar'" class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>

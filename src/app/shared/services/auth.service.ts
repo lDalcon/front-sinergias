@@ -1,0 +1,54 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { SessionService } from './session.service';
+import { firstValueFrom } from 'rxjs';
+import { Usuario } from '../models/usuario.model';
+import { Router } from '@angular/router';
+
+const API = environment.apiIntegracion + 'auth'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor(
+    private http: HttpClient,
+    private sessionService: SessionService,
+    private router: Router
+  ) { }
+
+  login(params: { nick: string, pass: string }) {
+    return firstValueFrom(this.http.post(`${API}`, params))
+      .then((res: any) => {
+        this.sessionService.guardarToken(res.token);
+        res.usuario.menu = JSON.parse(res.usuario.menu).menu;
+        return <Usuario>res.usuario;
+      })
+      .then(usuario => {
+        this.sessionService.usuario = usuario;
+        this.sessionService.guardarUsuario(usuario)
+        switch (usuario.role) {
+          case 'ADMIN':
+            this.router.navigateByUrl('/admin')
+            break;
+          case 'COMPRAS':
+            this.router.navigateByUrl('/cloud-fleet/compras/RCSER')
+            break;
+          case 'EQP':
+            this.router.navigateByUrl('/cloud-fleet/eqp/integrar')
+            break;
+        
+          default:
+            break;
+        }
+        //TODO: cambiar path origen
+      })
+  }
+
+  logOut() {
+    sessionStorage.clear();
+    this.router.navigate(['auth', 'login'])
+  }
+}
