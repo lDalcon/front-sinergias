@@ -30,10 +30,10 @@ export class MacroeconomicosService {
   getMacroeconomicosByDateAndType(fecha: string, tipo: string) {
     return firstValueFrom(this.http.get(`${API}/${fecha}/${tipo}`, this.headers))
       .then((res: any) => {
-        res.data[0].fecha = new Date(res.data[0].fecha);
-        return res.data[0]
+        res.data.fecha = new Date(res.data.fecha);
+        return res;
       })
-      .then((res: any) => <MacroEconomicos>res)
+      .then((res: any) => <MacroEconomicos>res.data)
       .then(data => { return data; })
   }
 }

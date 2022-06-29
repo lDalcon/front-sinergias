@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.enProceso = true;
-    this.authService.login({nick: this.nick, pass: this.password})
+    this.authService.login({nick: this.nick, password: this.password})
       .then()
       .catch(err => {
         console.warn(err)

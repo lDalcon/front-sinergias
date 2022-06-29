@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ValorCatalogo } from '../../models/catalogo.model';
+import { Catalogo } from '../../models/catalogo.model';
+import { ValorCatalogo } from '../../models/valor-catalogo';
 import { CatalogoService } from '../../services/catalogo.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class CatalogoComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Output() onSelect: EventEmitter<ValorCatalogo> = new EventEmitter<ValorCatalogo>();
 
-  public valoresCatalogo: ValorCatalogo[] = [];
+  public catalogo: Catalogo = new Catalogo();
   public valorCatalogo: ValorCatalogo;
 
   constructor(
@@ -29,8 +30,8 @@ export class CatalogoComponent implements OnInit {
   getCatalogoById() {
     this.catalogoService.getCatalogoById(this.idCatalogo)
       .then(res => {
-        this.valoresCatalogo = res;
-        if(this.idValorCatalogo != -1) this.valorCatalogo = this.valoresCatalogo.find(x=> x.id === this.idValorCatalogo)
+        this.catalogo = res;
+        if(this.idValorCatalogo != -1) this.valorCatalogo = this.catalogo.valorcatalogo.find(x=> x.id === this.idValorCatalogo)
       })
       .catch(err => console.log(err))
   }

@@ -1,6 +1,5 @@
-import { ValorCatalogo } from "./catalogo.model"
 import { Regional } from "./regional.model";
-
+import { ValorCatalogo } from "./valor-catalogo";
 export class Credito {
     id: number;
     ano: number;
@@ -21,6 +20,7 @@ export class Credito {
     amortizacionk: ValorCatalogo;
     amortizacionint: ValorCatalogo;
     modindexado: string;
+    tasa: number;
     usuariocrea: string;
     fechacrea: Date;
     usuariomod: string;

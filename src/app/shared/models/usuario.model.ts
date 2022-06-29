@@ -1,4 +1,4 @@
-import { MenuItem } from "primeng/api";
+import { Menu } from "./menu.model";
 
 export class Usuario {
     nick: string = '';
@@ -6,5 +6,6 @@ export class Usuario {
     apellido: string = '';
     password: string = '';
     role: string = '';
-    menu: MenuItem[] = []
+    menu: Menu = new Menu();
+    estado: boolean = true;
 }

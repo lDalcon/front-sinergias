@@ -19,17 +19,16 @@ export class AuthService {
     private router: Router
   ) { }
 
-  login(params: { nick: string, pass: string }) {
+  login(params: { nick: string, password: string }) {
     return firstValueFrom(this.http.post(`${API}`, params))
       .then((res: any) => {
         this.sessionService.guardarToken(res.token);
-        res.usuario.menu = JSON.parse(res.usuario.menu).menu;
-        return <Usuario>res.usuario;
+        return <Usuario>res.data;
       })
       .then(usuario => {
         this.sessionService.usuario = usuario;
         this.sessionService.guardarUsuario(usuario)
-        switch (usuario.role) {
+        switch (usuario.menu.role) {
           case 'ADMIN':
             this.router.navigateByUrl('/admin')
             break;
@@ -39,7 +38,6 @@ export class AuthService {
           case 'EQP':
             this.router.navigateByUrl('/cloud-fleet/eqp/integrar')
             break;
-        
           default:
             break;
         }

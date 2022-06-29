@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Regional } from '../../models/regional.model';
-import { EmpresaService } from '../../services/empresa.service';
+import { RegionalService } from '../../services/regional.service';
 
 @Component({
   selector: 'ut-regional',
@@ -19,7 +19,7 @@ export class RegionalComponent implements OnInit {
   public regional: Regional;
 
   constructor(
-    private empresaService: EmpresaService
+    private regionalService: RegionalService
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class RegionalComponent implements OnInit {
   }
 
   getCatalogoById() {
-    this.empresaService.getReginalByNit(this.nit)
+    this.regionalService.getReginalByNit(this.nit)
       .then(res => {
         this.regionales = res;
         if(this.idRegional != -1) this.regional = this.regionales.find(x=> x.id === this.idRegional)

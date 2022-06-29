@@ -2,15 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Catalogo } from '../models/catalogo.model';
+import { Regional } from '../models/regional.model';
 import { SessionService } from './session.service';
 
-const API = environment.apiIntegracion + 'catalogo';
+const API = environment.apiIntegracion + 'regional';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CatalogoService {
+export class RegionalService {
 
   public headers: any;
 
@@ -21,9 +21,13 @@ export class CatalogoService {
     this.headers = { headers: { 'x-token': this.sessionService.token } }
   }
 
-  getCatalogoById(idCatalogo: string) {
-    return firstValueFrom(this.http.get(`${API}/${idCatalogo}`, this.headers))
-      .then((res: any) => <Catalogo>res.data)
+  getReginalByNit(nit: string) {
+    return firstValueFrom(this.http.get(`${API}/${nit}`, this.headers))
+      .then((res: any) => <Regional[]>res.data)
   }
-
 }
+
+
+
+
+

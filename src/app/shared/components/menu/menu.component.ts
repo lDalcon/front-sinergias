@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { SessionService } from '../../services/session.service';
 import { LayoutComponent } from '../layout/layout.component';
@@ -21,7 +22,7 @@ import { LayoutComponent } from '../layout/layout.component';
 
 export class MenuComponent implements OnInit, OnDestroy {
 
-  model: any[] = [];
+  model: MenuItem[] = [];
   menuSubscription: Subscription;
 
   constructor(

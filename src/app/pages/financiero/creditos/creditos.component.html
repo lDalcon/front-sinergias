@@ -20,11 +20,13 @@
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-4">
                     <label>Empresa</label>
-                    <ut-regional [nit]="'860026895'" [appendTo]="cred" (onSelect)="credito.regional = $event"></ut-regional>
+                    <ut-regional [nit]="'860026895'" [appendTo]="cred" (onSelect)="credito.regional = $event">
+                    </ut-regional>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Moneda</label>
-                    <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="cred" (onSelect)="credito.moneda = $event"></ut-catalogo>
+                    <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="cred" (onSelect)="credito.moneda = $event">
+                    </ut-catalogo>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Entidad Financiera</label>
@@ -47,31 +49,45 @@
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Fecha Desembolso</label>
-                    <p-calendar [appendTo]="cred" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy"></p-calendar>
+                    <p-calendar [appendTo]="cred" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy">
+                    </p-calendar>
                 </div>
                 <div class="field col-12 md:col-3" *ngIf="credito.moneda">
                     <label>Monto Deuda</label>
-                    <p-inputNumber inputId="currency-us" mode="currency" currency="USD" [prefix]="credito.moneda.config.prefix"
-                        locale="en-US" [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
-                        [(ngModel)]="credito.capital"></p-inputNumber>
+                    <p-inputNumber inputId="currency-us" mode="currency" currency="USD"
+                        [prefix]="credito.moneda.config.prefix" locale="en-US"
+                        [maxFractionDigits]="credito.moneda.config.maxFractionDigits" [(ngModel)]="credito.capital">
+                    </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Periodo (Meses)</label>
-                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="periodo" spinnerMode="horizontal"
-                        [step]="1" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
-                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="1" [max]="120"
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="periodo"
+                        spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="1" [max]="120"
                         [(ngModel)]="credito.plazo">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Indexado</label>
-                    <ut-catalogo [idCatalogo]="'INDEX'" [appendTo]="cred" (onSelect)="credito.indexado = $event"></ut-catalogo>
+                    <ut-catalogo [idCatalogo]="'INDEX'" [appendTo]="cred" (onSelect)="credito.indexado = $event">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3" *ngIf="credito.indexado?.config?.catalogo === false">
+                    <label>{{credito.indexado.descripcion}}</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="spread"
+                        spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="credito.indexado.config.min"
+                        [max]="credito.indexado.config.max" suffix="%" [(ngModel)]="credito.tasa">
+                    </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Spread</label>
-                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="spread" spinnerMode="horizontal"
-                        [step]="0.25" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
-                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="5" suffix="%"
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="spread"
+                        spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="5" suffix="%"
                         [(ngModel)]="credito.spread">
                     </p-inputNumber>
                 </div>
@@ -87,7 +103,8 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Amortización Interes</label>
-                    <ut-catalogo [idCatalogo]="'AMOINT'" [appendTo]="cred" (onSelect)="credito.amortizacionint = $event">
+                    <ut-catalogo [idCatalogo]="'AMOINT'" [appendTo]="cred"
+                        (onSelect)="credito.amortizacionint = $event">
                     </ut-catalogo>
                 </div>
             </div>
@@ -96,15 +113,16 @@
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-3">
                     <label>Tasa Indx</label>
-                    <input pInputText id="tasa" type="text" [(ngModel)]="macroEconomico.tipo" [disabled]="true"/>
+                    <input pInputText id="tasa" type="text" [(ngModel)]="macroEconomico.tipo" [disabled]="true" />
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Fecha Tasa</label>
-                    <p-calendar [(ngModel)]="macroEconomico.fecha" [disabled]="true" dateFormat="dd/mm/yy" ></p-calendar>
+                    <p-calendar [(ngModel)]="macroEconomico.fecha" [disabled]="true" dateFormat="dd/mm/yy"></p-calendar>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Valor</label>
-                    <p-inputNumber inputId="valor" mode="decimal" [disabled]="true" [suffix]="macroEconomico.unidad" [(ngModel)]="macroEconomico.valor">
+                    <p-inputNumber inputId="valor" mode="decimal" [disabled]="true" [suffix]="macroEconomico.unidad"
+                        [(ngModel)]="macroEconomico.valor">
                     </p-inputNumber>
                 </div>
             </div>
@@ -128,22 +146,25 @@
                     <tr>
                         <td>{{amortizacion.nper}}</td>
                         <td>{{amortizacion.fechaPeriodo | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{amortizacion.tasaIdxEA | number: '1.2-2'}}%</td>
-                        <td>{{amortizacion.spreadEA | number: '1.2-2'}}%</td>
-                        <td>{{amortizacion.tasaEA | number: '1.2-2'}}%</td>
+                        <td>{{amortizacion.tasaIdxEA * 100 | number: '1.2-2'}}%</td>
+                        <td>{{amortizacion.spreadEA * 100 | number: '1.2-2'}}%</td>
+                        <td>{{amortizacion.tasaEA * 100 | number: '1.2-2'}}%</td>
                         <td>{{credito.moneda.config.prefix}}${{amortizacion.saldoCapital | number: '1.2-2'}}</td>
                         <td>{{credito.moneda.config.prefix}}${{amortizacion.valorInteres | number: '1.2-2'}}</td>
                         <td>{{credito.moneda.config.prefix}}${{amortizacion.abonoCapital | number: '1.2-2'}}</td>
                         <td>{{credito.moneda.config.prefix}}${{amortizacion.pagoTotal | number: '1.2-2'}}</td>
                         <td>{{credito.moneda.config.prefix}}${{amortizacion.interesCausado | number: '1.2-2'}}</td>
-                        <td><p-tag *ngIf="amortizacion.actualizaIdx" icon="pi pi-check"></p-tag></td>
+                        <td>
+                            <p-tag *ngIf="amortizacion.actualizaIdx" icon="pi pi-check"></p-tag>
+                        </td>
                     </tr>
-                </ng-template>            
+                </ng-template>
             </p-table>
         </p-tabPanel>
     </p-tabView>
-    
+
     <ng-template pTemplate="footer">
-        <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-save'" (click)="procesarCredito()" [label]="indexTab === 0 ? 'Siguiente': 'Guardar'" class="p-button-outlined"></button>
+        <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-save'" (click)="procesarCredito()"
+            [label]="indexTab === 0 ? 'Siguiente': 'Guardar'" class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>

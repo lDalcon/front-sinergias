@@ -15,8 +15,8 @@ export class SessionService {
   constructor() {
     this._token = sessionStorage.getItem('token') || '';
     this._usuario = JSON.parse(sessionStorage.getItem('usr') || JSON.stringify(new Usuario()));
-    if(this._usuario.menu.length != 0 )this.menu$.emit(this._usuario.menu);
-  } 
+    if (this._usuario.menu.opciones.length != 0) this.menu$.emit(this._usuario.menu.opciones);
+  }
 
   get usuario() {
     return this._usuario;
@@ -31,7 +31,7 @@ export class SessionService {
   }
 
   guardarUsuario(usuario: Usuario) {
-    this.menu$.emit(usuario.menu)
+    this.menu$.emit(usuario.menu.opciones)
     sessionStorage.setItem('usr', JSON.stringify(usuario));
   }
 
@@ -46,6 +46,6 @@ export class SessionService {
   }
 
   refreshMenu() {
-    this.menu$.emit(this._usuario.menu)
+    this.menu$.emit(this._usuario.menu.opciones)
   }
 }

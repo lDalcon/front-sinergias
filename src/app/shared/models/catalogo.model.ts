@@ -1,6 +1,8 @@
-export class ValorCatalogo {
-    id: number = -1;
-    ctgid: string = '';
-    descripcion: string = '';
-    config: object = {};
+import { ValorCatalogo } from "./valor-catalogo";
+
+export class Catalogo {
+    id: string = ''
+    descripcion: string = ''
+    config: object = {}
+    valorcatalogo: ValorCatalogo[] = [];
 }
