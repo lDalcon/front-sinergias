@@ -19,7 +19,6 @@ export class Credito {
     tipointeres: ValorCatalogo;
     amortizacionk: ValorCatalogo;
     amortizacionint: ValorCatalogo;
-    modindexado: string;
     tasa: number;
     usuariocrea: string;
     fechacrea: Date;

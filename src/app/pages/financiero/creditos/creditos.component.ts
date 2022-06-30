@@ -5,6 +5,7 @@ import { MacroeconomicosService } from 'src/app/shared/services/macroeconomicos.
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { CreditoService } from 'src/app/shared/services/credito.service';
+import { ICredito } from 'src/app/shared/interface/credito.interface';
 
 @Component({
   selector: 'app-creditos',
@@ -14,7 +15,7 @@ import { CreditoService } from 'src/app/shared/services/credito.service';
 })
 export class CreditosComponent implements OnInit {
 
-  public creditos: Credito[] = [];
+  public creditos: ICredito[] = [];
   public credito: Credito = new Credito();
   public isLoading: boolean = false;
   public displayCredito: boolean = false;
@@ -27,12 +28,25 @@ export class CreditosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.listarCreditos()
   }
 
   agregarCredito() {
     this.credito = new Credito();
     this.displayCredito = true;
+  }
+
+  listarCreditos() {
+    this.isLoading = true;
+    this.creditoService.listarCreditos()
+      .then(res => {
+        this.isLoading = false;
+        this.creditos = res;
+      })
+      .catch(err => {
+        this.isLoading = false;
+        console.log(err)
+      })
   }
 
   procesarCredito() {
@@ -56,7 +70,17 @@ export class CreditosComponent implements OnInit {
   }
 
   guardarCredito() {
-
+    this.isLoading = true;
+    this.creditoService.crearCredito(this.credito)
+      .then(res => {
+        this.isLoading = false;
+        this.displayCredito = false;
+        this.messageService.add({ severity: 'success', detail: res.message })
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.messageService.add({ severity: 'success', detail: err?.error?.message || 'Error al crear el crédito.' })
+      })
   }
 
   getTasaIndexada() {

@@ -9,9 +9,28 @@
         </div>
     </p-toolbar>
 
-    <!-- <p-table [value]="creditos">
-
-    </p-table> -->
+    <p-table [value]="creditos" [scrollable]="true" [rowHover]="true" [scrollHeight]="'500px'">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th colspan="2">Entidad</th>
+                <th>Moneda</th>
+                <th>V. Desembolso</th>
+                <th>Fecha Desembolso</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-credito>
+            <tr>
+                <td> {{credito.id }} </td>
+                <td colspan="2"> {{credito.entfinanciera }} </td>
+                <td> {{credito.moneda }} </td>
+                <td style="justify-content: flex-end;"> {{credito.capital | currency }} </td>
+                <td> {{credito.fechadesembolso | date: 'dd/MM/yyyy' }} </td>
+                <td></td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
 
 <p-dialog #cred [modal]="true" header="Nuevo Crédito" [(visible)]="displayCredito" [style]="{width:'90vw'}">
@@ -139,7 +158,6 @@
                         <th>Pago Capital</th>
                         <th>Pago Total</th>
                         <th>Interes Causado</th>
-                        <th>Actualiza Indx</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-amortizacion>
@@ -149,14 +167,11 @@
                         <td>{{amortizacion.tasaIdxEA * 100 | number: '1.2-2'}}%</td>
                         <td>{{amortizacion.spreadEA * 100 | number: '1.2-2'}}%</td>
                         <td>{{amortizacion.tasaEA * 100 | number: '1.2-2'}}%</td>
-                        <td>{{credito.moneda.config.prefix}}${{amortizacion.saldoCapital | number: '1.2-2'}}</td>
-                        <td>{{credito.moneda.config.prefix}}${{amortizacion.valorInteres | number: '1.2-2'}}</td>
-                        <td>{{credito.moneda.config.prefix}}${{amortizacion.abonoCapital | number: '1.2-2'}}</td>
-                        <td>{{credito.moneda.config.prefix}}${{amortizacion.pagoTotal | number: '1.2-2'}}</td>
-                        <td>{{credito.moneda.config.prefix}}${{amortizacion.interesCausado | number: '1.2-2'}}</td>
-                        <td>
-                            <p-tag *ngIf="amortizacion.actualizaIdx" icon="pi pi-check"></p-tag>
-                        </td>
+                        <td style="justify-content: flex-end">{{amortizacion.saldoCapital | number: '1.2-2'}} {{credito.moneda.config.prefix}}</td>
+                        <td style="justify-content: flex-end">{{amortizacion.valorInteres | number: '1.2-2'}} {{credito.moneda.config.prefix}}</td>
+                        <td style="justify-content: flex-end">{{amortizacion.abonoCapital | number: '1.2-2'}} {{credito.moneda.config.prefix}}</td>
+                        <td style="justify-content: flex-end">{{amortizacion.pagoTotal | number: '1.2-2'}} {{credito.moneda.config.prefix}}</td>
+                        <td style="justify-content: flex-end">{{amortizacion.interesCausado | number: '1.2-2'}} {{credito.moneda.config.prefix}}</td>
                     </tr>
                 </ng-template>
             </p-table>
