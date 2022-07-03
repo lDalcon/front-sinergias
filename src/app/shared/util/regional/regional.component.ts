@@ -10,9 +10,9 @@ import { RegionalService } from '../../services/regional.service';
 export class RegionalComponent implements OnInit {
 
   @Input() nit: string = '';
-  @Input() idRegional: number = -1;
   @Input() appendTo: any;
   @Input() disabled: boolean = false;
+  @Input() default: Regional;
   @Output() onSelect: EventEmitter<Regional> = new EventEmitter<Regional>();
 
   public regionales: Regional[] = [];
@@ -30,7 +30,7 @@ export class RegionalComponent implements OnInit {
     this.regionalService.getReginalByNit(this.nit)
       .then(res => {
         this.regionales = res;
-        if(this.idRegional != -1) this.regional = this.regionales.find(x=> x.id === this.idRegional)
+        if (this.default) this.regional = this.default;
       })
       .catch(err => console.log(err))
   }

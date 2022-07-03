@@ -12,21 +12,16 @@ const API = environment.apiIntegracion + 'usuario'
 })
 export class UsuarioService {
 
-  private headers: any;
-
   constructor(
-    private http: HttpClient,
-    private sessionService: SessionService
-  ) {
-    this.headers = { headers: { 'x-token': this.sessionService.token } }
-  }
+    private http: HttpClient
+  ) { }
 
   crearUsuario(usuario: Usuario) {
-    return firstValueFrom(this.http.post(`${API}`, usuario, this.headers))
+    return firstValueFrom(this.http.post(`${API}`, usuario))
   }
 
   getUsuarios() {
-    return firstValueFrom(this.http.get(`${API}`, this.headers))
+    return firstValueFrom(this.http.get(`${API}`))
       .then((res: any) => <Usuario[]>res.data)
       .then(data => { return data; })
   }

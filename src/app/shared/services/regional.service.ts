@@ -12,17 +12,12 @@ const API = environment.apiIntegracion + 'regional';
 })
 export class RegionalService {
 
-  public headers: any;
-
   constructor(
     private http: HttpClient,
-    private sessionService: SessionService
-  ) {
-    this.headers = { headers: { 'x-token': this.sessionService.token } }
-  }
+  ) { }
 
   getReginalByNit(nit: string) {
-    return firstValueFrom(this.http.get(`${API}/${nit}`, this.headers))
+    return firstValueFrom(this.http.get(`${API}/${nit}`))
       .then((res: any) => <Regional[]>res.data)
   }
 }

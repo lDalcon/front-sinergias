@@ -1,0 +1,31 @@
+<p-table #dt [value]="data" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" responsiveLayout="scroll" [paginator]="true">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Periodo</th>
+            <th>Fecha</th>
+            <th>Tasa IdxEA</th>
+            <th>Spread EA</th>
+            <th>Tasa EA</th>
+            <th>Saldo Deuda</th>
+            <th>Pago Interes</th>
+            <th>Pago Capital</th>
+            <th>Pago Total</th>
+            <th>Interes Causado</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-amortizacion>
+        <tr>
+            <td>{{amortizacion.nper}}</td>
+            <td>{{amortizacion.fechaPeriodo | date: 'dd/MM/yyyy'}}</td>
+            <td>{{amortizacion.tasaIdxEA * 100 | number: '1.2-2'}}%</td>
+            <td>{{amortizacion.spreadEA * 100 | number: '1.2-2'}}%</td>
+            <td>{{amortizacion.tasaEA * 100 | number: '1.2-2'}}%</td>
+            <td style="text-align: right;">{{amortizacion.saldoCapital | number: '1.2-2'}} {{prefix}}</td>
+            <td style="text-align: right;">{{amortizacion.valorInteres | number: '1.2-2'}} {{prefix}}</td>
+            <td style="text-align: right;">{{amortizacion.abonoCapital | number: '1.2-2'}} {{prefix}}</td>
+            <td style="text-align: right;">{{amortizacion.pagoTotal | number: '1.2-2'}} {{prefix}}</td>
+            <td style="text-align: right;">{{amortizacion.interesCausado | number: '1.2-2'}} {{prefix}}</td>
+        </tr>
+    </ng-template>
+</p-table>

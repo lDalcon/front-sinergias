@@ -4,7 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ICredito } from '../interface/credito.interface';
 import { Credito } from '../models/credito.model';
-import { SessionService } from './session.service';
 
 const API = environment.apiIntegracion + 'credito'
 @Injectable({
@@ -12,17 +11,12 @@ const API = environment.apiIntegracion + 'credito'
 })
 export class CreditoService {
 
-  headers: any;
-
   constructor(
     private http: HttpClient,
-    private sessionService: SessionService
-  ) {
-    this.headers = { headers: { 'x-token': this.sessionService.token } }
-  }
+  ) { }
 
   async simularCredito(credito: Credito): Promise<Credito> {
-    return firstValueFrom(this.http.post(`${API}/simular`, credito, this.headers))
+    return firstValueFrom(this.http.post(`${API}/simular`, credito))
       .then((res: any) => <Credito>res.data)
       .then(res => {
         res.fechadesembolso = new Date(res.fechadesembolso);
@@ -31,16 +25,32 @@ export class CreditoService {
       .then(data => { return data; })
   }
 
-  async crearCredito(credito: Credito){
-    return firstValueFrom(this.http.post(`${API}`, credito, this.headers))
-    .then((res: any)=> <{ok:boolean, message: string}>res)
-    .then(data => { return data; })
+  async crearCredito(credito: Credito) {
+    return firstValueFrom(this.http.post(`${API}`, credito))
+      .then((res: any) => <{ ok: boolean, message: string }>res)
+      .then(data => { return data; })
   }
 
-  async listarCreditos(){
-    return firstValueFrom(this.http.get(`${API}`, this.headers))
-    .then((res: any)=> <ICredito[]>res.data)
-    .then(data => { return data; })
+  async listarCreditos() {
+    return firstValueFrom(this.http.get(`${API}`))
+      .then((res: any) => <ICredito[]>res.data)
+      .then(data => { return data; })
+  }
+
+  async obtenerCredito(id: number) {
+    return firstValueFrom(this.http.get(`${API}/${id}`))
+      .then((res: any) => <Credito>res.data)
+      .then(credito => {
+        credito.fechacrea = new Date(credito.fechacrea);
+        credito.fechamod = new Date(credito.fechamod);
+        credito.fechadesembolso = new Date(credito.fechadesembolso);
+        return credito;
+      })
+      .then(data => { return data; })
+  }
+
+  async validarPagare(pagare: string, entfinanciera: number){
+    return firstValueFrom(this.http.get(`${API}/${pagare}/${entfinanciera}`))
   }
 
 }

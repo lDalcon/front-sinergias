@@ -7,6 +7,7 @@ import { PrimeNgModule } from './libs/prime-ng.module';
 import { MenuItemComponent } from './components/menu-item/menu-item.component';
 import { CatalogoComponent } from './util/catalogo/catalogo.component';
 import { RegionalComponent } from './util/regional/regional.component';
+import { AmortizacionComponent } from './util/amortizacion/amortizacion.component';
 
 
 
@@ -17,7 +18,8 @@ import { RegionalComponent } from './util/regional/regional.component';
     MenuComponent,
     MenuItemComponent,
     CatalogoComponent,
-    RegionalComponent
+    RegionalComponent,
+    AmortizacionComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { RegionalComponent } from './util/regional/regional.component';
     PrimeNgModule,
     MenuItemComponent,
     CatalogoComponent,
-    RegionalComponent
+    RegionalComponent,
+    AmortizacionComponent
   ]
 })
 export class SharedModule { }

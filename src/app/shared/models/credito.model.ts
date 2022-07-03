@@ -19,6 +19,8 @@ export class Credito {
     tipointeres: ValorCatalogo;
     amortizacionk: ValorCatalogo;
     amortizacionint: ValorCatalogo;
+    saldoasignacion: number;
+    estado: string;
     tasa: number;
     usuariocrea: string;
     fechacrea: Date;

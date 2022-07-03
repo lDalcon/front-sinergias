@@ -11,9 +11,9 @@ import { CatalogoService } from '../../services/catalogo.service';
 export class CatalogoComponent implements OnInit {
 
   @Input() idCatalogo: string = '';
-  @Input() idValorCatalogo: number = -1;
   @Input() appendTo: any;
   @Input() disabled: boolean = false;
+  @Input() default: ValorCatalogo;
   @Output() onSelect: EventEmitter<ValorCatalogo> = new EventEmitter<ValorCatalogo>();
 
   public catalogo: Catalogo = new Catalogo();
@@ -31,7 +31,7 @@ export class CatalogoComponent implements OnInit {
     this.catalogoService.getCatalogoById(this.idCatalogo)
       .then(res => {
         this.catalogo = res;
-        if(this.idValorCatalogo != -1) this.valorCatalogo = this.catalogo.valorcatalogo.find(x=> x.id === this.idValorCatalogo)
+        if (this.default) this.valorCatalogo = this.default;
       })
       .catch(err => console.log(err))
   }

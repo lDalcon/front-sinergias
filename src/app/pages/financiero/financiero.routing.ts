@@ -5,10 +5,10 @@ import { CreditosComponent } from './creditos/creditos.component';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'creditos',
+        redirectTo: 'obligaciones',
     },
     {
-        path: 'creditos',
+        path: 'obligaciones',
         component: CreditosComponent
     }
 ];

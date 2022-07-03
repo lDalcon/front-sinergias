@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { PrimeNgModule } from './shared/libs/prime-ng.module';
 import { ConfigService } from './shared/services/util/app.config.service';
 import { MenuService } from './shared/services/util/app.menu.service';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MenuService } from './shared/services/util/app.menu.service';
   ],
   providers: [
     ConfigService,
-    MenuService
+    MenuService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

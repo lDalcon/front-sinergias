@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Catalogo } from '../models/catalogo.model';
-import { SessionService } from './session.service';
 
 const API = environment.apiIntegracion + 'catalogo';
 
@@ -12,17 +11,12 @@ const API = environment.apiIntegracion + 'catalogo';
 })
 export class CatalogoService {
 
-  public headers: any;
-
   constructor(
     private http: HttpClient,
-    private sessionService: SessionService
-  ) {
-    this.headers = { headers: { 'x-token': this.sessionService.token } }
-  }
+  ) { }
 
   getCatalogoById(idCatalogo: string) {
-    return firstValueFrom(this.http.get(`${API}/${idCatalogo}`, this.headers))
+    return firstValueFrom(this.http.get(`${API}/${idCatalogo}`))
       .then((res: any) => <Catalogo>res.data)
   }
 

@@ -4,8 +4,6 @@ import { AdminRoutingModule } from './admin.routing';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
-
 @NgModule({
   declarations: [
     UsuariosComponent
