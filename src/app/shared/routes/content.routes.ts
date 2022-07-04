@@ -9,14 +9,8 @@ export const content: Routes = [
     path: 'financiero',
     loadChildren: () => import('../../pages/financiero/financiero.module').then(m => m.FinancieroModule)
   },
-//   {
-//     path: 'reportes',
-//     canActivate: [AuthGuard],
-//     loadChildren: () => import('../../pages/reportes/reportes.module').then(m => m.ReportesModule)
-//   },
-//   {
-//     path: 'procesos',
-//     canActivate: [AuthGuard],
-//     loadChildren: () => import('../../pages/procesos/procesos.module').then(m => m.ProcesosModule)
-//   }
+  {
+    path: 'dashboard',
+    loadChildren: () => import('../../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
 ];

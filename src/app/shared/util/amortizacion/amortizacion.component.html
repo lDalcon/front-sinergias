@@ -1,5 +1,5 @@
-<p-table #dt [value]="data" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" responsiveLayout="scroll" [paginator]="true">
+<p-table #dt [value]="data" [rowHover]="true" scrollable="true"
+styleClass="mt-3" responsiveLayout="scroll" scrollHeight="400px" >
     <ng-template pTemplate="header">
         <tr>
             <th>Periodo</th>

@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { MacroeconomicosComponent } from './macroeconomicos/macroeconomicos.component';
 
 const routes: Routes = [
     {
@@ -10,6 +11,10 @@ const routes: Routes = [
     {
         path: 'usuarios',
         component: UsuariosComponent
+    },
+    {
+        path: 'macroeconomicos',
+        component: MacroeconomicosComponent
     }
 ];
 

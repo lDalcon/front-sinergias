@@ -15,16 +15,16 @@ import * as moment from 'moment';
 })
 export class CreditosComponent implements OnInit {
 
+  public canEdit: boolean = false;
   public credito: Credito = new Credito();
   public creditos: ICredito[] = [];
   public displayCredito: boolean = false;
   public displayCreditoDetalle: boolean = false;
+  public idCreditoSelect: number = 0;
   public indexTab: number = 0;
   public isLoading: boolean = false;
-  public macroEconomico: MacroEconomicos = new MacroEconomicos();
   public items: MenuItem[] = [];
-  public idCreditoSelect: number = 0;
-  public canEdit: boolean = false;
+  public macroEconomico: MacroEconomicos = new MacroEconomicos();
 
   constructor(
     private creditoService: CreditoService,

@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CreditosComponent } from './creditos/creditos.component';
+import { ForwardComponent } from './forward/forward.component';
 
 const routes: Routes = [
     {
@@ -10,6 +11,10 @@ const routes: Routes = [
     {
         path: 'obligaciones',
         component: CreditosComponent
+    },
+    {
+        path: 'forward',
+        component: ForwardComponent
     }
 ];
 

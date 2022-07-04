@@ -10,10 +10,10 @@ import { CatalogoService } from '../../services/catalogo.service';
 })
 export class CatalogoComponent implements OnInit {
 
-  @Input() idCatalogo: string = '';
   @Input() appendTo: any;
-  @Input() disabled: boolean = false;
   @Input() default: ValorCatalogo;
+  @Input() disabled: boolean = false;
+  @Input() idCatalogo: string = '';
   @Output() onSelect: EventEmitter<ValorCatalogo> = new EventEmitter<ValorCatalogo>();
 
   public catalogo: Catalogo = new Catalogo();

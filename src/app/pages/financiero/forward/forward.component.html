@@ -1,0 +1,113 @@
+<p-toast [key]="'ext'"></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+
+<div class="card" #card>
+    <p-table #dt [value]="forwards" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
+        [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
+        [filterDelay]="0" [globalFilterFields]="['regional','entfinanciera','estado']">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <span class="p-input-icon-right">
+                    <p-button label="Crear Forward" icon="pi pi-plus" (onClick)="agregarForward()"></p-button>
+                </span>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Busqueda" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th>Regional</th>
+                <th>Entidad</th>
+                <th>Valor</th>
+                <th>Fecha Operación</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-forward>
+            <tr>
+                <td> {{forward.id }} </td>
+                <td> {{forward.regional }} </td>
+                <td> {{forward.entfinanciera }} </td>
+                <td style="text-align: right;"> {{forward.valorusd | currency }} </td>
+                <td> {{forward.fechaoperacion | date: 'dd/MM/yyyy' }} </td>
+                <td> {{forward.estado }} </td>
+                <td>
+                    <p-splitButton label="+" [model]="this.items" [appendTo]="card"
+                        (onDropdownClick)="idforwardSelect = forward.id"></p-splitButton>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog #fw [modal]="true" header="Crear Forward" *ngIf="displayForward" [(visible)]="displayForward"
+    [style]="{width:'90vw'}">
+    <p-toast [key]="'dialog'"></p-toast>
+
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-4">
+            <label>Empresa</label>
+            <ut-regional [nit]="'860026895'" [appendTo]="credV" (onSelect)="forward.regional = $event">
+            </ut-regional>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Fecha Operacion</label>
+            <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechaoperacion" dateFormat="dd/mm/yy">
+            </p-calendar>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Fecha Cumplimiento</label>
+            <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechacumplimiento" dateFormat="dd/mm/yy" [minDate]="forward.fechaoperacion">
+            </p-calendar>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Entidad Financiera</label>
+            <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="fw" (onSelect)="forward.entfinanciera = $event">
+            </ut-catalogo>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Valor USD</label>
+            <p-inputNumber [showButtons]="false" inputId="valorusd" mode="currency" currency="USD" [min]="0"
+                prefix="USD" [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Tasa SPOT</label>
+            <p-inputNumber [showButtons]="false" inputId="tasaspot" mode="currency" currency="USD" [min]="0"
+                prefix="USD" [(ngModel)]="forward.tasaspot">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Devaluación</label>
+            <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="devaluacion" spinnerMode="horizontal"
+                [step]="0.25" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="50"
+                suffix="%" [(ngModel)]="forward.devaluacion">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Tasa Forward</label>
+            <p-inputNumber [showButtons]="false" inputId="tasaforward" mode="currency" currency="USD" [min]="0"
+                prefix="USD" [(ngModel)]="forward.tasaforward" (focusout)="calcularValorCOP()">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Valor COP</label>
+            <p-inputNumber [showButtons]="false" inputId="valorcop" mode="currency" currency="USD" [min]="0"
+                prefix="COP" [(ngModel)]="forward.valorcop" [disabled]="true">
+            </p-inputNumber>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-save'" (click)="guardarForward()"
+            [label]="indexTab === 0 ? 'Siguiente': 'Guardar'" class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>

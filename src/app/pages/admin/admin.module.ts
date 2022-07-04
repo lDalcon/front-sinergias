@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin.routing';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MacroeconomicosComponent } from './macroeconomicos/macroeconomicos.component';
 
 @NgModule({
   declarations: [
-    UsuariosComponent
+    UsuariosComponent,
+    MacroeconomicosComponent
   ],
   imports: [
     AdminRoutingModule,

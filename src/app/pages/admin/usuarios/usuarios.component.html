@@ -23,7 +23,7 @@
                     <tr>
                         <td>{{usuario.nick}}</td>
                         <td>{{usuario.nombre}} {{usuario.apellido}}</td>
-                        <td>{{usuario.role}}</td>
+                        <td>{{usuario.menu.role}}</td>
                         <td></td>
                     </tr>
                 </ng-template>
@@ -34,17 +34,21 @@
 
 <p-dialog #dialog header="Crear Usuario" [(visible)]="verModalAddUsuario" [modal]="true">
     <div class="p-fluid p-formgrid grid">
-        <div class="field col-12 md:col-6">
-            <label htmlFor="nombres">Nombre</label>
-            <input pInputText id="nombres" type="text" [(ngModel)]="usuario.nombre" />
-        </div>
-        <div class="field col-12 md:col-6">
-            <label htmlFor="apellidos">Apellido</label>
-            <input pInputText id="apellidos" type="text" [(ngModel)]="usuario.apellido" />
-        </div>
         <div class="field col-12 md:col-4">
             <label htmlFor="nick">Usuario</label>
             <input pInputText id="nick" type="text" [(ngModel)]="usuario.nick" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="nombres">Nombre</label>
+            <input pInputText id="nombres" type="text" [(ngModel)]="usuario.nombres" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="apellidos">Apellido</label>
+            <input pInputText id="apellidos" type="text" [(ngModel)]="usuario.apellidos" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="password">email</label>
+            <input pInputText id="email" type="email" [(ngModel)]="usuario.email" />
         </div>
         <div class="field col-12 md:col-4">
             <label htmlFor="password">Contraseña</label>
@@ -52,7 +56,7 @@
         </div>
         <div class="field col-12 md:col-4">
             <label htmlFor="state">Role</label>
-            <p-dropdown placeholder="Seleccione un role" [options]="roles" [(ngModel)]="usuario.role"
+            <p-dropdown placeholder="Seleccione un role" [options]="roles" [(ngModel)]="usuario.menu.role"
                 [appendTo]="dialog"></p-dropdown>
         </div>
     </div>

@@ -9,10 +9,10 @@ import { RegionalService } from '../../services/regional.service';
 })
 export class RegionalComponent implements OnInit {
 
-  @Input() nit: string = '';
   @Input() appendTo: any;
-  @Input() disabled: boolean = false;
   @Input() default: Regional;
+  @Input() disabled: boolean = false;
+  @Input() nit: string = '';
   @Output() onSelect: EventEmitter<Regional> = new EventEmitter<Regional>();
 
   public regionales: Regional[] = [];
