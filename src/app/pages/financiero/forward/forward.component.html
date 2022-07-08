@@ -81,7 +81,7 @@
         <div class="field col-12 md:col-3">
             <label>Tasa SPOT</label>
             <p-inputNumber [showButtons]="false" inputId="tasaspot" mode="currency" currency="USD" [min]="0"
-                prefix="USD" [(ngModel)]="forward.tasaspot">
+                prefix="COP" [(ngModel)]="forward.tasaspot">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-3">
@@ -95,7 +95,7 @@
         <div class="field col-12 md:col-3">
             <label>Tasa Forward</label>
             <p-inputNumber [showButtons]="false" inputId="tasaforward" mode="currency" currency="USD" [min]="0"
-                prefix="USD" [(ngModel)]="forward.tasaforward" (focusout)="calcularValorCOP()">
+                prefix="COP" [(ngModel)]="forward.tasaforward" (focusout)="calcularValorCOP()">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-3">

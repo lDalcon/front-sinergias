@@ -21,11 +21,11 @@ styleClass="mt-3" responsiveLayout="scroll" scrollHeight="400px" >
             <td>{{amortizacion.tasaIdxEA * 100 | number: '1.2-2'}}%</td>
             <td>{{amortizacion.spreadEA * 100 | number: '1.2-2'}}%</td>
             <td>{{amortizacion.tasaEA * 100 | number: '1.2-2'}}%</td>
-            <td style="text-align: right;">{{amortizacion.saldoCapital | number: '1.2-2'}} {{prefix}}</td>
-            <td style="text-align: right;">{{amortizacion.valorInteres | number: '1.2-2'}} {{prefix}}</td>
-            <td style="text-align: right;">{{amortizacion.abonoCapital | number: '1.2-2'}} {{prefix}}</td>
-            <td style="text-align: right;">{{amortizacion.pagoTotal | number: '1.2-2'}} {{prefix}}</td>
-            <td style="text-align: right;">{{amortizacion.interesCausado | number: '1.2-2'}} {{prefix}}</td>
+            <td class="number-rigth">{{amortizacion.saldoCapital | number: '1.2-2'}} {{prefix}}</td>
+            <td class="number-rigth">{{amortizacion.valorInteres | number: '1.2-2'}} {{prefix}}</td>
+            <td class="number-rigth">{{amortizacion.abonoCapital | number: '1.2-2'}} {{prefix}}</td>
+            <td class="number-rigth">{{amortizacion.pagoTotal | number: '1.2-2'}} {{prefix}}</td>
+            <td class="number-rigth">{{amortizacion.interesCausado | number: '1.2-2'}} {{prefix}}</td>
         </tr>
     </ng-template>
 </p-table>
