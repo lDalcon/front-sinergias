@@ -1,7 +1,7 @@
 <p-toast [key]="'ext'"></p-toast>
 <p-blockUI [blocked]="isLoading"></p-blockUI>
 
-
+<!-- Tablero -->
 <div class="card" #card>
     <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
@@ -48,7 +48,9 @@
         </ng-template>
     </p-table>
 </div>
+<!-- Tablero -->
 
+<!-- Crear credito -->
 <p-dialog #cred [modal]="true" header="Crear Obligación" *ngIf="displayCredito" [(visible)]="displayCredito"
     [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
@@ -67,7 +69,8 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Entidad</label>
-                    <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="cred" (onSelect)="credito.entfinanciera = $event; validarPagare()">
+                    <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="cred"
+                        (onSelect)="credito.entfinanciera = $event; validarPagare()">
                     </ut-catalogo>
                 </div>
                 <div class="field col-12 md:col-3">
@@ -173,7 +176,9 @@
             [label]="indexTab === 0 ? 'Siguiente': 'Guardar'" class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
+<!-- Crear credito -->
 
+<!-- Detalle de Credito -->
 <p-dialog #credV [modal]="true" header="{{canEdit ? 'Editar' : 'Detalle'}} Obligación" *ngIf="displayCreditoDetalle"
     [(visible)]="displayCreditoDetalle" [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
@@ -301,10 +306,19 @@
             </div>
             <ut-amortizacion [data]="credito.amortizacion" [prefix]="credito?.moneda?.config?.prefix"></ut-amortizacion>
         </p-tabPanel>
+        <p-tabPanel header="Forwards" *ngIf="credito.forwards.length > 0">
+            <ut-listado-forward [data]="credito.forwards"></ut-listado-forward>
+        </p-tabPanel>
     </p-tabView>
 
     <ng-template pTemplate="footer">
         <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-times'" (click)="procesarCredito()"
             [label]="indexTab === 0 ? 'Siguiente': 'Cerrar'" class="p-button-outlined"></button>
     </ng-template>
+</p-dialog>
+<!-- Detalle de Credito -->
+
+<!-- Pago Creditos -->
+<p-dialog #credPago [modal]="true" header="Registrar pago" *ngIf="displayCreditoPago">
+
 </p-dialog>

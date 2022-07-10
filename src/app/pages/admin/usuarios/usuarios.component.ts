@@ -12,7 +12,7 @@ import { UsuarioService } from 'src/app/shared/services/usuario.service';
 export class UsuariosComponent implements OnInit {
 
   public verModalAddUsuario: boolean = false;
-  public roles: string[] = ['ADMIN', 'COMPRAS', 'EQP']
+  public roles: string[] = ['ADMIN']
   public usuario: Usuario = new Usuario();
   public isLoading: boolean = false;
   public usuarios: Usuario[] = []

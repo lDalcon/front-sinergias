@@ -1,0 +1,27 @@
+<p-button [label]="creditoSelected ? creditoSelected.pagare : 'Seleccione un credito'" (click)="op.toggle($event)">
+</p-button>
+
+<p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" [appendTo]="appendTo">
+    <ng-template pTemplate>
+        <p-table [value]="creditos" selectionMode="single" [(selection)]="creditoSelected"
+            (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="pagare">Pagare<p-sortIcon field="pagare"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="saldoasignacion">S. Asignación<p-sortIcon field="saldoasignacion"></p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-credito>
+                <tr [pSelectableRow]="rowData">
+                    <td>{{credito.id}}</td>
+                    <td>{{credito.pagare}}</td>
+                    <td>USD{{credito.saldoasignacion | currency: 'USD'}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</p-overlayPanel>

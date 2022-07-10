@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
+import { ICredito } from 'src/app/shared/interface/credito.interface';
 import { IForward } from 'src/app/shared/interface/forward.interface';
+import { CreditoForward } from 'src/app/shared/models/credito-forward.model';
 import { Forward } from 'src/app/shared/models/forward.model';
 import { ForwardService } from 'src/app/shared/services/forward.service';
 
@@ -12,12 +14,17 @@ import { ForwardService } from 'src/app/shared/services/forward.service';
 })
 export class ForwardComponent implements OnInit {
 
-  public displayForward: boolean = false;
-  public displayForwardDetalle: boolean = false;
+  public canEdit: boolean = false;
+  public display: boolean = false;
+  public displayAsignar: boolean = false;
+  public displayDetalle: boolean = false;
   public forward: Forward = new Forward();
   public forwards: IForward[] = []
-  public isLoading: boolean = false;
   public idforwardSelect: number = 0;
+  public isLoading: boolean = false;
+  public items: MenuItem[] = [];
+  public creditoForward: CreditoForward = new CreditoForward();
+  public creditoAsignar?: ICredito;
 
   constructor(
     private forwardService: ForwardService,
@@ -25,17 +32,21 @@ export class ForwardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.listarForward()
+    this.listarForward();
+    this.items = [
+      { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
+      { label: 'Asignar', icon: 'pi pi-times', command: () => this.ejecutarAccion('asignar') }
+    ];
   }
 
   agregarForward() {
     this.forward = new Forward();
-    this.displayForward = true;
+    this.display = true;
   }
 
   listarForward() {
     this.isLoading = true;
-    this.forwardService.listarForward()
+    this.forwardService.listar()
       .then(res => {
         this.isLoading = false;
         this.forwards = res;
@@ -43,6 +54,34 @@ export class ForwardComponent implements OnInit {
       .catch(err => {
         this.isLoading = false;
         console.log(err)
+      })
+  }
+
+  async ejecutarAccion(accion: string) {
+    this.forward = await this.forwardService.obtener(this.idforwardSelect);
+    switch (accion) {
+      case 'detalle':
+        this.canEdit = false;
+        this.displayDetalle = true;
+        break;
+      case 'asignar':
+        this.displayAsignar = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  asignarCredito() {
+    if (!this.validarAsignacion()) return;
+    this.forwardService.asignarCredito(this.creditoForward)
+      .then(() => {
+        this.messageService.add({ key: 'ext', severity: 'success', detail: 'Crédito asignado' })
+        this.displayAsignar = false;
+      })
+      .catch(err => {
+        console.log(err);
+        this.messageService.add({ key: 'dialog', severity: 'error', detail: 'Error al asignar crédito' })
       })
   }
 
@@ -54,10 +93,10 @@ export class ForwardComponent implements OnInit {
   guardarForward() {
     if (!this.validarForward()) return;
     this.isLoading = true;
-    this.forwardService.crearForward(this.forward)
+    this.forwardService.guardar(this.forward)
       .then(res => {
         this.isLoading = false;
-        this.displayForward = false;
+        this.display = false;
         this.messageService.add({ key: 'ext', severity: 'success', detail: 'Forward creado!' })
         this.listarForward();
       })
@@ -84,4 +123,19 @@ export class ForwardComponent implements OnInit {
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
     return error.length === 0 ? true : false;
   }
+
+  validarAsignacion(): boolean {
+    let error: string[] = []
+    this.creditoForward.idcredito = this.creditoAsignar?.id || 0;
+    this.creditoForward.idforward = this.forward?.id || 0;
+    if (this.creditoForward.valorasignado === 0) error.push(`El valor asignado debe ser mayor a USD$0`)
+    if (this.creditoForward.valorasignado === 0) error.push(`El valor asignado debe ser mayor a USD$0`)
+    if (this.creditoForward.valorasignado > this.creditoAsignar?.saldoasignacion) error.push(`El valor asignado supera el saldo del credito (USD$${this.creditoAsignar.saldoasignacion})`)
+    if (this.creditoForward.valorasignado > this.forward.saldoasignacion) error.push(`El valor asignado supera el saldo del forward (USD$${this.forward.saldoasignacion})`)
+    if (this.creditoForward.idcredito === 0) error.push(`El credito es obligatorio`);
+    if (this.creditoForward.idforward === 0) error.push(`El forward es obligatorio`);
+    if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
+    return error.length === 0 ? true : false;
+  }
+
 }

@@ -20,6 +20,7 @@ export class CreditosComponent implements OnInit {
   public creditos: ICredito[] = [];
   public displayCredito: boolean = false;
   public displayCreditoDetalle: boolean = false;
+  public displayCreditoPago: boolean = false;
   public idCreditoSelect: number = 0;
   public indexTab: number = 0;
   public isLoading: boolean = false;
@@ -36,8 +37,7 @@ export class CreditosComponent implements OnInit {
     this.listarCreditos();
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.detalleCredito() },
-      // { label: 'Modificar', icon: 'pi pi-times', command: () => this.modificarCredito() },
-      { label: 'Asociar Forward', icon: 'pi pi-plus-circle', command: () => this.asociarForward() },
+      { label: 'Pago', icon: 'pi pi-times', command: () => this.pagoCredito() },
       // { separator: true },
       // { label: 'Setup', icon: 'pi pi-cog', routerLink: ['/setup'] }
     ];
@@ -91,7 +91,7 @@ export class CreditosComponent implements OnInit {
     this.obtenerCredito();
   }
 
-  asociarForward() {
+  pagoCredito() {
 
   }
 

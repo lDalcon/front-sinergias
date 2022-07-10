@@ -27,6 +27,7 @@ export class Credito {
     usuariomod: string;
     fechamod: Date;
     amortizacion: Amortizacion[] = [];
+    forwards: any[];
 }
 
 export class Amortizacion {

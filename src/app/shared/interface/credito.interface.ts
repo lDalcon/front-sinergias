@@ -17,6 +17,8 @@ export interface ICredito{
     tipointeres: string;
     amortizacionk: string;
     amortizacionint: string;
+    saldoasignacion: number;
+    estado: string;
     tasa: number;
     usuariocrea: string;
     fechacrea: Date;

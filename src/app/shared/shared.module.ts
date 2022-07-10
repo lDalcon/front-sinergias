@@ -8,6 +8,8 @@ import { MenuItemComponent } from './components/menu-item/menu-item.component';
 import { CatalogoComponent } from './util/catalogo/catalogo.component';
 import { RegionalComponent } from './util/regional/regional.component';
 import { AmortizacionComponent } from './util/amortizacion/amortizacion.component';
+import { CreditoComponent } from './util/credito/credito.component';
+import { ListadoForwardComponent } from './util/listado-forward/listado-forward.component';
 
 
 
@@ -19,7 +21,9 @@ import { AmortizacionComponent } from './util/amortizacion/amortizacion.componen
     MenuItemComponent,
     CatalogoComponent,
     RegionalComponent,
-    AmortizacionComponent
+    AmortizacionComponent,
+    CreditoComponent,
+    ListadoForwardComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +37,9 @@ import { AmortizacionComponent } from './util/amortizacion/amortizacion.componen
     MenuItemComponent,
     CatalogoComponent,
     RegionalComponent,
-    AmortizacionComponent
+    AmortizacionComponent,
+    CreditoComponent,
+    ListadoForwardComponent
   ]
 })
 export class SharedModule { }

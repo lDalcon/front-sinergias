@@ -15,6 +15,7 @@ export class Forward {
     tasaforward: number;
     valorcop: number;
     saldoasignacion: number;
+    saldo: number;
     estado: string;
     usuariocrea: string;
     fechacrea: Date;
