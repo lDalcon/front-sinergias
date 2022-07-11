@@ -1,0 +1,27 @@
+<p-button [label]="forwardSelected ? 'Id: ' + forwardSelected.id + ' - '  + forwardSelected.entfinanciera.substring(0,20) : 'Seleccione un credito'" (click)="op.toggle($event)">
+</p-button>
+
+<p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" [appendTo]="appendTo">
+    <ng-template pTemplate>
+        <p-table [value]="data" selectionMode="single" [(selection)]="forwardSelected"
+            (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="entfinanciera">Entidad<p-sortIcon field="entfinanciera"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="saldoasignacion">S. Asignar<p-sortIcon field="saldoasignacion"></p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-forward>
+                <tr [pSelectableRow]="rowData">
+                    <td>{{forward.id}}</td>
+                    <td>{{forward.entfinanciera}}</td>
+                    <td>USD{{forward.saldoasignacion | currency: 'USD'}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</p-overlayPanel>

@@ -51,8 +51,7 @@
 <!-- Tablero -->
 
 <!-- Crear credito -->
-<p-dialog #cred [modal]="true" header="Crear Obligación" *ngIf="displayCredito" [(visible)]="displayCredito"
-    [style]="{width:'90vw'}">
+<p-dialog #cred [modal]="true" header="Crear Obligación" *ngIf="display" [(visible)]="display" [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <p-tabView [(activeIndex)]="indexTab">
         <p-tabPanel header="Información del Crédito">
@@ -179,8 +178,8 @@
 <!-- Crear credito -->
 
 <!-- Detalle de Credito -->
-<p-dialog #credV [modal]="true" header="{{canEdit ? 'Editar' : 'Detalle'}} Obligación" *ngIf="displayCreditoDetalle"
-    [(visible)]="displayCreditoDetalle" [style]="{width:'90vw'}">
+<p-dialog #credV [modal]="true" header="{{canEdit ? 'Editar' : 'Detalle'}} Obligación" *ngIf="displayDetalle"
+    [(visible)]="displayDetalle" [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <p-tabView [(activeIndex)]="indexTab">
         <p-tabPanel header="Información del Crédito">
@@ -319,6 +318,53 @@
 <!-- Detalle de Credito -->
 
 <!-- Pago Creditos -->
-<p-dialog #credPago [modal]="true" header="Registrar pago" *ngIf="displayCreditoPago">
-
+<p-dialog #credPago [modal]="true" header="Registrar pago (#{{credito.id}} - Pg:{{credito.pagare}})" *ngIf="displayPago"
+    [(visible)]="displayPago" [style]="{width:'90vw'}">
+    <p-toast [key]="'dialog'"></p-toast>
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-2">
+            <label>Pago a</label>
+            <p-dropdown [options]="['Capital', 'Interes']" [(ngModel)]="detallePago.tipopago"
+                placeholder="Seleccione una opción" [appendTo]="credPago"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-2">
+            <label>Fecha de Pago</label>
+            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy" (onSelect)="cambioFechaPago()">
+            </p-calendar>
+        </div>
+        <div class="field col-12 md:col-2" *ngIf="detallePago.fechapago">
+            <label>Forma de Pago</label>
+            <ut-catalogo [idCatalogo]="'FORPAG'" [appendTo]="credPago" (onSelect)="seleccionFormaPago($event)" [filter]="'config/moneda?' + credito.moneda.id">
+            </ut-catalogo>
+        </div>
+        <div class="field col-12 md:col-3" *ngIf="detallePago?.formapago === 'FORWARD'">
+            <label>Forward</label>
+            <ut-forward [appendTo]="credPago" [data]="credito.forwards" (forward)="seleccionForward($event)">
+            </ut-forward>
+        </div>
+        <div class="field col-12 md:col-3" *ngIf="aplTRM">
+            <label>TRM</label>
+            <p-inputNumber [showButtons]="false" inputId="valor" mode="currency" currency="USD" [min]="1"
+                [prefix]="'COP'" [(ngModel)]="detallePago.trm" [disabled]="!canEditTRM">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Valor</label>
+            <p-inputNumber [showButtons]="false" inputId="valor" mode="currency" currency="USD" [min]="1"
+                [prefix]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 md:col-1" id="field-button">
+            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
+                (click)="guardarDetallePago()"></button>
+            <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"
+                (click)="limpiarDetallePago()"></button>
+        </div>
+    </div>
+    <ut-detalle-pago [(data)]="pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>
+    <ng-template pTemplate="footer">
+        <button pButton [icon]="'pi pi-save'" (click)="guardarPagos()"
+            [label]="'Guardar'"></button>
+    </ng-template>
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 </p-dialog>

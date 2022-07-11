@@ -24,7 +24,7 @@ export class CreditoComponent implements OnInit {
 
   listarCreditos() {
     this.creditoService.listarCreditos()
-      .then(res => {
+    .then(res => {
         this.creditos = res.filter(x => x.estado === 'ACTIVO' && x.moneda === 'DOLAR (USD)' && x.saldoasignacion > 0);
       })
       .catch(err => console.log(err))

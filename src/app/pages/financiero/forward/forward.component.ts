@@ -78,6 +78,7 @@ export class ForwardComponent implements OnInit {
       .then(() => {
         this.messageService.add({ key: 'ext', severity: 'success', detail: 'Crédito asignado' })
         this.displayAsignar = false;
+        this.listarForward();
       })
       .catch(err => {
         console.log(err);

@@ -1,0 +1,24 @@
+<p-table #dt [value]="data" [rowHover]="true" scrollable="true" styleClass="mt-3" responsiveLayout="scroll"
+    scrollHeight="400px">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Pago</th>
+            <th>Forma de Pago</th>
+            <th>Fecha de Pago</th>
+            <th>Valor</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-detpago let-rowIndex>
+        <tr>
+            <td>{{detpago.tipopago}}</td>
+            <td>{{detpago.formapago}}</td>
+            <td>{{detpago.fechapago | date: 'dd/MM/yyyy'}}</td>
+            <td class="number-rigth">{{prefix}}${{detpago.valor | number: '1.2-2'}}</td>
+            <td>
+                <button pButton pRipple type="button" icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger" (click)="deleteRow(rowIndex)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

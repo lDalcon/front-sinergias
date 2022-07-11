@@ -1,3 +1,4 @@
+import { DetallePago } from "./detalle-pago.model";
 import { Regional } from "./regional.model";
 import { ValorCatalogo } from "./valor-catalogo";
 export class Credito {
@@ -28,6 +29,7 @@ export class Credito {
     fechamod: Date;
     amortizacion: Amortizacion[] = [];
     forwards: any[];
+    pagos: DetallePago[] = [];
 }
 
 export class Amortizacion {
