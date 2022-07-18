@@ -54,6 +54,7 @@ export class CreditosComponent implements OnInit {
     this.credito = await this.creditoService.obtenerCredito(this.idCreditoSelect);
     switch (accion) {
       case 'detalle':
+        this.indexTab = 0;
         this.canEdit = false;
         this.displayDetalle = true;
         break;
@@ -251,9 +252,10 @@ export class CreditosComponent implements OnInit {
     if (this.pagos.length === 0) return this.messageService.add({ key: 'dialog', severity: 'warn', detail: 'Debe asignar pagos para continuar' });
     let totalCapital: number = this.pagos.reduce((acc, cur) => acc += cur.tipopago === 'Capital' ? cur.valor : 0, 0);
     let totalInteres: number = this.pagos.reduce((acc, cur) => acc += cur.tipopago === 'Interes' ? cur.valor : 0, 0);
+    if (totalCapital > this.credito.saldo) return this.messageService.add({ key: 'dialog', severity: 'warn', detail: 'Los pagos a capital superan el saldo adeudado' });
     let message: string = `Resumen de pago: 
-    \n Capital: ${Intl.NumberFormat('en-IN', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalCapital)}.
-    \n Interes: ${Intl.NumberFormat('en-IN', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalInteres)}.
+    \n Capital: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalCapital)}.
+    \n Interes: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalInteres)}.
     \n ¿Desaea continuar?`
     this.confirmationService.confirm({
       message,
@@ -280,4 +282,5 @@ export class CreditosComponent implements OnInit {
       }
     });
   }
+
 }

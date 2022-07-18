@@ -6,7 +6,7 @@
     <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
         [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
-        [filterDelay]="0" [globalFilterFields]="['regional','entfinanciera','moneda','estado']">
+        [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda']">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
                 <span class="p-input-icon-right">
@@ -21,13 +21,13 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>#</th>
-                <th>Regional</th>
-                <th>Entidad</th>
-                <th>Moneda</th>
-                <th>V. Desembolso</th>
-                <th>Fecha Desembolso</th>
-                <th>Estado</th>
+                <th style="text-align: center;">#</th>
+                <th style="text-align: center;">Regional</th>
+                <th style="text-align: center;">Entidad</th>
+                <th style="text-align: center;">Moneda</th>
+                <th style="text-align: center;">Fecha Desembolso</th>
+                <th style="text-align: center;">V. Desembolso</th>
+                <th style="text-align: center;">Saldo</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -37,9 +37,9 @@
                 <td> {{credito.regional }} </td>
                 <td> {{credito.entfinanciera }} </td>
                 <td> {{credito.moneda }} </td>
-                <td style="text-align: right;"> {{credito.capital | currency }} </td>
                 <td> {{credito.fechadesembolso | date: 'dd/MM/yyyy' }} </td>
-                <td> {{credito.estado }} </td>
+                <td style="text-align: right;"> {{credito.capital | currency }} </td>
+                <td style="text-align: right;"> {{credito.saldo | currency }} </td>
                 <td>
                     <p-splitButton label="+" [model]="this.items" [appendTo]="card"
                         (onDropdownClick)="idCreditoSelect = credito.id"></p-splitButton>
@@ -308,6 +308,9 @@
         <p-tabPanel header="Forwards" *ngIf="credito.forwards.length > 0">
             <ut-listado-forward [data]="credito.forwards"></ut-listado-forward>
         </p-tabPanel>
+        <p-tabPanel header="Pagos" *ngIf="credito.pagos.length > 0">
+            <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>
+        </p-tabPanel>
     </p-tabView>
 
     <ng-template pTemplate="footer">
@@ -329,12 +332,14 @@
         </div>
         <div class="field col-12 md:col-2">
             <label>Fecha de Pago</label>
-            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy" (onSelect)="cambioFechaPago()">
+            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy"
+                (onSelect)="cambioFechaPago()">
             </p-calendar>
         </div>
         <div class="field col-12 md:col-2" *ngIf="detallePago.fechapago">
             <label>Forma de Pago</label>
-            <ut-catalogo [idCatalogo]="'FORPAG'" [appendTo]="credPago" (onSelect)="seleccionFormaPago($event)" [filter]="'config/moneda?' + credito.moneda.id">
+            <ut-catalogo [idCatalogo]="'FORPAG'" [appendTo]="credPago" (onSelect)="seleccionFormaPago($event)"
+                [filter]="'config/moneda?' + credito.moneda.id">
             </ut-catalogo>
         </div>
         <div class="field col-12 md:col-3" *ngIf="detallePago?.formapago === 'FORWARD'">
@@ -351,7 +356,8 @@
         <div class="field col-12 md:col-3">
             <label>Valor</label>
             <p-inputNumber [showButtons]="false" inputId="valor" mode="currency" currency="USD" [min]="1"
-                [prefix]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor">
+                [prefix]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor" [min]="1"
+                [max]="detallepago?.tipopago === 'Capital' ? credito.saldo : credito.capital">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-1" id="field-button">
@@ -361,10 +367,10 @@
                 (click)="limpiarDetallePago()"></button>
         </div>
     </div>
-    <ut-detalle-pago [(data)]="pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>
+    <ut-detalle-pago [(data)]="pagos" [prefix]="credito.moneda.config.prefix" [aplAccion]="true"></ut-detalle-pago>
     <ng-template pTemplate="footer">
-        <button pButton [icon]="'pi pi-save'" (click)="guardarPagos()"
-            [label]="'Guardar'"></button>
+        <button pButton [icon]="'pi pi-save'" (click)="guardarPagos()" [label]="'Guardar'"></button>
     </ng-template>
-    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+    </p-confirmDialog>
 </p-dialog>

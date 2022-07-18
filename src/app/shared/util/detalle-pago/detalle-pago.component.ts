@@ -10,6 +10,7 @@ export class DetallePagoComponent implements OnInit {
 
   private _data: DetallePago[] = [];
   @Input() prefix: string = '';
+  @Input() aplAccion: boolean = false;
 
   @Input() get data(): DetallePago[] {
     return this._data;

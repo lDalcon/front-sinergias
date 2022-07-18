@@ -5,8 +5,9 @@
             <th>Pago</th>
             <th>Forma de Pago</th>
             <th>Fecha de Pago</th>
+            <th>TRM</th>
             <th>Valor</th>
-            <th></th>
+            <th *ngIf="aplAccion"></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-detpago let-rowIndex>
@@ -14,8 +15,9 @@
             <td>{{detpago.tipopago}}</td>
             <td>{{detpago.formapago}}</td>
             <td>{{detpago.fechapago | date: 'dd/MM/yyyy'}}</td>
+            <td class="number-rigth">COP${{detpago.trm | number: '1.2-2'}}</td>
             <td class="number-rigth">{{prefix}}${{detpago.valor | number: '1.2-2'}}</td>
-            <td>
+            <td *ngIf="aplAccion">
                 <button pButton pRipple type="button" icon="pi pi-trash"
                     class="p-button-rounded p-button-danger" (click)="deleteRow(rowIndex)"></button>
             </td>
