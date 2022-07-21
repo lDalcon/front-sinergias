@@ -32,11 +32,8 @@ export class AuthService {
           case 'ADMIN':
             this.router.navigateByUrl('/admin')
             break;
-          case 'COMPRAS':
-            this.router.navigateByUrl('/cloud-fleet/compras/RCSER')
-            break;
-          case 'EQP':
-            this.router.navigateByUrl('/cloud-fleet/eqp/integrar')
+          case 'TESORERIA':
+            this.router.navigateByUrl('/dashboard/financiero')
             break;
           default:
             break;

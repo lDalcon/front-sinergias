@@ -58,7 +58,7 @@
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-4">
                     <label>Empresa</label>
-                    <ut-regional [nit]="'860026895'" [appendTo]="cred" (onSelect)="credito.regional = $event">
+                    <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="cred" (onSelect)="credito.regional = $event">
                     </ut-regional>
                 </div>
                 <div class="field col-12 md:col-4">
@@ -186,7 +186,7 @@
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-4">
                     <label>Empresa</label>
-                    <ut-regional [nit]="'860026895'" [appendTo]="credV" (onSelect)="credito.regional = $event"
+                    <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="credV" (onSelect)="credito.regional = $event"
                         [default]="credito.regional" [disabled]="!canEdit">
                     </ut-regional>
                 </div>

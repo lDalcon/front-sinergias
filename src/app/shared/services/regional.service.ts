@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Regional } from '../models/regional.model';
-import { SessionService } from './session.service';
 
 const API = environment.apiIntegracion + 'regional';
 
@@ -16,8 +15,13 @@ export class RegionalService {
     private http: HttpClient,
   ) { }
 
-  getReginalByNit(nit: string) {
+  getRegionalByNit(nit: string) {
     return firstValueFrom(this.http.get(`${API}/${nit}`))
+      .then((res: any) => <Regional[]>res.data)
+  }
+  
+  getAll() {
+    return firstValueFrom(this.http.get(`${API}`))
       .then((res: any) => <Regional[]>res.data)
   }
 }

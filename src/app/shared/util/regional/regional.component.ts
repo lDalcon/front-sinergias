@@ -15,25 +15,17 @@ export class RegionalComponent implements OnInit {
   @Input() nit: string = '';
   @Output() onSelect: EventEmitter<Regional> = new EventEmitter<Regional>();
 
-  public regionales: Regional[] = [];
+  @Input() regionales: Regional[] = [];
   public regional: Regional;
 
-  constructor(
-    private regionalService: RegionalService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.getCatalogoById();
+    if (this.default) this.regional = this.default;
+    console.log(this.regionales)
+    
   }
 
-  getCatalogoById() {
-    this.regionalService.getReginalByNit(this.nit)
-      .then(res => {
-        this.regionales = res;
-        if (this.default) this.regional = this.default;
-      })
-      .catch(err => console.log(err))
-  }
 
   onSelectValor() {
     this.onSelect.emit(this.regional)

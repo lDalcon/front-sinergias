@@ -20,9 +20,17 @@ export class UsuarioService {
     return firstValueFrom(this.http.post(`${API}`, usuario))
   }
 
+  actualizarUsuario(usuario: Usuario) {
+    return firstValueFrom(this.http.put(`${API}`, usuario))
+  }
+
   getUsuarios() {
     return firstValueFrom(this.http.get(`${API}`))
       .then((res: any) => <Usuario[]>res.data)
       .then(data => { return data; })
+  }
+
+  asociarEmpresas(usuario: Usuario){
+    return firstValueFrom(this.http.put(`${API}/asociarEmpresas`, usuario))
   }
 }

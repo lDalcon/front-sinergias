@@ -8,7 +8,7 @@
                 [paginator]="true" >
                 <ng-template pTemplate="caption">
                     <div class="flex">
-                        <p-button icon="pi pi-plus" label="Crear Usuario" (click)="verModalAddUsuario = true"></p-button>
+                        <p-button icon="pi pi-plus" label="Crear Usuario" (click)="displayAddUsuario = true"></p-button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -16,15 +16,23 @@
                         <th>Usuario</th>
                         <th>Nombres</th>
                         <th>Role</th>
+                        <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-usuario>
                     <tr>
                         <td>{{usuario.nick}}</td>
-                        <td>{{usuario.nombre}} {{usuario.apellido}}</td>
+                        <td>{{usuario.nombres}} {{usuario.apellidos}}</td>
                         <td>{{usuario.menu.role}}</td>
-                        <td></td>
+                        <td>
+                            <p-tag *ngIf="usuario.estado" severity="success" value="Activo"></p-tag>
+                            <p-tag *ngIf="!usuario.estado" severity="danger" value="Inactivo"></p-tag>
+                        </td>
+                        <td>
+                            <p-splitButton label="+" [model]="this.items" [appendTo]="card"
+                                (onDropdownClick)="usuarioSelected = usuario"></p-splitButton>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -32,7 +40,7 @@
     </div>
 </div>
 
-<p-dialog #dialog header="Crear Usuario" [(visible)]="verModalAddUsuario" [modal]="true">
+<p-dialog #dialog header="Crear Usuario" [(visible)]="displayAddUsuario" [modal]="true">
     <div class="p-fluid p-formgrid grid">
         <div class="field col-12 md:col-4">
             <label htmlFor="nick">Usuario</label>
@@ -47,7 +55,7 @@
             <input pInputText id="apellidos" type="text" [(ngModel)]="usuario.apellidos" />
         </div>
         <div class="field col-12 md:col-4">
-            <label htmlFor="password">email</label>
+            <label htmlFor="password">Email</label>
             <input pInputText id="email" type="email" [(ngModel)]="usuario.email" />
         </div>
         <div class="field col-12 md:col-4">
@@ -63,5 +71,59 @@
     <ng-template pTemplate="footer">
         <button pButton icon="pi pi-save" (click)="crearUsuario()" label="Guardar" class="p-button-outlined"></button>
     </ng-template>
+</p-dialog>
 
+<p-dialog #dialog header="Editar Usuario" [(visible)]="displayEditUsuario" [modal]="true">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-4">
+            <label htmlFor="nick">Usuario</label>
+            <input pInputText id="nick" type="text" [(ngModel)]="usuarioSelected.nick" [disabled]="true"/>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="nombres">Nombre</label>
+            <input pInputText id="nombres" type="text" [(ngModel)]="usuarioSelected.nombres" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="apellidos">Apellido</label>
+            <input pInputText id="apellidos" type="text" [(ngModel)]="usuarioSelected.apellidos" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="password">Email</label>
+            <input pInputText id="email" type="email" [(ngModel)]="usuarioSelected.email" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="state">Role</label>
+            <p-dropdown placeholder="Seleccione un role" [options]="roles" [(ngModel)]="usuarioSelected.menu.role"
+                [appendTo]="dialog"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label htmlFor="state">Estado</label>
+            <p-dropdown placeholder="Seleccione un role" [options]="estados" optionValue="estado" optionLabel="label" [(ngModel)]="usuarioSelected.estado"
+                [appendTo]="dialog"></p-dropdown>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton icon="pi pi-save" (click)="actualizarUsuario()" label="Guardar" class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog #dialog header="Asociar Empresa ({{usuarioSelected.nombres}} {{usuarioSelected.apellidos}})" [(visible)]="displayAsociarEmpresa" [modal]="true"
+    (onHide)="getUsuarios()">
+    <p-table [value]="regionales" [(selection)]="usuarioSelected.regionales" [rowHover]="true" scrollHeight="400px">
+        <ng-template pTemplate="header">
+            <tr>
+                <th> <p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                <th> Empresa </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-regional>
+            <tr>
+                <td><p-tableCheckbox [value]="regional"></p-tableCheckbox></td>
+                <td>{{regional.nombre}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <button pButton icon="pi pi-save" (click)="guardarAsociarEmpresa()" label="Guardar" class="p-button-outlined"></button>
+    </ng-template>    
 </p-dialog>

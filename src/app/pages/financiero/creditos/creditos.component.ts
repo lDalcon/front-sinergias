@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import { DetallePago } from 'src/app/shared/models/detalle-pago.model';
 import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import { DetallePagoService } from 'src/app/shared/services/detalle-pago.service';
+import { Usuario } from 'src/app/shared/models/usuario.model';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-creditos',
@@ -33,14 +35,18 @@ export class CreditosComponent implements OnInit {
   public items: MenuItem[] = [];
   public macroEconomico: MacroEconomicos = new MacroEconomicos();
   public pagos: DetallePago[] = [];
+  public usuarioSesion: Usuario;
 
   constructor(
     private creditoService: CreditoService,
     private macroeconomicosService: MacroeconomicosService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private detallePagoService: DetallePagoService
-  ) { }
+    private detallePagoService: DetallePagoService,
+    private sessionService: SessionService
+  ) { 
+    this.usuarioSesion = this.sessionService.usuario;
+  }
 
   ngOnInit(): void {
     this.listarCreditos();
