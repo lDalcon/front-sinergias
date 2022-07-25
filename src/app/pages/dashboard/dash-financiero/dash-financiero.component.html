@@ -1,1 +1,48 @@
-<p>dash-financiero works!</p>
+<p-toast></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+<div class="card" #card>
+
+    <p-table #dt [value]="data" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
+        [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
+        [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda']">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <span class="p-input-icon-right">
+                    <p-calendar [(ngModel)]="fechaReporte" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker" placeholder="Fecha" ></p-calendar>
+                    <button type="button" pButton pRipple icon="pi pi-search" (click)="obtenerDataReporte()" class="p-button-success mr-2" [disabled]="!fechaReporte"></button>
+                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom" [disabled]="data.length == 0"></button>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="text-align: center;">Regional</th>
+                <th style="text-align: center;">Credito</th>
+                <th style="text-align: center;">Moneda</th>
+                <th style="text-align: center;">Linea Credito</th>
+                <th style="text-align: center;">Entidad</th>
+                <th style="text-align: center;">TRM Desembolso</th>
+                <th style="text-align: center;">TRM Cierre</th>
+                <th style="text-align: center;">TRM Promedio</th>
+                <th style="text-align: center;">Saldo Crédito</th>
+                <th style="text-align: center;">Abonos</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-credito>
+            <tr>
+                <td> {{credito.regional }} </td>
+                <td> {{credito.idcredito }} </td>
+                <td> {{credito.moneda }} </td>
+                <td> {{credito.lineacredito }} </td>
+                <td> {{credito.entfinanciera }} </td>
+                <td style="text-align: right;"> {{credito.trmdesembolso | currency }} </td>
+                <td style="text-align: right;"> {{credito.trmcierre | currency }} </td>
+                <td style="text-align: right;"> {{credito.trmprom | currency }} </td>
+                <td style="text-align: right;"> {{credito.saldokfinal | currency }} </td>
+                <td style="text-align: right;"> {{credito.abonoscapital | currency }} </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

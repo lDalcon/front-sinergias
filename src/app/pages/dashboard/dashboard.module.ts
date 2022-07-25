@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashGerenciaComponent } from './dash-gerencia/dash-gerencia.component';
 import { DashFinancieroComponent } from './dash-financiero/dash-financiero.component';
 import { DashboardRoutingModule } from './dashboard.routes';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -13,7 +14,8 @@ import { DashboardRoutingModule } from './dashboard.routes';
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    SharedModule
   ]
 })
 export class DashboardModule { }

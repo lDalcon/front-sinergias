@@ -76,6 +76,7 @@ export class UsuariosComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Usuario Actualizado' })
         this.displayEditUsuario = false;
         this.isLoading = false;
+        this.usuario = new Usuario();
       })
       .catch((err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message })
@@ -93,6 +94,7 @@ export class UsuariosComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Usuario Creado' })
         this.displayAddUsuario = false;
         this.isLoading = false;
+        this.usuario = new Usuario();
       })
       .catch((err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message })

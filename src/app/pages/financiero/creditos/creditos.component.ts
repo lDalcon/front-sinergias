@@ -57,7 +57,9 @@ export class CreditosComponent implements OnInit {
   }
 
   async ejecutarAccion(accion: string) {
+    this.isLoading = true;
     this.credito = await this.creditoService.obtenerCredito(this.idCreditoSelect);
+    this.isLoading = false;
     switch (accion) {
       case 'detalle':
         this.indexTab = 0;
