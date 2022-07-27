@@ -5,6 +5,7 @@ import { IForward } from 'src/app/shared/interface/forward.interface';
 import { CreditoForward } from 'src/app/shared/models/credito-forward.model';
 import { Forward } from 'src/app/shared/models/forward.model';
 import { ForwardService } from 'src/app/shared/services/forward.service';
+import { ExcelService } from 'src/app/shared/services/util/excel.service';
 
 @Component({
   selector: 'app-forward',
@@ -28,7 +29,8 @@ export class ForwardComponent implements OnInit {
 
   constructor(
     private forwardService: ForwardService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private excelService: ExcelService
   ) { }
 
   ngOnInit(): void {
@@ -137,6 +139,10 @@ export class ForwardComponent implements OnInit {
     if (this.creditoForward.idforward === 0) error.push(`El forward es obligatorio`);
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
     return error.length === 0 ? true : false;
+  }
+
+  exportExcel(){
+    this.excelService.exportExcel(this.forwards, 'forwards')
   }
 
 }

@@ -11,6 +11,7 @@ import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import { DetallePagoService } from 'src/app/shared/services/detalle-pago.service';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { SessionService } from 'src/app/shared/services/session.service';
+import { ExcelService } from 'src/app/shared/services/util/excel.service';
 
 @Component({
   selector: 'app-creditos',
@@ -43,7 +44,8 @@ export class CreditosComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private detallePagoService: DetallePagoService,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private excelService: ExcelService
   ) { 
     this.usuarioSesion = this.sessionService.usuario;
   }
@@ -289,6 +291,10 @@ export class CreditosComponent implements OnInit {
         this.messageService.add({ key: 'dialog', severity: 'warn', detail: 'Acción cancelada' });
       }
     });
+  }
+
+  exportExcel(){
+    this.excelService.exportExcel(this.creditos, 'obligaciones')
   }
 
 }

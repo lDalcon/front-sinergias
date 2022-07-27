@@ -11,6 +11,7 @@
             <div class="flex justify-content-between flex-column sm:flex-row">
                 <span class="p-input-icon-right">
                     <p-button label="Crear Obligación" icon="pi pi-plus" (onClick)="agregarObligacion()"></p-button>
+                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom" [disabled]="creditos.length == 0"></button>
                 </span>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
