@@ -11,7 +11,8 @@ export class CreditoComponent implements OnInit {
 
   public creditos: ICredito[] = [];
   public creditoSelected?: ICredito;
-  @Input() appendTo: any
+  @Input() appendTo: any;
+  @Input() idRegional: number;
   @Output() credito: EventEmitter<ICredito> = new EventEmitter<ICredito>();
 
   constructor(
@@ -23,8 +24,9 @@ export class CreditoComponent implements OnInit {
   }
 
   listarCreditos() {
-    this.creditoService.listarCreditos()
-    .then(res => {
+    let params = { saldo: 1, regional: this.idRegional };
+    this.creditoService.listarCreditos(params)
+      .then(res => {
         this.creditos = res.filter(x => x.estado === 'ACTIVO' && x.moneda === 'DOLAR (USD)' && x.saldoasignacion > 0);
       })
       .catch(err => console.log(err))

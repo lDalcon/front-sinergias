@@ -31,8 +31,8 @@ export class CreditoService {
       .then(data => { return data; })
   }
 
-  async listarCreditos() {
-    return firstValueFrom(this.http.get(`${API}`))
+  async listarCreditos(params?: any) {
+    return firstValueFrom(this.http.get(`${API}`, { params }))
       .then((res: any) => <ICredito[]>res.data)
       .then(data => { return data; })
   }
@@ -49,7 +49,7 @@ export class CreditoService {
       .then(data => { return data; })
   }
 
-  async validarPagare(pagare: string, entfinanciera: number){
+  async validarPagare(pagare: string, entfinanciera: number) {
     return firstValueFrom(this.http.get(`${API}/${pagare}/${entfinanciera}`))
   }
 

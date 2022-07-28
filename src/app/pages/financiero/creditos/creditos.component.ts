@@ -37,6 +37,7 @@ export class CreditosComponent implements OnInit {
   public macroEconomico: MacroEconomicos = new MacroEconomicos();
   public pagos: DetallePago[] = [];
   public usuarioSesion: Usuario;
+  public fechaPago: Date;
 
   constructor(
     private creditoService: CreditoService,
@@ -46,7 +47,7 @@ export class CreditosComponent implements OnInit {
     private detallePagoService: DetallePagoService,
     private sessionService: SessionService,
     private excelService: ExcelService
-  ) { 
+  ) {
     this.usuarioSesion = this.sessionService.usuario;
   }
 
@@ -81,11 +82,12 @@ export class CreditosComponent implements OnInit {
   agregarObligacion() {
     this.credito = new Credito();
     this.display = true;
+    this.indexTab = 0;
   }
 
   listarCreditos() {
     this.isLoading = true;
-    this.creditoService.listarCreditos()
+    this.creditoService.listarCreditos({ saldo: 1 })
       .then(res => {
         this.isLoading = false;
         this.creditos = res;
@@ -124,10 +126,6 @@ export class CreditosComponent implements OnInit {
     this.canEdit = true;
     this.indexTab = 0;
     this.obtenerCredito();
-  }
-
-  pagoCredito() {
-
   }
 
   calcularAmortizacion() {
@@ -178,6 +176,7 @@ export class CreditosComponent implements OnInit {
     if (!this.validarDetallePago()) return;
     this.pagos.push(this.detallePago);
     this.detallePago = new DetallePago();
+    this.detallePago.fechapago = this.fechaPago;
   }
 
   limpiarDetallePago() {
@@ -256,6 +255,7 @@ export class CreditosComponent implements OnInit {
   cambioFechaPago() {
     this.detallePago.idforward = undefined;
     this.detallePago.formapago = undefined;
+    this.fechaPago = this.detallePago.fechapago;
   }
 
   guardarPagos() {
@@ -264,9 +264,9 @@ export class CreditosComponent implements OnInit {
     let totalInteres: number = this.pagos.reduce((acc, cur) => acc += cur.tipopago === 'Interes' ? cur.valor : 0, 0);
     if (totalCapital > this.credito.saldo) return this.messageService.add({ key: 'dialog', severity: 'warn', detail: 'Los pagos a capital superan el saldo adeudado' });
     let message: string = `Resumen de pago: 
-    \n Capital: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalCapital)}.
-    \n Interes: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalInteres)}.
-    \n ¿Desaea continuar?`
+    Capital: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalCapital)}. 
+    Interes: ${Intl.NumberFormat('en-US', { style: 'currency', currency: this.credito.moneda.config.prefix, minimumFractionDigits: 0 }).format(totalInteres)}. 
+    ¿Desaea continuar?`
     this.confirmationService.confirm({
       message,
       header: 'Atención',
@@ -293,7 +293,7 @@ export class CreditosComponent implements OnInit {
     });
   }
 
-  exportExcel(){
+  exportExcel() {
     this.excelService.exportExcel(this.creditos, 'obligaciones')
   }
 

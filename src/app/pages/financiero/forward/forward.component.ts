@@ -4,7 +4,9 @@ import { ICredito } from 'src/app/shared/interface/credito.interface';
 import { IForward } from 'src/app/shared/interface/forward.interface';
 import { CreditoForward } from 'src/app/shared/models/credito-forward.model';
 import { Forward } from 'src/app/shared/models/forward.model';
+import { Usuario } from 'src/app/shared/models/usuario.model';
 import { ForwardService } from 'src/app/shared/services/forward.service';
+import { SessionService } from 'src/app/shared/services/session.service';
 import { ExcelService } from 'src/app/shared/services/util/excel.service';
 
 @Component({
@@ -16,6 +18,8 @@ import { ExcelService } from 'src/app/shared/services/util/excel.service';
 export class ForwardComponent implements OnInit {
 
   public canEdit: boolean = false;
+  public creditoAsignar?: ICredito;
+  public creditoForward: CreditoForward = new CreditoForward();
   public display: boolean = false;
   public displayAsignar: boolean = false;
   public displayDetalle: boolean = false;
@@ -24,20 +28,23 @@ export class ForwardComponent implements OnInit {
   public idforwardSelect: number = 0;
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
-  public creditoForward: CreditoForward = new CreditoForward();
-  public creditoAsignar?: ICredito;
+  public usuarioSesion: Usuario;
+
 
   constructor(
+    private excelService: ExcelService,
     private forwardService: ForwardService,
     private messageService: MessageService,
-    private excelService: ExcelService
-  ) { }
+    private sessionService: SessionService,
+  ) {
+    this.usuarioSesion = this.sessionService.usuario;
+  }
 
   ngOnInit(): void {
     this.listarForward();
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
-      { label: 'Asignar', icon: 'pi pi-times', command: () => this.ejecutarAccion('asignar') }
+      { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') }
     ];
   }
 
@@ -60,13 +67,16 @@ export class ForwardComponent implements OnInit {
   }
 
   async ejecutarAccion(accion: string) {
+    this.isLoading = true;
     this.forward = await this.forwardService.obtener(this.idforwardSelect);
+    this.isLoading = false;
     switch (accion) {
       case 'detalle':
         this.canEdit = false;
         this.displayDetalle = true;
         break;
       case 'asignar':
+        this.creditoForward = new CreditoForward();
         this.displayAsignar = true;
         break;
       default:
@@ -141,7 +151,7 @@ export class ForwardComponent implements OnInit {
     return error.length === 0 ? true : false;
   }
 
-  exportExcel(){
+  exportExcel() {
     this.excelService.exportExcel(this.forwards, 'forwards')
   }
 
