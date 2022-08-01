@@ -3,8 +3,18 @@
 
 <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" [appendTo]="appendTo">
     <ng-template pTemplate>
-        <p-table [value]="creditos" selectionMode="single" [(selection)]="creditoSelected"
-            (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <p-table #dt [value]="creditos" selectionMode="single" [(selection)]="creditoSelected"
+            (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll"
+            [globalFilterFields]="['id', 'pagare']">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Busqueda" />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon>

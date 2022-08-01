@@ -21,8 +21,8 @@ export class ForwardService {
     return firstValueFrom(this.http.post(`${API}`, forward))
   }
 
-  async listar() {
-    return firstValueFrom(this.http.get(`${API}`))
+  async listar(params?: any) {
+    return firstValueFrom(this.http.get(`${API}`, { params }))
       .then((res: any) => <IForward[]>res.data)
       .then(data => { return data; })
   }
@@ -40,7 +40,7 @@ export class ForwardService {
       .then(data => { return data; })
   }
 
-  async asignarCredito(creditoForward: CreditoForward){
+  async asignarCredito(creditoForward: CreditoForward) {
     return firstValueFrom(this.http.post(`${API}/asignarCredito`, creditoForward))
   }
 }

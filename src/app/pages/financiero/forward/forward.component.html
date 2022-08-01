@@ -1,6 +1,23 @@
 <p-toast [key]="'ext'"></p-toast>
 <p-blockUI [blocked]="isLoading"></p-blockUI>
 
+<!-- Filtro -->
+<div class="card p-fluid p-formgrid grid">
+    <div class="field col-12 md:col-3">
+        <label>Empresa</label>
+        <ut-regional [regionales]="usuarioSesion.regionales" (onSelect)="regional = $event?.id || null"
+            [showClear]="true" [placeholder]="'Todos'">
+        </ut-regional>
+    </div>
+    <div class="field col-2 md:col-2 button">
+        <button pButton class="p-element p-button p-component" icon="pi pi-search" (click)="listarForward()"></button>
+        <button pButton class="p-element p-button p-component" icon="pi pi-plus" (click)="agregarForward()"></button>
+        <button pButton class="p-element p-button p-component" icon="pi pi-file-excel" (click)="exportExcel()"
+            [disabled]="forwards.length == 0"></button>
+    </div>
+</div>
+<!-- Filtro -->
+
 <!-- Tablero -->
 <div class="card" #card>
     <p-table #dt [value]="forwards" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
@@ -9,12 +26,6 @@
         [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','estado']">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
-                <span class="p-input-icon-right">
-                    <p-button label="Crear Forward" icon="pi pi-plus" (onClick)="agregarForward()"></p-button>
-                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-                        class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"
-                        [disabled]="forwards.length == 0"></button>
-                </span>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -27,10 +38,10 @@
                 <th>#</th>
                 <th>Regional</th>
                 <th>Entidad</th>
+                <th>Fecha Operación</th>
+                <th>Spot</th>
                 <th>Valor</th>
                 <th>Valor x Asignar</th>
-                <th>Fecha Operación</th>
-                <th>Estado</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -39,10 +50,10 @@
                 <td> {{forward.id }} </td>
                 <td> {{forward.regional }} </td>
                 <td> {{forward.entfinanciera }} </td>
+                <td> {{forward.fechaoperacion | date: 'dd/MM/yyyy' }} </td>
+                <td style="text-align: right;"> {{forward.tasaspot | currency }} </td>
                 <td style="text-align: right;"> {{forward.valorusd | currency }} </td>
                 <td style="text-align: right;"> {{forward.saldoasignacion | currency }} </td>
-                <td> {{forward.fechaoperacion | date: 'dd/MM/yyyy' }} </td>
-                <td> {{forward.estado }} </td>
                 <td>
                     <p-splitButton label="+" [model]="this.items" [appendTo]="card"
                         (onDropdownClick)="idforwardSelect = forward.id"></p-splitButton>
@@ -95,7 +106,7 @@
         <div class="field col-12 md:col-3">
             <label>Devaluación</label>
             <p-inputNumber [showButtons]="false" inputId="devaluacion" [step]="0.25" mode="decimal" [disabled]="true"
-                suffix="%" [(ngModel)]="forward.devaluacion">
+                [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" [(ngModel)]="forward.devaluacion">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-3">

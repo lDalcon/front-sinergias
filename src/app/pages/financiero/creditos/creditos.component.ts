@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Credito } from 'src/app/shared/models/credito.model';
 import { CreditoService } from 'src/app/shared/services/credito.service';
+import { DetallePago } from 'src/app/shared/models/detalle-pago.model';
+import { DetallePagoService } from 'src/app/shared/services/detalle-pago.service';
+import { ExcelService } from 'src/app/shared/services/util/excel.service';
 import { ICredito } from 'src/app/shared/interface/credito.interface';
 import { MacroEconomicos } from 'src/app/shared/models/macroeconomicos.model';
 import { MacroeconomicosService } from 'src/app/shared/services/macroeconomicos.service';
-import { ConfirmationService, ConfirmEventType, MenuItem, MessageService } from 'primeng/api';
-import * as moment from 'moment';
-import { DetallePago } from 'src/app/shared/models/detalle-pago.model';
-import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
-import { DetallePagoService } from 'src/app/shared/services/detalle-pago.service';
-import { Usuario } from 'src/app/shared/models/usuario.model';
 import { SessionService } from 'src/app/shared/services/session.service';
-import { ExcelService } from 'src/app/shared/services/util/excel.service';
+import { Usuario } from 'src/app/shared/models/usuario.model';
+import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
+import * as moment from 'moment';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-creditos',
@@ -30,29 +31,31 @@ export class CreditosComponent implements OnInit {
   public display: boolean = false;
   public displayDetalle: boolean = false;
   public displayPago: boolean = false;
+  public fechaPago: Date;
   public idCreditoSelect: number = 0;
   public indexTab: number = 0;
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
   public macroEconomico: MacroEconomicos = new MacroEconomicos();
   public pagos: DetallePago[] = [];
+  public regional?: number;
+  public totalDesembolso: number = 0;
+  public totalSaldo: number = 0;
   public usuarioSesion: Usuario;
-  public fechaPago: Date;
 
   constructor(
+    private confirmationService: ConfirmationService,
     private creditoService: CreditoService,
+    private detallePagoService: DetallePagoService,
+    private excelService: ExcelService,
     private macroeconomicosService: MacroeconomicosService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
-    private detallePagoService: DetallePagoService,
     private sessionService: SessionService,
-    private excelService: ExcelService
   ) {
     this.usuarioSesion = this.sessionService.usuario;
   }
 
   ngOnInit(): void {
-    this.listarCreditos();
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
       { label: 'Pago', icon: 'pi pi-credit-card', command: () => this.ejecutarAccion('pago') }
@@ -87,10 +90,14 @@ export class CreditosComponent implements OnInit {
 
   listarCreditos() {
     this.isLoading = true;
-    this.creditoService.listarCreditos({ saldo: 1 })
+    let params = { saldo: 1 }
+    if (this.regional) params['regional'] = this.regional;
+    this.creditoService.listarCreditos(params)
       .then(res => {
         this.isLoading = false;
         this.creditos = res;
+        this.totalDesembolso = this.creditos.reduce((acc, cur) => acc+= cur.capital, 0)
+        this.totalSaldo = this.creditos.reduce((acc, cur) => acc+= cur.saldo, 0)
       })
       .catch(err => {
         this.isLoading = false;
@@ -296,5 +303,4 @@ export class CreditosComponent implements OnInit {
   exportExcel() {
     this.excelService.exportExcel(this.creditos, 'obligaciones')
   }
-
 }

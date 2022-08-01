@@ -29,7 +29,7 @@ export class ForwardComponent implements OnInit {
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
   public usuarioSesion: Usuario;
-
+  public regional?: number;
 
   constructor(
     private excelService: ExcelService,
@@ -41,7 +41,6 @@ export class ForwardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listarForward();
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
       { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') }
@@ -55,7 +54,9 @@ export class ForwardComponent implements OnInit {
 
   listarForward() {
     this.isLoading = true;
-    this.forwardService.listar()
+    let params = { saldo: 1 }
+    if (this.regional) params['regional'] = this.regional;
+    this.forwardService.listar(params)
       .then(res => {
         this.isLoading = false;
         this.forwards = res;

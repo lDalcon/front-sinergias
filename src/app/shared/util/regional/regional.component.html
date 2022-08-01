@@ -1,2 +1,3 @@
 <p-dropdown [options]="regionales" [(ngModel)]="regional" optionLabel="nombre" [appendTo]="appendTo"
-    placeholder="Seleccione una opción" [disabled]="disabled" (onChange)="onSelectValor()"></p-dropdown>
+    [placeholder]="placeholder" [disabled]="disabled" (onChange)="onSelectValor()" [showClear]="showClear"
+    (onClear)="onSelectValor()"></p-dropdown>

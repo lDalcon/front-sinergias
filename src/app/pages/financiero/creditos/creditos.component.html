@@ -1,6 +1,23 @@
 <p-toast [key]="'ext'"></p-toast>
 <p-blockUI [blocked]="isLoading"></p-blockUI>
 
+<!-- Filtro -->
+<div class="card p-fluid p-formgrid grid">
+    <div class="field col-12 md:col-3">
+        <label>Empresa</label>
+        <ut-regional [regionales]="usuarioSesion.regionales" (onSelect)="regional = $event?.id || null"
+            [showClear]="true" [placeholder]="'Todos'">
+        </ut-regional>
+    </div>
+    <div class="field col-2 md:col-2 button">
+        <button pButton class="p-element p-button p-component" icon="pi pi-search" (click)="listarCreditos()"></button>
+        <button pButton class="p-element p-button p-component" icon="pi pi-plus" (click)="agregarObligacion()"></button>
+        <button pButton class="p-element p-button p-component" icon="pi pi-file-excel" (click)="exportExcel()"
+        [disabled]="creditos.length == 0"></button>
+    </div>
+</div>
+<!-- Filtro -->
+
 <!-- Tablero -->
 <div class="card" #card>
     <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
@@ -9,12 +26,6 @@
         [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda']">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
-                <span class="p-input-icon-right">
-                    <p-button label="Crear Obligación" icon="pi pi-plus" (onClick)="agregarObligacion()"></p-button>
-                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-                        class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"
-                        [disabled]="creditos.length == 0"></button>
-                </span>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -131,8 +142,7 @@
                         spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
                         incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
                         decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="5" suffix="%"
-                        [minFractionDigits]="2" [maxFractionDigits]="4"
-                        [(ngModel)]="credito.spread">
+                        [minFractionDigits]="2" [maxFractionDigits]="4" [(ngModel)]="credito.spread">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-4">
@@ -364,7 +374,7 @@
                 [max]="detallepago?.tipopago === 'Capital' ? credito.saldo : credito.capital">
             </p-inputNumber>
         </div>
-        <div class="field col-12 md:col-1" id="field-button">
+        <div class="field col-12 md:col-1 button">
             <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success"
                 (click)="guardarDetallePago()"></button>
             <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"

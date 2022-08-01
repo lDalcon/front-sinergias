@@ -1,4 +1,6 @@
-#field-button{
+.button {
     align-items: flex-end;
     display: flex;
+    justify-content: space-evenly;
 }
+

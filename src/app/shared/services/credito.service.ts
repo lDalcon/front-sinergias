@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -32,6 +32,7 @@ export class CreditoService {
   }
 
   async listarCreditos(params?: any) {
+    console.log(params)
     return firstValueFrom(this.http.get(`${API}`, { params }))
       .then((res: any) => <ICredito[]>res.data)
       .then(data => { return data; })

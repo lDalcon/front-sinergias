@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Regional } from '../../models/regional.model';
-import { RegionalService } from '../../services/regional.service';
 
 @Component({
   selector: 'ut-regional',
@@ -13,6 +12,8 @@ export class RegionalComponent implements OnInit {
   @Input() default: Regional;
   @Input() disabled: boolean = false;
   @Input() nit: string = '';
+  @Input() showClear: boolean = false;
+  @Input() placeholder: string = 'Seleccione una opción';
   @Output() onSelect: EventEmitter<Regional> = new EventEmitter<Regional>();
 
   @Input() regionales: Regional[] = [];
@@ -25,8 +26,7 @@ export class RegionalComponent implements OnInit {
     console.log(this.regionales)
     
   }
-
-
+  
   onSelectValor() {
     this.onSelect.emit(this.regional)
   }
