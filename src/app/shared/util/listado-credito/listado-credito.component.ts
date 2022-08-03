@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'ut-listado-forward',
-  templateUrl: './listado-forward.component.html',
-  styleUrls: ['./listado-forward.component.css']
+  selector: 'ut-listado-credito',
+  templateUrl: './listado-credito.component.html',
+  styleUrls: ['./listado-credito.component.css']
 })
-export class ListadoForwardComponent implements OnInit {
+export class ListadoCreditoComponent implements OnInit {
 
   @Input() data: any[] = [];
   @Input() hasActions: boolean = false;

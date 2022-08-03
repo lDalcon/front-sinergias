@@ -12,6 +12,7 @@ import { CreditoComponent } from './util/credito/credito.component';
 import { ListadoForwardComponent } from './util/listado-forward/listado-forward.component';
 import { DetallePagoComponent } from './util/detalle-pago/detalle-pago.component';
 import { ForwardComponent } from './util/forward/forward.component';
+import { ListadoCreditoComponent } from './util/listado-credito/listado-credito.component';
 
 
 
@@ -27,7 +28,8 @@ import { ForwardComponent } from './util/forward/forward.component';
     CreditoComponent,
     ListadoForwardComponent,
     DetallePagoComponent,
-    ForwardComponent
+    ForwardComponent,
+    ListadoCreditoComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { ForwardComponent } from './util/forward/forward.component';
     CreditoComponent,
     ListadoForwardComponent,
     DetallePagoComponent,
-    ForwardComponent
+    ForwardComponent,
+    ListadoCreditoComponent
   ]
 })
 export class SharedModule { }

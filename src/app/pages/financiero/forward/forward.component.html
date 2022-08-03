@@ -105,7 +105,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <label>Devaluación</label>
-            <p-inputNumber [showButtons]="false" inputId="devaluacion" [step]="0.25" mode="decimal" [disabled]="true"
+            <p-inputNumber [showButtons]="false" inputId="devaluacion" [step]="0.25" mode="decimal"
                 [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" [(ngModel)]="forward.devaluacion">
             </p-inputNumber>
         </div>
@@ -134,65 +134,72 @@
 <p-dialog #fwd [modal]="true" header="Detalle Forward" *ngIf="displayDetalle" [(visible)]="displayDetalle"
     [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
-
-    <div class="p-fluid p-formgrid grid">
-        <div class="field col-12 md:col-3">
-            <label>Empresa</label>
-            <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="credV" [disabled]="!canEdit"
-                [default]="forward.regional">
-            </ut-regional>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Entidad Financiera</label>
-            <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="fw" [disabled]="!canEdit"
-                [default]="forward.entfinanciera">
-            </ut-catalogo>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Fecha Operacion</label>
-            <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechaoperacion" dateFormat="dd/mm/yy"
-                [disabled]="!canEdit">
-            </p-calendar>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Fecha Cumplimiento</label>
-            <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechacumplimiento" dateFormat="dd/mm/yy"
-                [minDate]="forward.fechaoperacion" [disabled]="!canEdit">
-            </p-calendar>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Valor USD</label>
-            <p-inputNumber [showButtons]="false" inputId="valorusd" mode="currency" currency="USD" [min]="0"
-                prefix="USD" [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()" [disabled]="!canEdit">
-            </p-inputNumber>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Tasa SPOT</label>
-            <p-inputNumber [showButtons]="false" inputId="tasaspot" mode="currency" currency="USD" [min]="0"
-                prefix="COP" [(ngModel)]="forward.tasaspot" [disabled]="!canEdit">
-            </p-inputNumber>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Devaluación</label>
-            <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="devaluacion" spinnerMode="horizontal"
-                [step]="0.25" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
-                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="50"
-                suffix="%" [(ngModel)]="forward.devaluacion" [disabled]="!canEdit">
-            </p-inputNumber>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Tasa Forward</label>
-            <p-inputNumber [showButtons]="false" inputId="tasaforward" mode="currency" currency="USD" [min]="0"
-                prefix="COP" [(ngModel)]="forward.tasaforward" (focusout)="calcularValorCOP()" [disabled]="!canEdit">
-            </p-inputNumber>
-        </div>
-        <div class="field col-12 md:col-3">
-            <label>Valor COP</label>
-            <p-inputNumber [showButtons]="false" inputId="valorcop" mode="currency" currency="USD" [min]="0"
-                prefix="COP" [(ngModel)]="forward.valorcop" [disabled]="true">
-            </p-inputNumber>
-        </div>
-    </div>
+    <p-tabView>
+        <p-tabPanel header="Información del Forward">
+            <div class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-3">
+                    <label>Empresa</label>
+                    <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="credV" [disabled]="!canEdit"
+                        [default]="forward.regional">
+                    </ut-regional>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Entidad Financiera</label>
+                    <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="fw" [disabled]="!canEdit"
+                        [default]="forward.entfinanciera">
+                    </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Fecha Operacion</label>
+                    <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechaoperacion" dateFormat="dd/mm/yy"
+                        [disabled]="!canEdit">
+                    </p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Fecha Cumplimiento</label>
+                    <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechacumplimiento" dateFormat="dd/mm/yy"
+                        [minDate]="forward.fechaoperacion" [disabled]="!canEdit">
+                    </p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Valor USD</label>
+                    <p-inputNumber [showButtons]="false" inputId="valorusd" mode="currency" currency="USD" [min]="0"
+                        [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()" [disabled]="!canEdit">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Tasa SPOT</label>
+                    <p-inputNumber [showButtons]="false" inputId="tasaspot" mode="currency" currency="COP" [min]="0"
+                        [(ngModel)]="forward.tasaspot" [disabled]="!canEdit">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Devaluación</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="devaluacion"
+                        spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="50" suffix="%"
+                        [(ngModel)]="forward.devaluacion" [disabled]="!canEdit">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Tasa Forward</label>
+                    <p-inputNumber [showButtons]="false" inputId="tasaforward" mode="currency" currency="COP" [min]="0"
+                        [(ngModel)]="forward.tasaforward" (focusout)="calcularValorCOP()" [disabled]="!canEdit">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Valor COP</label>
+                    <p-inputNumber [showButtons]="false" inputId="valorcop" mode="currency" currency="COP" [min]="0"
+                        [(ngModel)]="forward.valorcop" [disabled]="true">
+                    </p-inputNumber>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel *ngIf="forward.creditos.length > 0" header="Creditos">
+            <ut-listado-credito [data]="forward.creditos"></ut-listado-credito>
+        </p-tabPanel>
+    </p-tabView>
     <ng-template pTemplate="footer">
         <button pButton [icon]="'pi pi-times'" (click)="displayDetalle = false" [label]="'Cerrar'"
             class="p-button-outlined"></button>

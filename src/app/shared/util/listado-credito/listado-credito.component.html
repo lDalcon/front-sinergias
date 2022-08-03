@@ -1,0 +1,21 @@
+<p-table #dt [value]="data" [rowHover]="true" scrollable="true" styleClass="mt-3" responsiveLayout="scroll"
+    scrollHeight="400px">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Id</th>
+            <th>Entidad</th>
+            <th>Valor Asignado</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-credito>
+        <tr>
+            <td>{{credito.id}}</td>
+            <td>{{credito.entfinanciera}}</td>
+            <td class="number-rigth">USD${{credito.valorasignado | number: '1.2-2'}}</td>
+            <td>{{credito.fechacrea | date: 'dd/MM/yyyy'}}</td>
+            <td>{{credito.estado}}</td>
+        </tr>
+    </ng-template>
+</p-table>
