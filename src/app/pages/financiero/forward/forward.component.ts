@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ICredito } from 'src/app/shared/interface/credito.interface';
 import { IForward } from 'src/app/shared/interface/forward.interface';
@@ -154,6 +155,13 @@ export class ForwardComponent implements OnInit {
 
   exportExcel() {
     this.excelService.exportExcel(this.forwards, 'forwards')
+  }
+
+  devaluacion(){
+    if(this.forward.fechaoperacion && this.forward.fechacumplimiento && this.forward.tasaforward && this.forward.tasaspot){
+      this.forward.dias = moment(this.forward.fechacumplimiento).diff(moment(this.forward.fechaoperacion), 'days');
+      this.forward.devaluacion = Math.pow((this.forward.tasaforward / this.forward.tasaspot), (365 / this.forward.dias))
+    }
   }
 
 }

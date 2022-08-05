@@ -9,11 +9,11 @@
             [showClear]="true" [placeholder]="'Todos'">
         </ut-regional>
     </div>
-    <div class="field col-2 md:col-2 button">
+    <div class="field col-12 md:col-2 button">
         <button pButton class="p-element p-button p-component" icon="pi pi-search" (click)="listarCreditos()"></button>
         <button pButton class="p-element p-button p-component" icon="pi pi-plus" (click)="agregarObligacion()"></button>
         <button pButton class="p-element p-button p-component" icon="pi pi-file-excel" (click)="exportExcel()"
-        [disabled]="creditos.length == 0"></button>
+            [disabled]="creditos.length == 0"></button>
     </div>
 </div>
 <!-- Filtro -->
@@ -240,8 +240,7 @@
                 </div>
                 <div class="field col-12 md:col-3" *ngIf="credito.moneda">
                     <label>Monto Deuda</label>
-                    <p-inputNumber inputId="currency-us" mode="currency" currency="USD"
-                        [prefix]="credito.moneda.config.prefix" locale="en-US"
+                    <p-inputNumber inputId="currency-us" mode="currency" [currency]="credito.moneda.config.prefix"
                         [maxFractionDigits]="credito.moneda.config.maxFractionDigits" [(ngModel)]="credito.capital"
                         [disabled]="!canEdit">
                     </p-inputNumber>
@@ -363,15 +362,15 @@
         </div>
         <div class="field col-12 md:col-3" *ngIf="aplTRM">
             <label>TRM</label>
-            <p-inputNumber [showButtons]="false" inputId="valor" mode="currency" currency="USD" [min]="1"
-                [prefix]="'COP'" [(ngModel)]="detallePago.trm" [disabled]="!canEditTRM">
+            <p-inputNumber [showButtons]="false" inputId="valor" mode="currency" currency="COP" [min]="1"
+                [(ngModel)]="detallePago.trm" [disabled]="!canEditTRM">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-3">
             <label>Valor</label>
             <p-inputNumber [showButtons]="false" inputId="valor" mode="currency"
-                [currency]="credito.moneda.config.prefix" [min]="1" [(ngModel)]="detallePago.valor" [min]="1"
-                [max]="detallepago?.tipopago === 'Capital' ? credito.saldo : credito.capital">
+                [currency]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor" [min]="1"
+                [max]="valorMaxPago">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-1 button">

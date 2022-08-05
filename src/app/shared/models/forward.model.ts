@@ -7,6 +7,7 @@ export class Forward {
     periodo: number;
     fechaoperacion: Date;
     fechacumplimiento: Date;
+    dias: number;
     entfinanciera: ValorCatalogo;
     regional: Regional;
     valorusd: number;
