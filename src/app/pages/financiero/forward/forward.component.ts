@@ -160,7 +160,7 @@ export class ForwardComponent implements OnInit {
   devaluacion(){
     if(this.forward.fechaoperacion && this.forward.fechacumplimiento && this.forward.tasaforward && this.forward.tasaspot){
       this.forward.dias = moment(this.forward.fechacumplimiento).diff(moment(this.forward.fechaoperacion), 'days');
-      this.forward.devaluacion = Math.pow((this.forward.tasaforward / this.forward.tasaspot), (365 / this.forward.dias))
+      this.forward.devaluacion = (Math.pow((this.forward.tasaforward / this.forward.tasaspot), (365 / this.forward.dias)) - 1) * 100;
     }
   }
 

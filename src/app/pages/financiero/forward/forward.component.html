@@ -38,8 +38,8 @@
                 <th>#</th>
                 <th>Regional</th>
                 <th>Entidad</th>
-                <th>Fecha Operación</th>
-                <th>Spot</th>
+                <th>Fecha Cumplimiento</th>
+                <th>Forward</th>
                 <th>Valor</th>
                 <th>Valor x Asignar</th>
                 <th></th>
@@ -50,10 +50,10 @@
                 <td> {{forward.id }} </td>
                 <td> {{forward.regional }} </td>
                 <td> {{forward.entfinanciera }} </td>
-                <td> {{forward.fechaoperacion | date: 'dd/MM/yyyy' }} </td>
-                <td style="text-align: right;"> {{forward.tasaspot | currency }} </td>
-                <td style="text-align: right;"> {{forward.valorusd | currency }} </td>
-                <td style="text-align: right;"> {{forward.saldoasignacion | currency }} </td>
+                <td> {{forward.fechacumplimiento | date: 'dd/MM/yyyy' }} </td>
+                <td style="text-align: right;">COP {{forward.tasaspot | number : '1.2-2' }} </td>
+                <td style="text-align: right;">USD {{forward.valorusd | number : '1.2-2' }} </td>
+                <td style="text-align: right;">USD {{forward.saldoasignacion | number : '1.2-2' }} </td>
                 <td>
                     <p-splitButton label="+" [model]="this.items" [appendTo]="card"
                         (onDropdownClick)="idforwardSelect = forward.id"></p-splitButton>
@@ -119,7 +119,7 @@
         <div class="field col-12 md:col-3">
             <label>Devaluación</label>
             <p-inputNumber [showButtons]="false" inputId="devaluacion" [step]="0.25" mode="decimal" [disabled]="true"
-                [minFractionDigits]="2" [maxFractionDigits]="4" suffix="%" [(ngModel)]="forward.devaluacion">
+                [minFractionDigits]="2" [maxFractionDigits]="2" suffix="%" [(ngModel)]="forward.devaluacion">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-3">
