@@ -1,1 +1,39 @@
-<p>dash-gerencia works!</p>
+<p-toast></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+<div class="card">
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <p-calendar [(ngModel)]="fechaReporte" view="month" dateFormat="mm/yy" [showIcon]="true" placeholder="Fecha"
+                class="mr-2"></p-calendar>
+            <p-button icon="pi pi-search" class="mr-2" (onClick)="getInfoReporte()"></p-button>
+        </div>
+    </p-toolbar>
+    <br>
+    <p-treeTable *ngIf="dataReporte.data.length > 0" [value]="dataReporte.data" [scrollable]="true" scrollHeight="450px">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="text-align: center;" colspan="2">Empresa</th>
+                <th style="text-align: center;">Total</th>
+                <th style="text-align: center;">Participacion</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td colspan="2">
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    {{rowData.label | uppercase}}
+                </td>
+                <td style="text-align: right;">{{rowData.total | number: '1.0-0'}} COP</td>
+                <td style="text-align: center;">{{rowData.participacion | number: '1.2-2'}}%</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="2">Total</td>
+                <td style="text-align: right;">{{dataReporte.total | number : '1.0-0'}} COP</td>
+                <td style="text-align: center;"></td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
