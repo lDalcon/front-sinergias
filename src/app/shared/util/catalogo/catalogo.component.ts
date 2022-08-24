@@ -46,9 +46,14 @@ export class CatalogoComponent implements OnInit {
     let filtros: string[] = this.filter.split('/');
     switch (filtros[0]) {
       case 'config':
-        let key: string = filtros[1].split('?')[0]
-        let value: string = filtros[1].split('?')[1]
+        let key: string = filtros[1].split('?')[0];
+        let value: string = filtros[1].split('?')[1];
         catalogo.valorcatalogo = catalogo.valorcatalogo.filter(x => x.config[key] == value);
+        break;
+      case 'moneda':
+        let monedalocal: string = filtros[1].split('?')[0];
+        let monedaCredito: string = filtros[1].split('?')[1];
+        catalogo.valorcatalogo = catalogo.valorcatalogo.filter(x => x.config['moneda'] == monedaCredito && x.config['monedalocal'] == monedalocal);
         break;
       default:
         break;

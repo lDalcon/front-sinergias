@@ -220,7 +220,7 @@ export class CreditosComponent implements OnInit {
     if (!this.detallePago?.formapago) error.push('La forma de pago es obligatoria');
     if (this.detallePago?.formapago === 'FORWARD' && !this.detallePago.idforward) error.push('El forward es obligatorio');
     if (this.detallePago?.valor <= 0) error.push('El valor del pago debe ser mayor a $0');
-    if (this.credito.moneda.id === 501 && this.detallePago.trm === 0) error.push('El valor de la TRM debe ser distinto a $0');
+    if (this.credito.regional.config.monedalocal === 'COP'&& this.credito.moneda.id === 501 && this.detallePago.trm === 0) error.push('El valor de la TRM debe ser distinto a $0');
     if (this.detallePago?.idforward && this.pagos.findIndex(x => x?.idforward === this.detallePago.idforward) != -1) error.push('El forward ya fue asociado en un pago previo')
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
     return error.length === 0 ? true : false;

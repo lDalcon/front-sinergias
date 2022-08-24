@@ -352,7 +352,7 @@
         <div class="field col-12 md:col-2" *ngIf="detallePago.tipopago && detallePago.fechapago">
             <label>Forma de Pago</label>
             <ut-catalogo [idCatalogo]="'FORPAG'" [appendTo]="credPago" (onSelect)="seleccionFormaPago($event)"
-                [filter]="'config/moneda?' + credito.moneda.id" [default]="undefined">
+                [filter]="'moneda/'+ credito.regional.config.monedalocal +'?' + credito.moneda.id" [default]="undefined">
             </ut-catalogo>
         </div>
         <div class="field col-12 md:col-3" *ngIf="detallePago?.formapago === 'FORWARD'">
