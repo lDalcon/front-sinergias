@@ -204,7 +204,6 @@ export class CreditosComponent implements OnInit {
     if (!this.credito.capital) error.push('El valor de desembolso es obligatoria');
     if (!this.credito.plazo) error.push('El plazo es obligatoria');
     if (!this.credito.indexado) error.push('El indexado es obligatoria');
-    if (!this.credito.spread) error.push('El spread es obligatoria');
     if (!this.credito.tipointeres) error.push('El tipo de interes es obligatoria');
     if (!this.credito.amortizacionk) error.push('La amortizacion de capital es obligatoria');
     if (!this.credito.amortizacionint) error.push('La amortizacion de interes es obligatoria');

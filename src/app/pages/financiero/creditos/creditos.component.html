@@ -123,6 +123,15 @@
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">
+                    <label>Periodo de Gracia (Meses)</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="periodo"
+                        spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="120"
+                        [(ngModel)]="credito.periodogracia">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
                     <label>Indexado</label>
                     <ut-catalogo [idCatalogo]="'INDEX'" [appendTo]="cred" (onSelect)="credito.indexado = $event">
                     </ut-catalogo>
@@ -141,7 +150,7 @@
                     <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="spread"
                         spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
                         incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
-                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="5" suffix="%"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="20" suffix="%"
                         [minFractionDigits]="2" [maxFractionDigits]="4" [(ngModel)]="credito.spread">
                     </p-inputNumber>
                 </div>
@@ -163,7 +172,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="Amortización" [disabled]="credito.amortizacion.length === 0">
+        <p-tabPanel header="Amortización" [disabled]="true">
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-3">
                     <label>Tasa Indx</label>
@@ -252,6 +261,15 @@
                         incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
                         decrementButtonIcon="pi pi-minus" mode="decimal" [min]="1" [max]="120"
                         [(ngModel)]="credito.plazo" [disabled]="!canEdit">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Periodo de Gracia (Meses)</label>
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="periodo"
+                        spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus" mode="decimal" [min]="0" [max]="120"
+                        [(ngModel)]="credito.periodogracia" [disabled]="!canEdit">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">

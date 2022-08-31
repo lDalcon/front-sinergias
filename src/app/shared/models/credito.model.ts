@@ -16,13 +16,13 @@ export class Credito {
     saldo: number;
     plazo: number;
     indexado: ValorCatalogo;
-    spread: number;
+    spread: number = 0;
     tipointeres: ValorCatalogo;
     amortizacionk: ValorCatalogo;
     amortizacionint: ValorCatalogo;
     saldoasignacion: number;
     estado: string;
-    tasa: number;
+    tasa: number = 0;
     usuariocrea: string;
     fechacrea: Date;
     usuariomod: string;
@@ -30,6 +30,7 @@ export class Credito {
     amortizacion: Amortizacion[] = [];
     forwards: any[];
     pagos: DetallePago[] = [];
+    periodogracia: number = 0;
 }
 
 export class Amortizacion {

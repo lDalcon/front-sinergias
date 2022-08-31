@@ -9,12 +9,13 @@ export class ForwardComponent implements OnInit {
 
   public forwardSelected: any;
   @Input() data: any[] = [];
-  @Input() appendTo: any
+  @Input() appendTo: any;
   @Output() forward: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
+    this.data = this.data.filter(x=> x.saldoasignacion > 0);
   }
 
   onRowSelect(event: any) {
