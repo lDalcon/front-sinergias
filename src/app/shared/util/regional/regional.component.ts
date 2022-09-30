@@ -12,19 +12,17 @@ export class RegionalComponent implements OnInit {
   @Input() default: Regional;
   @Input() disabled: boolean = false;
   @Input() nit: string = '';
-  @Input() showClear: boolean = false;
   @Input() placeholder: string = 'Seleccione una opción';
+  @Input() regionales: Regional[] = [];
+  @Input() showClear: boolean = false;
   @Output() onSelect: EventEmitter<Regional> = new EventEmitter<Regional>();
 
-  @Input() regionales: Regional[] = [];
   public regional: Regional;
 
   constructor() { }
 
   ngOnInit(): void {
-    if (this.default) this.regional = this.default;
-    console.log(this.regionales)
-    
+    if (this.default) this.regional = this.default;    
   }
   
   onSelectValor() {

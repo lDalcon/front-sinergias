@@ -4,11 +4,13 @@ import { FinancieroRoutingModule } from './financiero.routing';
 import { CreditosComponent } from './creditos/creditos.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ForwardComponent } from './forward/forward.component';
+import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
 
 @NgModule({
   declarations: [
     CreditosComponent,
-    ForwardComponent
+    ForwardComponent,
+    DiferenciaCambioComponent
   ],
   imports: [
     CommonModule,

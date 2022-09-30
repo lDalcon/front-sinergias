@@ -117,7 +117,7 @@ export class ForwardComponent implements OnInit {
       })
       .catch(err => {
         this.isLoading = false;
-        this.messageService.add({ key: 'ext', severity: 'error', detail: 'Error al crear forward' })
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err.error.message })
         console.log(err)
       })
   }
@@ -143,6 +143,7 @@ export class ForwardComponent implements OnInit {
     let error: string[] = []
     this.creditoForward.idcredito = this.creditoAsignar?.id || 0;
     this.creditoForward.idforward = this.forward?.id || 0;
+    if (!this.creditoForward.ano || !this.creditoForward.periodo) error.push('El mes de asignación es obligatorio');
     if (this.creditoForward.valorasignado === 0) error.push(`El valor asignado debe ser mayor a USD$0`)
     if (this.creditoForward.valorasignado === 0) error.push(`El valor asignado debe ser mayor a USD$0`)
     if (this.creditoForward.valorasignado > this.creditoAsignar?.saldoasignacion) error.push(`El valor asignado supera el saldo del credito (USD$${this.creditoAsignar.saldoasignacion})`)

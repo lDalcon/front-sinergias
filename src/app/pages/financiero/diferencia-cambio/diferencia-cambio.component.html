@@ -1,0 +1,57 @@
+<p-toast></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+<div class="card">
+    <p-toolbar>
+        <div class="p-toolbar-group-left">
+            <p-calendar [(ngModel)]="fechaReporte" view="month" dateFormat="mm/yy" [showIcon]="true" placeholder="Fecha"
+            class="mr-2"></p-calendar>
+            <ut-regional (onSelect)="regional = $event" placeholder="Seleccione empresa" [regionales]="sessionService.usuario.regionales"></ut-regional>
+        </div>
+        <div class="p-toolbar-group-right">
+            <p-button icon="pi pi-search" class="mr-2" (onClick)="obtenerDiferenciaCambio()"></p-button>
+            <p-button icon="pi pi-file-excel" class="mr-2" (onClick)="exportar()"></p-button>
+        </div>
+    </p-toolbar>
+
+    <p-table [value]="data.dc_consolidado" [rowHover]="true" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="header-table">REGIONAL</th>
+                <th class="header-table">LINEA DE CREDITO</th>
+                <th class="header-table">DEUDA USD</th>
+                <th class="header-table">DEUDA NO CUBIERTA</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO TOTAL DEUDA NO CUBIERTA</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO ACUMULADA MES ANTERIRO DEUDA NO CUBIERTA</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO DEL MES DEUDA NO CUBIERTA</th>
+                <th class="header-table">FORWARD</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO TOTAL FORWARD</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO ACUMULADA FORWARD</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO ACUMULADA MES ANTERIRO FORWARD</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO DEL MES FORWARD</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO ACUMULADA TOTAL</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO ACUMULADA MES ANTERIRO TOTAL</th>
+                <th class="header-table">DIFERENCIA EN CAMBIO DEL MES TOTAL</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-detalle>
+            <tr>
+                <td> {{detalle.regional }} </td>
+                <td> {{detalle.lineacredito }} </td>
+                <td class="currency"> {{detalle.deudausd | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.deudanocubierta | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiodeudanocubierta | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiomesanterior | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiomesactual | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.forward | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.dicambiototalfwd | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.dicambiototalacumfwd | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiomesanteriorfw | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiomesactualfw | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiototalacum | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiototalacummesanterior | currency: 'USD' }} </td>
+                <td class="currency"> {{detalle.difcambiototalacummesactual | currency: 'USD' }} </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

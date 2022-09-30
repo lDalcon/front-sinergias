@@ -222,16 +222,22 @@
 
 <!-- Asignar Credito -->
 <p-dialog #ac [modal]="true" header="Asignar Crédito" *ngIf="displayAsignar" [(visible)]="displayAsignar"
-    [style]="{width:'50vw'}">
+    [style]="{width:'70vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <div class="p-fluid p-formgrid grid">
-        <div class="field col-12 md:col-6">
+        <div class="field col-12 md:col-4">
             <label>Empresa</label>
             <ut-credito [appendTo]="ac" [idRegional]="forward.regional.id"
                 (credito)="creditoAsignar = $event; creditoForward.valorasignado = $event.saldoasignacion < forward.saldoasignacion ? $event.saldoasignacion : forward.saldoasignacion">
             </ut-credito>
         </div>
-        <div class="field col-12 md:col-6">
+        <div class="field col-12 md:col-4">
+            <label>Mes de Asignación</label>
+            <ut-calendario [appendTo]="ac" [trx]="'registro'"
+                (onSelect)="creditoForward.periodo = $event.periodo; creditoForward.ano = $event.ano">
+            </ut-calendario>
+        </div>
+        <div class="field col-12 md:col-4">
             <label>Valor Asignar</label>
             <p-inputNumber [showButtons]="false" inputId="valorcop" mode="currency" currency="USD" [min]="0"
                 [(ngModel)]="creditoForward.valorasignado" [min]="1" [max]="forward.saldoasignacion">

@@ -12,7 +12,6 @@ import { SessionService } from 'src/app/shared/services/session.service';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import * as moment from 'moment';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-creditos',

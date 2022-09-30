@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CreditosComponent } from './creditos/creditos.component';
 import { ForwardComponent } from './forward/forward.component';
+import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
 
 const routes: Routes = [
     {
@@ -15,6 +16,10 @@ const routes: Routes = [
     {
         path: 'forward',
         component: ForwardComponent
+    },
+    {
+        path: 'diferenciacambio',
+        component: DiferenciaCambioComponent
     }
 ];
 

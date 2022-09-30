@@ -19,4 +19,8 @@ export class ReporteService {
       .then((res: any) => <any[]>res.data)
       .then(data => { return data })
   }
+  
+  obtenerDiferenciaCambio(paramentros: { fecha: Date, nick?: string, nit?: string }){
+    return firstValueFrom(this.http.post(`${API}/diferenciacambio`, paramentros))
+  }
 }
