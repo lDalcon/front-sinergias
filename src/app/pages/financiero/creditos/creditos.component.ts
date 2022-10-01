@@ -292,7 +292,7 @@ export class CreditosComponent implements OnInit {
           .catch(err => {
             console.log(err);
             this.isLoading = false;
-            this.messageService.add({ key: 'dialog', severity: 'error', detail: 'Error al registrar los pagos' });
+            this.messageService.add({ key: 'dialog', severity: 'error', detail: err?.error?.message });
 
           })
       },
