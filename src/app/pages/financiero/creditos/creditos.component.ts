@@ -42,6 +42,8 @@ export class CreditosComponent implements OnInit {
   public totalSaldo: number = 0;
   public usuarioSesion: Usuario;
   public valorMaxPago: number = 0;
+  public estados: string [] = ['TODOS', 'ACTIVO', 'PAGO', 'ANULADO', 'CXC'];
+  public estado: string = 'ACTIVO';
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -73,6 +75,7 @@ export class CreditosComponent implements OnInit {
         this.displayDetalle = true;
         break;
       case 'pago':
+        if(this.credito.saldo <= 0) return this.messageService.add({severity: 'warn', detail: 'El credito se encuentra saldado', key: 'ext'});
         this.detallePago = new DetallePago();
         this.pagos = [];
         this.displayPago = true;
@@ -91,7 +94,8 @@ export class CreditosComponent implements OnInit {
 
   listarCreditos() {
     this.isLoading = true;
-    let params = { saldo: 1 }
+    let params: any = {};
+    if (this.estado != 'TODOS') params['estado'] = this.estado;
     if (this.regional) params['regional'] = this.regional;
     this.creditoService.listarCreditos(params)
       .then(res => {
@@ -140,6 +144,7 @@ export class CreditosComponent implements OnInit {
     if (!this.validarCredito()) return;
     this.isLoading = true;
     this.credito.saldo = this.credito.capital;
+    this.credito.estado = this.credito.capital > 0 ? 'ACTIVO' : 'CXC';
     if (this.credito.moneda.id === 501) this.credito.saldoasignacion = this.credito.capital;
     if (this.credito.indexado?.config?.catalogo) this.getTasaIndexada()
     this.creditoService.simularCredito(this.credito)

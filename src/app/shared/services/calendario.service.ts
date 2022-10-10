@@ -19,4 +19,13 @@ export class CalendarioService {
     return firstValueFrom(this.http.get(`${API}/${trx}`))
       .then((res: any) => <Calendario[]>res.data)
   }
+
+  async getCalendarioByAno(ano: string) {
+    return firstValueFrom(this.http.get(`${API}`, { params: { ano } }))
+      .then((res: any) => <Calendario[]>res.data)
+  }
+
+  async actualizarPeriodo(calendario: Calendario) {
+    return firstValueFrom(this.http.put(`${API}`, calendario))
+  }
 }

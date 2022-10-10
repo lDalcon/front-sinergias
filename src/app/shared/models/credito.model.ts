@@ -31,6 +31,7 @@ export class Credito {
     forwards: any[];
     pagos: DetallePago[] = [];
     periodogracia: number = 0;
+    observaciones: string = '';
 }
 
 export class Amortizacion {

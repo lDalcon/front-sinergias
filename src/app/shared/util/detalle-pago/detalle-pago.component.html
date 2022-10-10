@@ -2,6 +2,7 @@
     scrollHeight="400px">
     <ng-template pTemplate="header">
         <tr>
+            <th>Id</th>
             <th>Pago</th>
             <th>Forma de Pago</th>
             <th>Fecha de Pago</th>
@@ -12,6 +13,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-detpago let-rowIndex>
         <tr>
+            <td>{{detpago.seq}}</td>
             <td>{{detpago.tipopago}}</td>
             <td>{{detpago.formapago}}</td>
             <td>{{detpago.fechapago | date: 'dd/MM/yyyy'}}</td>

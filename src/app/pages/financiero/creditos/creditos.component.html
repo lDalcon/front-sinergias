@@ -9,6 +9,10 @@
             [showClear]="true" [placeholder]="'Todos'">
         </ut-regional>
     </div>
+    <div class="field col-12 md:col-3">
+        <label>Estado</label>
+        <p-dropdown [options]="estados" [(ngModel)]="estado"></p-dropdown>
+    </div>
     <div class="field col-12 md:col-2 button">
         <button pButton class="p-element p-button p-component" icon="pi pi-search" (click)="listarCreditos()"></button>
         <button pButton class="p-element p-button p-component" icon="pi pi-plus" (click)="agregarObligacion()"></button>
@@ -154,21 +158,26 @@
                         [minFractionDigits]="2" [maxFractionDigits]="4" [(ngModel)]="credito.spread">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Tipo de Interes</label>
                     <ut-catalogo [idCatalogo]="'TIPINT'" [appendTo]="cred" (onSelect)="credito.tipointeres = $event">
                     </ut-catalogo>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Amortización Capital</label>
                     <ut-catalogo [idCatalogo]="'AMOCAP'" [appendTo]="cred" (onSelect)="credito.amortizacionk = $event">
                     </ut-catalogo>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Amortización Interes</label>
                     <ut-catalogo [idCatalogo]="'AMOINT'" [appendTo]="cred"
                         (onSelect)="credito.amortizacionint = $event">
                     </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Observaciones</label>
+                    <textarea pInputTextarea [(ngModel)]="credito.observaciones" rows="3"
+                        style="width: 100%;"></textarea>
                 </div>
             </div>
         </p-tabPanel>
@@ -296,24 +305,30 @@
                         [(ngModel)]="credito.spread" [disabled]="!canEdit">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Tipo de Interes</label>
                     <ut-catalogo [idCatalogo]="'TIPINT'" [appendTo]="credV" (onSelect)="credito.tipointeres = $event"
                         [default]="credito.tipointeres" [disabled]="!canEdit">
                     </ut-catalogo>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Amortización Capital</label>
                     <ut-catalogo [idCatalogo]="'AMOCAP'" [appendTo]="credV" (onSelect)="credito.amortizacionk = $event"
                         [default]="credito.amortizacionk" [disabled]="!canEdit">
                     </ut-catalogo>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Amortización Interes</label>
                     <ut-catalogo [idCatalogo]="'AMOINT'" [appendTo]="credV"
                         (onSelect)="credito.amortizacionint = $event" [default]="credito.amortizacionint"
                         [disabled]="!canEdit">
                     </ut-catalogo>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Observaciones</label>
+                    <textarea pInputTextarea [(ngModel)]="credito.observaciones" rows="3" style="width: 100%;"
+                        [disabled]="!canEdit">
+                    </textarea>
                 </div>
             </div>
         </p-tabPanel>
@@ -370,7 +385,8 @@
         <div class="field col-12 md:col-2" *ngIf="detallePago.tipopago && detallePago.fechapago">
             <label>Forma de Pago</label>
             <ut-catalogo [idCatalogo]="'FORPAG'" [appendTo]="credPago" (onSelect)="seleccionFormaPago($event)"
-                [filter]="'moneda/'+ credito.regional.config.monedalocal +'?' + credito.moneda.id" [default]="undefined">
+                [filter]="'moneda/'+ credito.regional.config.monedalocal +'?' + credito.moneda.id"
+                [default]="undefined">
             </ut-catalogo>
         </div>
         <div class="field col-12 md:col-3" *ngIf="detallePago?.formapago === 'FORWARD'">
@@ -405,3 +421,4 @@
     <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
     </p-confirmDialog>
 </p-dialog>
+<!-- Pago Creditos -->
