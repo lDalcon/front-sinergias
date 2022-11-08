@@ -69,18 +69,18 @@
     <p-toast [key]="'dialog'"></p-toast>
 
     <div class="p-fluid p-formgrid grid">
-        <div class="field col-12 md:col-4">
+        <div class="field col-12 md:col-6">
             <label>Empresa</label>
             <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="credV"
                 (onSelect)="forward.regional = $event">
             </ut-regional>
         </div>
-        <div class="field col-12 md:col-4">
+        <div class="field col-12 md:col-6">
             <label>Entidad Financiera</label>
             <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="fw" (onSelect)="forward.entfinanciera = $event">
             </ut-catalogo>
         </div>
-        <div class="field col-12 md:col-4">
+        <div class="field col-12 md:col-3">
             <label>Valor USD</label>
             <p-inputNumber [showButtons]="false" inputId="valorusd" mode="currency" currency="USD" [min]="0"
                 [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()">
@@ -128,6 +128,10 @@
                 [(ngModel)]="forward.valorcop" [disabled]="true">
             </p-inputNumber>
         </div>
+        <div class="field col-12 md:col-12">
+            <label>Observaciones</label>
+            <textarea pInputTextarea [(ngModel)]="forward.observaciones" rows="3" style="width: 100%;"></textarea>
+        </div>
     </div>
 
     <ng-template pTemplate="footer">
@@ -137,8 +141,8 @@
 </p-dialog>
 <!-- Crear Forward -->
 
-<!-- Detalle Forward -->
-<p-dialog #fwd [modal]="true" header="Detalle Forward" *ngIf="displayDetalle" [(visible)]="displayDetalle"
+<!-- Detalle - Edicion Forward -->
+<p-dialog #fwd [modal]="true" [header]="header" *ngIf="displayDetalle" [(visible)]="displayDetalle"
     [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <p-tabView>
@@ -159,13 +163,15 @@
                 <div class="field col-12 md:col-3">
                     <label>Fecha Operacion</label>
                     <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechaoperacion" dateFormat="dd/mm/yy"
-                        [disabled]="!canEdit" (focusout)="devaluacion()">
+                        [appendTo]="fwd" [minDate]="minDate" [maxDate]="maxDate" [disabled]="!canEdit"
+                        (onSelect)="devaluacion()">
                     </p-calendar>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Fecha Cumplimiento</label>
                     <p-calendar [appendTo]="fw" [(ngModel)]="forward.fechacumplimiento" dateFormat="dd/mm/yy"
-                        [minDate]="forward.fechaoperacion" [disabled]="!canEdit" (focusout)="devaluacion()">
+                        [appendTo]="fwd" [minDate]="forward.fechaoperacion" [disabled]="!canEdit"
+                        (onSelect)="devaluacion()">
                     </p-calendar>
                 </div>
                 <div class="field col-12 md:col-3">
@@ -207,6 +213,11 @@
                         [(ngModel)]="forward.valorcop" [disabled]="true">
                     </p-inputNumber>
                 </div>
+                <div class="field col-12 md:col-12">
+                    <label>Observaciones</label>
+                    <textarea pInputTextarea [(ngModel)]="forward.observaciones" rows="3" style="width: 100%;"
+                        [disabled]="!canEdit"></textarea>
+                </div>
             </div>
         </p-tabPanel>
         <p-tabPanel *ngIf="forward.creditos.length > 0" header="Creditos">
@@ -216,9 +227,11 @@
     <ng-template pTemplate="footer">
         <button pButton [icon]="'pi pi-times'" (click)="displayDetalle = false" [label]="'Cerrar'"
             class="p-button-outlined"></button>
+        <button pButton [icon]="'pi pi-save'" (click)="actualizarForward()" [label]="'Guardar'"
+            class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
-<!-- Detalle Forward -->
+<!-- Detalle - Edición Forward -->
 
 <!-- Asignar Credito -->
 <p-dialog #ac [modal]="true" header="Asignar Crédito" *ngIf="displayAsignar" [(visible)]="displayAsignar"

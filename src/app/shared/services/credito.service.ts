@@ -34,24 +34,36 @@ export class CreditoService {
   async listarCreditos(params?: any) {
     console.log(params)
     return firstValueFrom(this.http.get(`${API}`, { params }))
-      .then((res: any) => <ICredito[]>res.data)
+      .then((res: any) => <any[]>res.data)
+      .then(creditos => {
+        creditos.forEach(credito => {
+          credito.fechadesembolso = new Date(`${credito.fechadesembolso.substring(0,10)}T00:00:00`);
+        });
+        return creditos;
+      })
+      .then((res: any) => <ICredito[]>res)
       .then(data => { return data; })
   }
 
   async obtenerCredito(id: number) {
     return firstValueFrom(this.http.get(`${API}/${id}`))
-      .then((res: any) => <Credito>res.data)
+      .then((res: any) => <any>res.data)
       .then(credito => {
         credito.fechacrea = new Date(credito.fechacrea);
         credito.fechamod = new Date(credito.fechamod);
-        credito.fechadesembolso = new Date(credito.fechadesembolso);
+        credito.fechadesembolso = new Date(`${credito.fechadesembolso.substring(0,10)}T00:00:00`);
         return credito;
       })
+      .then((res: any) => <Credito>res)
       .then(data => { return data; })
   }
 
   async validarPagare(pagare: string, entfinanciera: number) {
     return firstValueFrom(this.http.get(`${API}/${pagare}/${entfinanciera}`))
+  }
+
+  async actualizar(credito: Credito){
+    return firstValueFrom(this.http.put(`${API}`, credito));
   }
 
 }

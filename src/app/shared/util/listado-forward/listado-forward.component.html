@@ -1,11 +1,33 @@
+<div class="p-fluid p-formgrid grid mb-2" *ngIf="viewResume">
+    <div class="field col-12 md:col-3">
+        <label>Total asignado</label>
+        <p-inputNumber [showButtons]="false" mode="currency" currency="USD" [(ngModel)]="totalAsignacion"
+            [disabled]="true">
+        </p-inputNumber>
+    </div>
+    <div class="field col-12 md:col-3">
+        <label>Total Saldo</label>
+        <p-inputNumber [showButtons]="false" mode="currency" currency="USD" [(ngModel)]="totalSaldo"
+            [disabled]="true">
+        </p-inputNumber>
+    </div>
+    <div class="field col-12 md:col-3">
+        <label>% Cubierto</label>
+        <p-inputNumber [showButtons]="false" mode="decimal" [(ngModel)]="procentajeCubierto" suffix="%"
+            [disabled]="true">
+        </p-inputNumber>
+    </div>
+</div>
+
 <p-table #dt [value]="data" [rowHover]="true" scrollable="true" styleClass="mt-3" responsiveLayout="scroll"
     scrollHeight="400px">
     <ng-template pTemplate="header">
         <tr>
             <th>Id</th>
             <th>Entidad</th>
-            <th>Valor Asignado</th>
-            <th>Fecha</th>
+            <th>V. Asignado</th>
+            <th>Saldo</th>
+            <th>Fecha c.</th>
             <th>Estado</th>
         </tr>
     </ng-template>
@@ -14,7 +36,8 @@
             <td>{{forward.id}}</td>
             <td>{{forward.entfinanciera}}</td>
             <td class="number-rigth">USD${{forward.valorasignado | number: '1.2-2'}}</td>
-            <td>{{forward.fechacrea | date: 'dd/MM/yyyy'}}</td>
+            <td class="number-rigth">USD${{forward.saldoasignacion | number: '1.2-2'}}</td>
+            <td>{{forward.fechacumplimiento | date: 'dd/MM/yyyy'}}</td>
             <td>{{forward.estado}}</td>
         </tr>
     </ng-template>

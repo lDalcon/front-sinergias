@@ -12,7 +12,6 @@ import { SessionService } from 'src/app/shared/services/session.service';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import * as moment from 'moment';
-
 @Component({
   selector: 'app-creditos',
   templateUrl: './creditos.component.html',
@@ -30,20 +29,23 @@ export class CreditosComponent implements OnInit {
   public display: boolean = false;
   public displayDetalle: boolean = false;
   public displayPago: boolean = false;
+  public estado: string = 'ACTIVO';
+  public estados: string[] = ['TODOS', 'ACTIVO', 'PAGO', 'ANULADO', 'CXC'];
   public fechaPago: Date;
+  public header: string = '';
   public idCreditoSelect: number = 0;
   public indexTab: number = 0;
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
   public macroEconomico: MacroEconomicos = new MacroEconomicos();
+  public maxDate: Date = new Date();
+  public minDate: Date = new Date();
   public pagos: DetallePago[] = [];
   public regional?: number;
   public totalDesembolso: number = 0;
   public totalSaldo: number = 0;
   public usuarioSesion: Usuario;
   public valorMaxPago: number = 0;
-  public estados: string [] = ['TODOS', 'ACTIVO', 'PAGO', 'ANULADO', 'CXC'];
-  public estado: string = 'ACTIVO';
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -60,28 +62,47 @@ export class CreditosComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
+      { label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') },
+      { label: 'Anular', icon: 'pi pi-times', command: () => this.ejecutarAccion('anular') },
       { label: 'Pago', icon: 'pi pi-credit-card', command: () => this.ejecutarAccion('pago') }
     ];
   }
 
   async ejecutarAccion(accion: string) {
-    this.isLoading = true;
     this.credito = await this.creditoService.obtenerCredito(this.idCreditoSelect);
-    this.isLoading = false;
     switch (accion) {
       case 'detalle':
         this.indexTab = 0;
+        this.header = `Detalle crédito - ${this.credito.id}`;
         this.canEdit = false;
         this.displayDetalle = true;
         break;
+      case 'editar':
+        this.indexTab = 0;
+        this.canEdit = true;
+        this.header = `Editar crédito - ${this.credito.id}`;
+        this.calculateMinMaxDate();
+        this.displayDetalle = true;
+        break;
       case 'pago':
-        if(this.credito.saldo <= 0) return this.messageService.add({severity: 'warn', detail: 'El credito se encuentra saldado', key: 'ext'});
+        if (this.credito.saldo <= 0) return this.messageService.add({ severity: 'warn', detail: 'El credito se encuentra saldado', key: 'ext' });
         this.detallePago = new DetallePago();
         this.pagos = [];
         this.displayPago = true;
         this.valorMaxPago = this.credito.saldo;
         break;
+      case 'anular':
+        this.header = `Anular Crédito - ${this.credito.id}`;
+        this.confirmationService.confirm({
+          message: '¿Está seguro de anular el crédito?',
+          header: this.header,
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => this.procesarAnulacion(),
+          reject: () => this.messageService.add({ key: 'ext', severity: 'warn', detail: 'Acción cancelada' })
+        });
+        break;
       default:
+        this.messageService.add({ key: 'ext', severity: 'warn', detail: 'Acción no configurada' });
         break;
     }
   }
@@ -99,8 +120,8 @@ export class CreditosComponent implements OnInit {
     if (this.regional) params['regional'] = this.regional;
     this.creditoService.listarCreditos(params)
       .then(res => {
-        this.isLoading = false;
         this.creditos = res;
+        this.isLoading = false;
         this.totalDesembolso = this.creditos.reduce((acc, cur) => acc += cur.capital, 0)
         this.totalSaldo = this.creditos.reduce((acc, cur) => acc += cur.saldo, 0)
       })
@@ -212,7 +233,7 @@ export class CreditosComponent implements OnInit {
     if (!this.credito.amortizacionk) error.push('La amortizacion de capital es obligatoria');
     if (!this.credito.amortizacionint) error.push('La amortizacion de interes es obligatoria');
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
-    return error.length === 0 ? true : false;
+    return error.length === 0;
   }
 
   validarDetallePago() {
@@ -223,10 +244,19 @@ export class CreditosComponent implements OnInit {
     if (!this.detallePago?.formapago) error.push('La forma de pago es obligatoria');
     if (this.detallePago?.formapago === 'FORWARD' && !this.detallePago.idforward) error.push('El forward es obligatorio');
     if (this.detallePago?.valor <= 0) error.push('El valor del pago debe ser mayor a $0');
-    if (this.credito.regional.config.monedalocal === 'COP'&& this.credito.moneda.id === 501 && this.detallePago.trm === 0) error.push('El valor de la TRM debe ser distinto a $0');
+    if (this.credito.regional.config.monedalocal === 'COP' && this.credito.moneda.id === 501 && this.detallePago.trm === 0) error.push('El valor de la TRM debe ser distinto a $0');
     if (this.detallePago?.idforward && this.pagos.findIndex(x => x?.idforward === this.detallePago.idforward) != -1) error.push('El forward ya fue asociado en un pago previo')
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
-    return error.length === 0 ? true : false;
+    return error.length === 0;
+  }
+
+  validarCreditoAnular() {
+    let error: string[] = []
+    if (this.credito.estado == 'ANULADO') error.push('El crédito ya se encuentra anulado');
+    if (this.credito.forwards.filter(x => x.estado != 'REVERSADO').length > 0) error.push('El crédito tiene forwards asociados');
+    if (this.credito.capital != this.credito.saldo) error.push('El crédito tiene pagos asociados');
+    if (error.length != 0) this.messageService.add({ key: 'ext', severity: 'warn', detail: error.join('. ') })
+    return error.length === 0;
   }
 
   validarPagare() {
@@ -309,5 +339,36 @@ export class CreditosComponent implements OnInit {
 
   exportExcel() {
     this.excelService.exportExcel(this.creditos, 'obligaciones')
+  }
+
+  calculateMinMaxDate() {
+    this.minDate = new Date(this.credito.ano, this.credito.periodo - 1, 1);
+    this.maxDate = new Date(this.credito.ano, this.credito.periodo, 0);
+  }
+
+  actualizarCredito() {
+    this.isLoading = true;
+    this.creditoService.actualizar(this.credito)
+      .then((res: any) => {
+        this.isLoading = false;
+        this.displayDetalle = false;
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message });
+        this.listarCreditos();
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al crear el crédito.' })
+      })
+  }
+
+  actualizarDatosAnulacion() {
+    this.credito.estado = 'ANULADO';
+    this.credito.saldo = 0;
+  }
+
+  procesarAnulacion() {
+    if (!this.validarCreditoAnular()) return;
+    this.actualizarDatosAnulacion();
+    this.actualizarCredito();
   }
 }

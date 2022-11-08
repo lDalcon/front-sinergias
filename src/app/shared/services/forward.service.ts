@@ -21,22 +21,32 @@ export class ForwardService {
     return firstValueFrom(this.http.post(`${API}`, forward))
   }
 
+  async actualizar(forward: Forward) {
+    return firstValueFrom(this.http.put(`${API}`, forward))
+  }
+
   async listar(params?: any) {
     return firstValueFrom(this.http.get(`${API}`, { params }))
       .then((res: any) => <IForward[]>res.data)
+      .then(forwards => {
+        forwards.forEach(forward => {
+          forward.fechacumplimiento = forward.fechacumplimiento.substring(0,10);
+          forward.fechaoperacion = forward.fechaoperacion.substring(0,10);
+        });
+        return forwards;
+      })
       .then(data => { return data; })
   }
 
   async obtener(id: number) {
     return firstValueFrom(this.http.get(`${API}/${id}`))
-      .then((res: any) => <Forward>res.data)
-      .then(forward => {
-        forward.fechaoperacion = new Date(forward.fechaoperacion);
-        forward.fechacumplimiento = new Date(forward.fechacumplimiento);
-        forward.fechacrea = new Date(forward.fechacrea);
-        forward.fechamod = new Date(forward.fechamod);
+      .then((res: any) => res.data)
+      .then((forward: any) => {
+        forward.fechaoperacion = new Date(`${forward.fechaoperacion.substring(0,10)}T00:00:00`);
+        forward.fechacumplimiento = new Date(`${forward.fechacumplimiento.substring(0,10)}T00:00:00`);
         return forward;
       })
+      .then((res: any) => <Forward>res)
       .then(data => { return data; })
   }
 

@@ -26,11 +26,14 @@ export class ForwardComponent implements OnInit {
   public displayDetalle: boolean = false;
   public forward: Forward = new Forward();
   public forwards: IForward[] = []
+  public header: string = '';
   public idforwardSelect: number = 0;
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
-  public usuarioSesion: Usuario;
+  public maxDate:Date = new Date();
+  public minDate:Date = new Date();
   public regional?: number;
+  public usuarioSesion: Usuario;
 
   constructor(
     private excelService: ExcelService,
@@ -44,6 +47,7 @@ export class ForwardComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
+      { label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') },
       { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') }
     ];
   }
@@ -75,6 +79,13 @@ export class ForwardComponent implements OnInit {
     switch (accion) {
       case 'detalle':
         this.canEdit = false;
+        this.header = `Detalle Forward - ${this.forward.id}`;
+        this.displayDetalle = true;
+        break;
+      case 'editar':
+        this.canEdit = true;
+        this.calculateMinMaxDate();
+        this.header = `Editar Forward - ${this.forward.id}`;
         this.displayDetalle = true;
         break;
       case 'asignar':
@@ -109,10 +120,10 @@ export class ForwardComponent implements OnInit {
     if (!this.validarForward()) return;
     this.isLoading = true;
     this.forwardService.guardar(this.forward)
-      .then(res => {
+      .then((res: any) => {
         this.isLoading = false;
         this.display = false;
-        this.messageService.add({ key: 'ext', severity: 'success', detail: 'Forward creado!' })
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message })
         this.listarForward();
       })
       .catch(err => {
@@ -120,6 +131,23 @@ export class ForwardComponent implements OnInit {
         this.messageService.add({ key: 'ext', severity: 'error', detail: err.error.message })
         console.log(err)
       })
+  }
+
+  actualizarForward(){
+    if (!this.validarForward()) return;
+    this.isLoading = true;
+    this.forwardService.actualizar(this.forward)
+    .then((res: any) => {
+      this.isLoading = false;
+      this.displayDetalle = false;
+      this.messageService.add({ key: 'ext', severity: 'success', detail: res.message })
+      this.listarForward();
+    })
+    .catch(err => {
+      this.isLoading = false;
+      this.messageService.add({ key: 'ext', severity: 'error', detail: err.error.message })
+      console.log(err)
+    })
   }
 
   validarForward(): boolean {
@@ -152,6 +180,17 @@ export class ForwardComponent implements OnInit {
     if (this.creditoForward.idforward === 0) error.push(`El forward es obligatorio`);
     if (error.length != 0) this.messageService.add({ key: 'dialog', severity: 'warn', detail: error.join('. ') })
     return error.length === 0 ? true : false;
+  }
+
+  validarEdicionForward(): boolean{
+    let error: string [] = [];
+    if(this.forward.estado != 'ACTIVO') error.push('El crédito no se encuentra ACTIVO');
+    return error.length === 0;
+  }
+
+  calculateMinMaxDate(){
+    this.minDate = new Date(this.forward.ano, this.forward.periodo - 1, 1);
+    this.maxDate = new Date(this.forward.ano, this.forward.periodo, 0);
   }
 
   exportExcel() {

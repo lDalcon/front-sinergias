@@ -2,7 +2,7 @@ export interface ICredito{
     id: number;
     ano: number;
     periodo: number;
-    fechadesembolso: Date;
+    fechadesembolso: string;
     moneda: string;
     entfinanciera: string;
     regional: string;

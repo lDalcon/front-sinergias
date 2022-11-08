@@ -27,7 +27,7 @@
     <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
         [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
-        [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda']">
+        [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda', 'pagare']">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
                 <span class="p-input-icon-left">
@@ -43,6 +43,7 @@
                 <th style="text-align: center;">Regional</th>
                 <th style="text-align: center;">Entidad</th>
                 <th style="text-align: center;">Moneda</th>
+                <th style="text-align: center;">Pagaré</th>
                 <th style="text-align: center;">Fecha Desembolso</th>
                 <th style="text-align: center;">V. Desembolso</th>
                 <th style="text-align: center;">Saldo</th>
@@ -55,6 +56,7 @@
                 <td> {{credito.regional }} </td>
                 <td> {{credito.entfinanciera }} </td>
                 <td> {{credito.moneda }} </td>
+                <td> {{credito.pagare }} </td>
                 <td> {{credito.fechadesembolso | date: 'dd/MM/yyyy' }} </td>
                 <td style="text-align: right;"> {{credito.capital | currency }} </td>
                 <td style="text-align: right;"> {{credito.saldo | currency }} </td>
@@ -210,7 +212,7 @@
 <!-- Crear credito -->
 
 <!-- Detalle de Credito -->
-<p-dialog #credV [modal]="true" header="{{canEdit ? 'Editar' : 'Detalle'}} Obligación" *ngIf="displayDetalle"
+<p-dialog #credV [modal]="true" [header]="header" *ngIf="displayDetalle"
     [(visible)]="displayDetalle" [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <p-tabView [(activeIndex)]="indexTab">
@@ -225,7 +227,7 @@
                 <div class="field col-12 md:col-4">
                     <label>Moneda</label>
                     <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="credV" (onSelect)="credito.moneda = $event"
-                        [default]="credito.moneda" [disabled]="!canEdit">
+                        [default]="credito.moneda" [disabled]="true">
                     </ut-catalogo>
                 </div>
                 <div class="field col-12 md:col-4">
@@ -252,7 +254,7 @@
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Fecha Desembolso</label>
-                    <p-calendar [appendTo]="credV" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy"
+                    <p-calendar [appendTo]="credV" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy" [minDate]="minDate" [maxDate]="maxDate"
                         [disabled]="!canEdit">
                     </p-calendar>
                 </div>
@@ -352,7 +354,7 @@
             <ut-amortizacion [data]="credito.amortizacion" [prefix]="credito?.moneda?.config?.prefix"></ut-amortizacion>
         </p-tabPanel>
         <p-tabPanel header="Forwards" *ngIf="credito.forwards.length > 0">
-            <ut-listado-forward [data]="credito.forwards"></ut-listado-forward>
+            <ut-listado-forward [data]="credito.forwards" [viewResume]="true" [valorCredito]="credito.capital"></ut-listado-forward>
         </p-tabPanel>
         <p-tabPanel header="Pagos" *ngIf="credito.pagos.length > 0">
             <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>
@@ -362,6 +364,8 @@
     <ng-template pTemplate="footer">
         <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-times'" (click)="procesarCredito()"
             [label]="indexTab === 0 ? 'Siguiente': 'Cerrar'" class="p-button-outlined"></button>
+        <button pButton *ngIf="indexTab != 0" (click)="actualizarCredito()" icon="pi pi-save"
+            label="Guardar" class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
 <!-- Detalle de Credito -->
@@ -422,3 +426,5 @@
     </p-confirmDialog>
 </p-dialog>
 <!-- Pago Creditos -->
+
+<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
