@@ -12,6 +12,7 @@ import { SessionService } from 'src/app/shared/services/session.service';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import * as moment from 'moment';
+import { ForwardService } from 'src/app/shared/services/forward.service';
 @Component({
   selector: 'app-creditos',
   templateUrl: './creditos.component.html',
@@ -52,6 +53,7 @@ export class CreditosComponent implements OnInit {
     private creditoService: CreditoService,
     private detallePagoService: DetallePagoService,
     private excelService: ExcelService,
+    private forwardService: ForwardService,
     private macroeconomicosService: MacroeconomicosService,
     private messageService: MessageService,
     private sessionService: SessionService,
@@ -370,5 +372,21 @@ export class CreditosComponent implements OnInit {
     if (!this.validarCreditoAnular()) return;
     this.actualizarDatosAnulacion();
     this.actualizarCredito();
+  }
+
+  liberarForward(data: any) {
+    if (data.error.length > 0) return this.messageService.add({ key: 'dialog', severity: 'warn', detail: `${data.error.join('. ')}` });
+    this.isLoading = true;
+    this.forwardService.liberarForward(data)
+      .then((res: any) => {
+        this.isLoading = false;
+        this.displayDetalle = false;
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message });
+        this.listarCreditos();
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al crear el crédito.' })
+      })
   }
 }

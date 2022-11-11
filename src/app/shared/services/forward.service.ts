@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IForward } from '../interface/forward.interface';
+import { CierreForward } from '../models/cierre-forward.model';
 import { CreditoForward } from '../models/credito-forward.model';
 import { Forward } from '../models/forward.model';
 
@@ -52,5 +53,13 @@ export class ForwardService {
 
   async asignarCredito(creditoForward: CreditoForward) {
     return firstValueFrom(this.http.post(`${API}/asignarCredito`, creditoForward))
+  }
+
+  async cerrarForward(cierreForward: CierreForward){
+    return firstValueFrom(this.http.post(`${API}/cerrar`, cierreForward))
+  }
+
+  async liberarForward(data: any){
+    return firstValueFrom(this.http.put(`${API}/liberar`, data));
   }
 }

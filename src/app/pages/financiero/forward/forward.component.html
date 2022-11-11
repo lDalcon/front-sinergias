@@ -41,7 +41,8 @@
                 <th>Fecha Cumplimiento</th>
                 <th>Forward</th>
                 <th>Valor</th>
-                <th>Valor x Asignar</th>
+                <!-- <th>Valor x Asignar</th> -->
+                <th>Estado</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -53,7 +54,8 @@
                 <td> {{forward.fechacumplimiento | date: 'dd/MM/yyyy' }} </td>
                 <td style="text-align: right;">COP {{forward.tasaforward | number : '1.2-2' }} </td>
                 <td style="text-align: right;">USD {{forward.valorusd | number : '1.2-2' }} </td>
-                <td style="text-align: right;">USD {{forward.saldoasignacion | number : '1.2-2' }} </td>
+                <!-- <td style="text-align: right;">USD {{forward.saldoasignacion | number : '1.2-2' }} </td> -->
+                <td>{{forward.estado}}</td>
                 <td>
                     <p-splitButton label="+" [model]="this.items" [appendTo]="card"
                         (onDropdownClick)="idforwardSelect = forward.id"></p-splitButton>
@@ -227,7 +229,7 @@
     <ng-template pTemplate="footer">
         <button pButton [icon]="'pi pi-times'" (click)="displayDetalle = false" [label]="'Cerrar'"
             class="p-button-outlined"></button>
-        <button pButton [icon]="'pi pi-save'" (click)="actualizarForward()" [label]="'Guardar'"
+        <button *ngIf="canEdit" pButton [icon]="'pi pi-save'" (click)="actualizarForward()" [label]="'Guardar'"
             class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
@@ -262,3 +264,28 @@
             class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
+<!-- Asignar Credito -->
+
+<!-- Cerrar Forward -->
+<p-dialog #cfwd *ngIf="displayCierre" [(visible)]="displayCierre" [modal]="true" [position]="'top'"
+    [style]="{width: '400px'}" [header]="header">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-12">
+            <label>Mes de Cierre</label>
+            <ut-calendario [appendTo]="cfwd" [trx]="'registro'"
+                (onSelect)="cierreForward.periodo = $event.periodo; cierreForward.ano = $event.ano">
+            </ut-calendario>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label>Observaciones</label>
+            <textarea pInputTextarea [(ngModel)]="cierreForward.observaciones" rows="3" style="width: 100%;"></textarea>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton [icon]="'pi pi-save'" (click)="cerrarForward()" [label]="'Guardar'"
+            class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<!-- Cerrar Forward -->

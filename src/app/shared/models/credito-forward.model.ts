@@ -5,6 +5,7 @@ export class CreditoForward {
     idcredito: number;
     idforward: number;
     valorasignado: number;
+    saldoasignacion: number;
     estado: string;
     justificacion: string;
     usuariocrea: string;

@@ -354,7 +354,7 @@
             <ut-amortizacion [data]="credito.amortizacion" [prefix]="credito?.moneda?.config?.prefix"></ut-amortizacion>
         </p-tabPanel>
         <p-tabPanel header="Forwards" *ngIf="credito.forwards.length > 0">
-            <ut-listado-forward [data]="credito.forwards" [viewResume]="true" [valorCredito]="credito.capital"></ut-listado-forward>
+            <ut-listado-forward [credito]="credito" [viewResume]="true" (data)="liberarForward($event)"></ut-listado-forward>
         </p-tabPanel>
         <p-tabPanel header="Pagos" *ngIf="credito.pagos.length > 0">
             <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>

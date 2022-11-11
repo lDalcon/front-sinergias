@@ -22,4 +22,5 @@ export class Forward {
     fechacrea: Date;
     usuariomod: string;
     fechamod: Date;
+    creditos: any[];
 }

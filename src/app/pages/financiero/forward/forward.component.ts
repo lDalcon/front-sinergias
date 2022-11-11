@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ICredito } from 'src/app/shared/interface/credito.interface';
 import { IForward } from 'src/app/shared/interface/forward.interface';
+import { CierreForward } from 'src/app/shared/models/cierre-forward.model';
 import { CreditoForward } from 'src/app/shared/models/credito-forward.model';
 import { Forward } from 'src/app/shared/models/forward.model';
 import { Usuario } from 'src/app/shared/models/usuario.model';
@@ -14,7 +15,7 @@ import { ExcelService } from 'src/app/shared/services/util/excel.service';
   selector: 'app-forward',
   templateUrl: './forward.component.html',
   styleUrls: ['./forward.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class ForwardComponent implements OnInit {
 
@@ -23,6 +24,7 @@ export class ForwardComponent implements OnInit {
   public creditoForward: CreditoForward = new CreditoForward();
   public display: boolean = false;
   public displayAsignar: boolean = false;
+  public displayCierre: boolean = false;
   public displayDetalle: boolean = false;
   public forward: Forward = new Forward();
   public forwards: IForward[] = []
@@ -30,12 +32,14 @@ export class ForwardComponent implements OnInit {
   public idforwardSelect: number = 0;
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
-  public maxDate:Date = new Date();
-  public minDate:Date = new Date();
+  public maxDate: Date = new Date();
+  public minDate: Date = new Date();
   public regional?: number;
   public usuarioSesion: Usuario;
-
+  public cierreForward: CierreForward = new CierreForward();
+  
   constructor(
+    private confirmationService: ConfirmationService,
     private excelService: ExcelService,
     private forwardService: ForwardService,
     private messageService: MessageService,
@@ -47,8 +51,9 @@ export class ForwardComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
+      { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') },
       { label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') },
-      { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') }
+      { label: 'Cerrar', icon: 'pi pi-times', command: () => this.ejecutarAccion('cerrar') }
     ];
   }
 
@@ -88,11 +93,19 @@ export class ForwardComponent implements OnInit {
         this.header = `Editar Forward - ${this.forward.id}`;
         this.displayDetalle = true;
         break;
+      case 'cerrar':
+        this.cierreForward = new CierreForward();
+        this.cierreForward.id = this.idforwardSelect; 
+        this.cierreForward.valor = this.forward.saldo;
+        this.header = `Cerrar Forward - ${this.forward.id}`;
+        if (this.validarCierre()) this.displayCierre = true;
+        break;
       case 'asignar':
         this.creditoForward = new CreditoForward();
         this.displayAsignar = true;
         break;
       default:
+        this.messageService.add({ key: 'ext', severity: 'warm', detail: 'Acción no configurada' })
         break;
     }
   }
@@ -133,21 +146,21 @@ export class ForwardComponent implements OnInit {
       })
   }
 
-  actualizarForward(){
+  actualizarForward() {
     if (!this.validarForward()) return;
     this.isLoading = true;
     this.forwardService.actualizar(this.forward)
-    .then((res: any) => {
-      this.isLoading = false;
-      this.displayDetalle = false;
-      this.messageService.add({ key: 'ext', severity: 'success', detail: res.message })
-      this.listarForward();
-    })
-    .catch(err => {
-      this.isLoading = false;
-      this.messageService.add({ key: 'ext', severity: 'error', detail: err.error.message })
-      console.log(err)
-    })
+      .then((res: any) => {
+        this.isLoading = false;
+        this.displayDetalle = false;
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message })
+        this.listarForward();
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err.error.message })
+        console.log(err)
+      })
   }
 
   validarForward(): boolean {
@@ -182,13 +195,13 @@ export class ForwardComponent implements OnInit {
     return error.length === 0 ? true : false;
   }
 
-  validarEdicionForward(): boolean{
-    let error: string [] = [];
-    if(this.forward.estado != 'ACTIVO') error.push('El crédito no se encuentra ACTIVO');
+  validarEdicionForward(): boolean {
+    let error: string[] = [];
+    if (this.forward.estado != 'ACTIVO') error.push('El crédito no se encuentra ACTIVO');
     return error.length === 0;
   }
 
-  calculateMinMaxDate(){
+  calculateMinMaxDate() {
     this.minDate = new Date(this.forward.ano, this.forward.periodo - 1, 1);
     this.maxDate = new Date(this.forward.ano, this.forward.periodo, 0);
   }
@@ -197,11 +210,49 @@ export class ForwardComponent implements OnInit {
     this.excelService.exportExcel(this.forwards, 'forwards')
   }
 
-  devaluacion(){
-    if(this.forward.fechaoperacion && this.forward.fechacumplimiento && this.forward.tasaforward && this.forward.tasaspot){
+  devaluacion() {
+    if (this.forward.fechaoperacion && this.forward.fechacumplimiento && this.forward.tasaforward && this.forward.tasaspot) {
       this.forward.dias = moment(this.forward.fechacumplimiento).diff(moment(this.forward.fechaoperacion), 'days');
-      this.forward.devaluacion = (Math.pow((this.forward.tasaforward / this.forward.tasaspot), (365 / this.forward.dias)) - 1) * 100;
+      this.forward.devaluacion = ((Math.pow((this.forward.tasaforward / this.forward.tasaspot), (365 / this.forward.dias)) - 1) * 100);
     }
+  }
+
+  validarCierre(): boolean {
+    let error: string[] = [];
+    if (this.displayCierre) {
+      if (!this.cierreForward.periodo) error.push('El periodo de cierre es obligatorio');
+      if (!this.cierreForward.observaciones) error.push('Las observaciones son obligatorias');
+    }
+    if (this.forward.estado == 'CERRADO') error.push('El forward ya fue cerrado');
+    this.forward.creditos.forEach(credito => {
+      if (credito.saldoasignacion != 0) error.push(`El forward tiene un saldo ($${credito.saldoasignacion}) asociado al crédito ${credito.id}`);
+    })
+    if (error.length != 0) this.messageService.add({ key: 'ext', severity: 'warn', detail: error.join('. ') })
+    return error.length === 0;
+  }
+
+  cerrarForward() {
+    if(!this.validarCierre()) return
+    this.confirmationService.confirm({
+      header: 'Esta acción no es reversible',
+      message: `¿Desea continuar con el cierre del forward ${this.forward.id}?`,
+      accept: () => {
+        this.forwardService.cerrarForward(this.cierreForward)
+          .then((res: any) => {
+            this.displayCierre = false;
+            this.messageService.add({ key: 'ext', severity: 'success', detail: res.message });
+          })
+          .catch(err => {
+            console.log(err);
+            this.displayCierre = false;
+            this.messageService.add({ key: 'ext', severity: 'warn', detail: err?.message || 'Error no controlado' });
+          })
+      },
+      reject: () => {
+        this.messageService.add({ key: 'ext', severity: 'warn', detail: 'Acción cancelada' });
+        this.displayCierre = false;
+      }
+    })
   }
 
 }
