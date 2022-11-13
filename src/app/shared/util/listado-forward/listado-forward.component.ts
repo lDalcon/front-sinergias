@@ -47,6 +47,11 @@ export class ListadoForwardComponent implements OnInit {
   }
 
   abrirLiberar(data: any) {
+    if(data.saldoasignacion == 0) {
+      this.creditoForward['error'] = ['El forward no tiene saldo'];
+      this.data.emit(this.creditoForward);
+      return
+    }
     this.dataSelected = data;
     this.header = `Liberar Fwd ${data.id}`
     this.creditoForward.seq = data.seq;
