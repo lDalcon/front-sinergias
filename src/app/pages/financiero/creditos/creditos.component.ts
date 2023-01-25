@@ -293,6 +293,7 @@ export class CreditosComponent implements OnInit {
     if (event.descripcion === 'SPOT') {
       this.aplTRM = true;
       this.canEditTRM = true;
+      this.detallePago.idforward = undefined;
     }
     else this.aplTRM = false;
     this.detallePago.formapago = event.descripcion;

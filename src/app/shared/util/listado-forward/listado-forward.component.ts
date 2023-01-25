@@ -66,7 +66,7 @@ export class ListadoForwardComponent implements OnInit {
   validar() {
     let error: string[] = [];
     if (this.creditoForward.ano < this.dataSelected.ano || this.creditoForward.periodo < this.dataSelected.periodo) error.push('El periodo ingresado es menor al periodo de asignación ');
-    if ((this.dataSelected.valorasignado - this.valorLiberar) > this.dataSelected.saldoasignacion) error.push('El valor a liberar supera el saldo del forward');
+    if (this.valorLiberar > this.dataSelected.saldoasignacion) error.push('El valor a liberar supera el saldo del forward');
     this.creditoForward['error'] = error;
   }
 

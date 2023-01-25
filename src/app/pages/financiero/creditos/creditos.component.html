@@ -255,14 +255,14 @@
                 <div class="field col-12 md:col-3">
                     <label>Fecha Desembolso</label>
                     <p-calendar [appendTo]="credV" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy" [minDate]="minDate" [maxDate]="maxDate"
-                        [disabled]="!canEdit">
+                        [disabled]="true">
                     </p-calendar>
                 </div>
                 <div class="field col-12 md:col-3" *ngIf="credito.moneda">
                     <label>Monto Deuda</label>
                     <p-inputNumber inputId="currency-us" mode="currency" [currency]="credito.moneda.config.prefix"
                         [maxFractionDigits]="credito.moneda.config.maxFractionDigits" [(ngModel)]="credito.capital"
-                        [disabled]="!canEdit">
+                        [disabled]="true">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">

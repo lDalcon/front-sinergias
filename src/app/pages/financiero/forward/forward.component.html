@@ -185,7 +185,7 @@
                 <div class="field col-12 md:col-3">
                     <label>Valor USD</label>
                     <p-inputNumber [showButtons]="false" inputId="valorusd" mode="currency" currency="USD" [min]="0"
-                        [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()" [disabled]="!canEdit">
+                        [(ngModel)]="forward.valorusd" (focusout)="calcularValorCOP()" [disabled]="true">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">

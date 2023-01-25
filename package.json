@@ -1,6 +1,6 @@
 {
   "name": "front-sinergias",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "Damian Duarte",
     "email": "damianleo1991@hotmail.com",
@@ -9,7 +9,7 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve -o",
-    "build": "ng build --configuration production",
+    "build": "npm --no-git-tag-version version patch && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
