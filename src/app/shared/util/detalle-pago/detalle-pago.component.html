@@ -11,7 +11,7 @@
             <th *ngIf="aplAccion"></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-detpago let-rowIndex>
+    <ng-template pTemplate="body" let-detpago>
         <tr>
             <td>{{detpago.seq}}</td>
             <td>{{detpago.tipopago}}</td>
@@ -21,7 +21,7 @@
             <td class="number-rigth">{{prefix}}${{detpago.valor | number: '1.2-2'}}</td>
             <td *ngIf="aplAccion">
                 <button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger" (click)="deleteRow(rowIndex)"></button>
+                    class="p-button-rounded p-button-danger" (click)="deleteRow(detpago)"></button>
             </td>
         </tr>
     </ng-template>

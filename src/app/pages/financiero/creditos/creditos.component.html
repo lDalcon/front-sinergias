@@ -357,7 +357,7 @@
             <ut-listado-forward [credito]="credito" [viewResume]="true" (data)="liberarForward($event)"></ut-listado-forward>
         </p-tabPanel>
         <p-tabPanel header="Pagos" *ngIf="credito.pagos.length > 0">
-            <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix"></ut-detalle-pago>
+            <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix" (onDelete)="deletePago($event)"></ut-detalle-pago>
         </p-tabPanel>
     </p-tabView>
 
@@ -382,7 +382,7 @@
         </div>
         <div class="field col-12 md:col-2">
             <label>Fecha de Pago</label>
-            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy"
+            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy" [maxDate]="maxDate"
                 (onSelect)="cambioFechaPago()" [disabled]="pagos.length > 0">
             </p-calendar>
         </div>
@@ -407,7 +407,7 @@
         <div class="field col-12 md:col-3">
             <label>Valor</label>
             <p-inputNumber [showButtons]="false" inputId="valor" mode="currency"
-                [currency]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor" [min]="1"
+                [currency]="credito.moneda.config.prefix" [(ngModel)]="detallePago.valor" [min]="0.001"
                 [max]="valorMaxPago">
             </p-inputNumber>
         </div>

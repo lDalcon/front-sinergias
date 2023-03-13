@@ -14,4 +14,5 @@ export class DetallePago {
     fechacrea: Date;
     usuariomod: string;
     fechamod: Date;
+    seqpago: number;
 }

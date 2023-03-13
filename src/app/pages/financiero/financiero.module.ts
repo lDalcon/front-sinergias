@@ -5,12 +5,14 @@ import { CreditosComponent } from './creditos/creditos.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ForwardComponent } from './forward/forward.component';
 import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
+import { SolicitudComponent } from './solicitudes/solicitud.component';
 
 @NgModule({
   declarations: [
     CreditosComponent,
     ForwardComponent,
-    DiferenciaCambioComponent
+    DiferenciaCambioComponent,
+    SolicitudComponent
   ],
   imports: [
     CommonModule,

@@ -90,8 +90,9 @@ export class CreditosComponent implements OnInit {
         if (this.credito.saldo <= 0) return this.messageService.add({ severity: 'warn', detail: 'El credito se encuentra saldado', key: 'ext' });
         this.detallePago = new DetallePago();
         this.pagos = [];
-        this.displayPago = true;
         this.valorMaxPago = this.credito.saldo;
+        this.maxDate = new Date();
+        this.displayPago = true;
         break;
       case 'anular':
         this.header = `Anular Crédito - ${this.credito.id}`;
@@ -287,6 +288,7 @@ export class CreditosComponent implements OnInit {
     }
     this.valorMaxPago = event.saldoasignacion;
     this.detallePago.idforward = event.id;
+    this.detallePago.seqpago = event.seq;
   }
 
   seleccionFormaPago(event: ValorCatalogo) {
@@ -331,7 +333,6 @@ export class CreditosComponent implements OnInit {
             console.log(err);
             this.isLoading = false;
             this.messageService.add({ key: 'dialog', severity: 'error', detail: err?.error?.message });
-
           })
       },
       reject: () => {
@@ -389,5 +390,9 @@ export class CreditosComponent implements OnInit {
         this.isLoading = false;
         this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al crear el crédito.' })
       })
+  }
+
+  deletePago(detallepago: DetallePago){
+    console.log(detallepago);
   }
 }

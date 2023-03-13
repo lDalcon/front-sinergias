@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CreditosComponent } from './creditos/creditos.component';
 import { ForwardComponent } from './forward/forward.component';
 import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
+import { SolicitudComponent } from './solicitudes/solicitud.component';
 
 const routes: Routes = [
     {
@@ -20,6 +21,10 @@ const routes: Routes = [
     {
         path: 'diferenciacambio',
         component: DiferenciaCambioComponent
+    },
+    {
+        path: 'solicitudes',
+        component: SolicitudComponent
     }
 ];
 
