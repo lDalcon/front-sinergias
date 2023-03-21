@@ -37,7 +37,7 @@ export class ForwardComponent implements OnInit {
   public regional?: number;
   public usuarioSesion: Usuario;
   public cierreForward: CierreForward = new CierreForward();
-  
+
   constructor(
     private confirmationService: ConfirmationService,
     private excelService: ExcelService,
@@ -51,10 +51,12 @@ export class ForwardComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
-      { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') },
-      { label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') },
-      { label: 'Cerrar', icon: 'pi pi-times', command: () => this.ejecutarAccion('cerrar') }
+      { label: 'Asignar', icon: 'pi pi-plus', command: () => this.ejecutarAccion('asignar') }
     ];
+    if (this.usuarioSesion.menu.role == 'ADMIN') {
+      this.items.push({ label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') })
+      this.items.push({ label: 'Cerrar', icon: 'pi pi-times', command: () => this.ejecutarAccion('cerrar') })
+    }
   }
 
   agregarForward() {
@@ -64,7 +66,7 @@ export class ForwardComponent implements OnInit {
 
   listarForward() {
     this.isLoading = true;
-    let params = { saldo: 1 }
+    let params = { saldo: 0.01 }
     if (this.regional) params['regional'] = this.regional;
     this.forwardService.listar(params)
       .then(res => {
@@ -95,7 +97,7 @@ export class ForwardComponent implements OnInit {
         break;
       case 'cerrar':
         this.cierreForward = new CierreForward();
-        this.cierreForward.id = this.idforwardSelect; 
+        this.cierreForward.id = this.idforwardSelect;
         this.cierreForward.valor = this.forward.saldo;
         this.header = `Cerrar Forward - ${this.forward.id}`;
         if (this.validarCierre()) this.displayCierre = true;
@@ -232,7 +234,7 @@ export class ForwardComponent implements OnInit {
   }
 
   cerrarForward() {
-    if(!this.validarCierre()) return
+    if (!this.validarCierre()) return
     this.confirmationService.confirm({
       header: 'Esta acción no es reversible',
       message: `¿Desea continuar con el cierre del forward ${this.forward.id}?`,

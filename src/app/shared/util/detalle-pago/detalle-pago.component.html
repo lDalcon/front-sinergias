@@ -20,9 +20,24 @@
             <td class="number-rigth">COP${{detpago.trm | number: '1.2-2'}}</td>
             <td class="number-rigth">{{prefix}}${{detpago.valor | number: '1.2-2'}}</td>
             <td *ngIf="aplAccion">
-                <button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger" (click)="deleteRow(detpago)"></button>
+                <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                    (click)="deleteRow(detpago)"></button>
             </td>
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog #rfwd *ngIf="display" [(visible)]="display" [modal]="true" [position]="'top'" [style]="{width: '400px'}"
+    [header]="header" [draggable]="false">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-12">
+            <label>Fecha de Reversion</label>
+            <p-calendar [(ngModel)]="fechaRev" [minDate]="minDate" [maxDate]="maxDate" appendTo="body"
+                dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton [icon]="'pi pi-undo'" (click)="deleteDetallePago()" [label]="'Reversar'"
+            class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>

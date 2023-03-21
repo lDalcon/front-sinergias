@@ -28,7 +28,7 @@
             <th>Saldo</th>
             <th>Fecha c.</th>
             <th>Estado</th>
-            <th></th>
+            <th *ngIf="aplAccion"></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-forward>
@@ -39,7 +39,7 @@
             <td class="number-rigth">USD${{forward.saldoasignacion | number: '1.2-2'}}</td>
             <td>{{forward.fechacumplimiento | date: 'dd/MM/yyyy'}}</td>
             <td>{{forward.estado}}</td>
-            <td>
+            <td *ngIf="aplAccion">
                 <button pButton pRipple type="button" icon="pi pi-minus" (click)="abrirLiberar(forward)"
                     class="p-button-rounded p-button-warning">
                 </button>
@@ -59,13 +59,14 @@
         </div>
         <div class="field col-12 md:col-12">
             <label>Valor a Liberar</label>
-            <p-inputNumber [showButtons]="false" mode="currency" currency="USD" [min]="0" [max]="creditoForward.saldoasignacion"
-                [(ngModel)]="valorLiberar">
+            <p-inputNumber [showButtons]="false" mode="currency" currency="USD" [min]="0"
+                [max]="creditoForward.saldoasignacion" [(ngModel)]="valorLiberar">
             </p-inputNumber>
         </div>
         <div class="field col-12 md:col-12">
             <label>Observaciones</label>
-            <textarea pInputTextarea [(ngModel)]="creditoForward.justificacion" rows="3" style="width: 100%;"></textarea>
+            <textarea pInputTextarea [(ngModel)]="creditoForward.justificacion" rows="3"
+                style="width: 100%;"></textarea>
         </div>
     </div>
     <ng-template pTemplate="footer">

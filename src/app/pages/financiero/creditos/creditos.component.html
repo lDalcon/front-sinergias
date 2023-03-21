@@ -148,7 +148,8 @@
                         spinnerMode="horizontal" [step]="0.25" decrementButtonClass="p-button-danger"
                         incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
                         decrementButtonIcon="pi pi-minus" mode="decimal" [min]="credito.indexado.config.min"
-                        [max]="credito.indexado.config.max" suffix="%" [(ngModel)]="credito.tasa">
+                        [max]="credito.indexado.config.max" suffix="%" [(ngModel)]="credito.tasa"
+                        [minFractionDigits]="2">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-3">
@@ -212,8 +213,8 @@
 <!-- Crear credito -->
 
 <!-- Detalle de Credito -->
-<p-dialog #credV [modal]="true" [header]="header" *ngIf="displayDetalle"
-    [(visible)]="displayDetalle" [style]="{width:'90vw'}">
+<p-dialog #credV [modal]="true" [header]="header" *ngIf="displayDetalle" [(visible)]="displayDetalle"
+    [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <p-tabView [(activeIndex)]="indexTab">
         <p-tabPanel header="Información del Crédito">
@@ -254,8 +255,8 @@
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Fecha Desembolso</label>
-                    <p-calendar [appendTo]="credV" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy" [minDate]="minDate" [maxDate]="maxDate"
-                        [disabled]="true">
+                    <p-calendar [appendTo]="credV" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy"
+                        [minDate]="minDate" [maxDate]="maxDate" [disabled]="true">
                     </p-calendar>
                 </div>
                 <div class="field col-12 md:col-3" *ngIf="credito.moneda">
@@ -354,18 +355,20 @@
             <ut-amortizacion [data]="credito.amortizacion" [prefix]="credito?.moneda?.config?.prefix"></ut-amortizacion>
         </p-tabPanel>
         <p-tabPanel header="Forwards" *ngIf="credito.forwards.length > 0">
-            <ut-listado-forward [credito]="credito" [viewResume]="true" (data)="liberarForward($event)"></ut-listado-forward>
+            <ut-listado-forward [credito]="credito" [viewResume]="true" [canDelete]="canEdit"
+                (data)="liberarForward($event)"></ut-listado-forward>
         </p-tabPanel>
         <p-tabPanel header="Pagos" *ngIf="credito.pagos.length > 0">
-            <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix" (onDelete)="deletePago($event)"></ut-detalle-pago>
+            <ut-detalle-pago [data]="credito.pagos" [prefix]="credito.moneda.config.prefix"
+                (onDelete)="deletePago($event)" [canDelete]="canEdit"></ut-detalle-pago>
         </p-tabPanel>
     </p-tabView>
 
     <ng-template pTemplate="footer">
         <button pButton [icon]="indexTab === 0 ? 'pi pi-arrow-right': 'pi pi-times'" (click)="procesarCredito()"
             [label]="indexTab === 0 ? 'Siguiente': 'Cerrar'" class="p-button-outlined"></button>
-        <button pButton *ngIf="indexTab != 0" (click)="actualizarCredito()" icon="pi pi-save"
-            label="Guardar" class="p-button-outlined"></button>
+        <button pButton *ngIf="indexTab != 0 && canEdit" (click)="actualizarCredito()" icon="pi pi-save" label="Guardar"
+            class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
 <!-- Detalle de Credito -->
@@ -382,8 +385,8 @@
         </div>
         <div class="field col-12 md:col-2">
             <label>Fecha de Pago</label>
-            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy" [maxDate]="maxDate"
-                (onSelect)="cambioFechaPago()" [disabled]="pagos.length > 0">
+            <p-calendar [appendTo]="credPago" [(ngModel)]="detallePago.fechapago" dateFormat="dd/mm/yy"
+                [maxDate]="maxDate" (onSelect)="cambioFechaPago()" [disabled]="pagos.length > 0">
             </p-calendar>
         </div>
         <div class="field col-12 md:col-2" *ngIf="detallePago.tipopago && detallePago.fechapago">
@@ -427,4 +430,4 @@
 </p-dialog>
 <!-- Pago Creditos -->
 
-<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog icon="pi pi-exclamation-triangle" key="ext"></p-confirmDialog>

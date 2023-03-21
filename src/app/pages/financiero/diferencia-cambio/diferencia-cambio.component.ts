@@ -6,6 +6,8 @@ import { ReporteService } from 'src/app/shared/services/reporte.service';
 import { SessionService } from 'src/app/shared/services/session.service';
 import * as xlsx from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { MacroeconomicosService } from 'src/app/shared/services/macroeconomicos.service';
+import * as moment from 'moment';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 @Component({
@@ -20,8 +22,10 @@ export class DiferenciaCambioComponent implements OnInit {
   public fechaReporte: Date;
   public regional: Regional;
   public isLoading: boolean = false;
+  public trmExist: boolean = false;
 
   constructor(
+    private macroeconomicosService: MacroeconomicosService,
     private messageService: MessageService,
     private reporteService: ReporteService,
     public sessionService: SessionService,
@@ -51,6 +55,7 @@ export class DiferenciaCambioComponent implements OnInit {
     let errors: string[] = [];
     if (!this.fechaReporte) errors.push('La fecha es obligatoria');
     if (!this.regional) errors.push('La regional es obligatoria');
+    if (!this.trmExist) errors.push('La TRM no se encuentra registrada para el periodo seleccionado')
     if (errors.length > 0) this.messageService.add({ severity: 'warn', detail: `${errors.join('. ')}` })
     return errors.length === 0 ? true : false;
   }
@@ -73,5 +78,18 @@ export class DiferenciaCambioComponent implements OnInit {
   private saveAsExcel(buffer: any) {
     const data = new Blob([buffer], { type: EXCEL_TYPE })
     FileSaver.saveAs(data, `diferenciaencambio_${new Date().getTime()}`);
+  }
+
+  getTRMCierre() {
+    this.isLoading = true;
+    this.macroeconomicosService.getMacroeconomicosByDateAndType(moment(new Date(this.fechaReporte.getFullYear(), this.fechaReporte.getMonth() + 1, 0)).format('YYYY-MM-DD'), 'TRM')
+      .then(res => {
+        this.trmExist = moment(new Date(this.fechaReporte.getFullYear(), this.fechaReporte.getMonth() + 1, 0)).format('YYYY-MM-DD') == moment(res.fecha).format('YYYY-MM-DD');
+        this.isLoading = false;
+      })
+      .catch(err => {
+        console.log(err)
+        this.isLoading = false;
+      })
   }
 }

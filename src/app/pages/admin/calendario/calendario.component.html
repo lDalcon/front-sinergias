@@ -3,8 +3,19 @@
 
 <div class="grid">
     <div class="col-12">
-        <p-card [header]="'Calendario'">
-            <p-table [value]="calendario" [rowHover]="true" [rows]="12">
+        <p-card>
+            <p-table #dt [value]="calendario" [rowHover]="true" [rows]="12" [globalFilterFields]="['ano', 'mes']"
+                [paginator]="true" [showCurrentPageReport]="true" [rowsPerPageOptions]="[12,24,36]">
+                <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        Calendario
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Buscar" />
+                        </span>
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Año</th>

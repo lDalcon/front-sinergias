@@ -10,6 +10,7 @@ import { SessionService } from '../../services/session.service';
 export class DetallePagoComponent implements OnInit {
 
   private _data: DetallePago[] = [];
+  @Input() canDelete: boolean = false;
   @Input() prefix: string = '';
   @Input() get data(): DetallePago[] {
     return this._data;
@@ -20,17 +21,31 @@ export class DetallePagoComponent implements OnInit {
   @Output() onDelete: EventEmitter<DetallePago> = new EventEmitter<DetallePago>();
 
   public aplAccion: boolean = false;
+  public detallePago: DetallePago = new DetallePago();
+  public display: boolean = false;
+  public header: string = ''
+  public minDate: Date;
+  public maxDate: Date = new Date();
+  public fechaRev: Date = new Date();
 
   constructor(
-    private sessionService: SessionService
-  ) {
-    this.aplAccion = this.sessionService.usuario.menu.role == 'ADMIN';
-  }
+    private sessionService: SessionService,
+  ) { }
 
   ngOnInit(): void {
+    this.aplAccion = this.sessionService.usuario.menu.role == 'ADMIN' && this.canDelete;
   }
 
   deleteRow(detallepago: DetallePago) {
-    this.onDelete.emit(detallepago)
+    this.minDate = new Date(detallepago.fechapago);
+    this.header = `Reversar Pago ${detallepago.seq}`
+    this.detallePago = detallepago;
+    this.display = true;
+  }
+
+  deleteDetallePago() {
+    this.detallePago.fechapago = this.fechaRev
+    this.onDelete.emit(this.detallePago)
+    this.display = false;
   }
 }

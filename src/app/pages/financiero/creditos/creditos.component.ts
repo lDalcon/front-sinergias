@@ -64,13 +64,16 @@ export class CreditosComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       { label: 'Detalle', icon: 'pi pi-bars', command: () => this.ejecutarAccion('detalle') },
-      { label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') },
-      { label: 'Anular', icon: 'pi pi-times', command: () => this.ejecutarAccion('anular') },
       { label: 'Pago', icon: 'pi pi-credit-card', command: () => this.ejecutarAccion('pago') }
     ];
+    if (this.usuarioSesion.menu.role == 'ADMIN') {
+      this.items.push({ label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') })
+      this.items.push({ label: 'Anular', icon: 'pi pi-times', command: () => this.ejecutarAccion('anular') })
+    }
   }
 
   async ejecutarAccion(accion: string) {
+    this.displayDetalle = false;
     this.credito = await this.creditoService.obtenerCredito(this.idCreditoSelect);
     switch (accion) {
       case 'detalle':
@@ -100,6 +103,7 @@ export class CreditosComponent implements OnInit {
           message: '¿Está seguro de anular el crédito?',
           header: this.header,
           icon: 'pi pi-exclamation-triangle',
+          key: 'ext',
           accept: () => this.procesarAnulacion(),
           reject: () => this.messageService.add({ key: 'ext', severity: 'warn', detail: 'Acción cancelada' })
         });
@@ -392,7 +396,17 @@ export class CreditosComponent implements OnInit {
       })
   }
 
-  deletePago(detallepago: DetallePago){
-    console.log(detallepago);
+  deletePago(detallepago: DetallePago) {
+    this.isLoading = true;
+    this.detallePagoService.deletePago(detallepago)
+      .then((res: any) => {
+        this.listarCreditos()
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message })
+        this.displayDetalle = false;
+      })
+      .catch(err => {
+        console.log(err)
+        this.messageService.add({ key: 'ext', severity: 'warn', detail: err?.error?.message || 'Error no controlado, por favor contacte al admin' })
+      })
   }
 }

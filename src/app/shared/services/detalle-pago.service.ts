@@ -16,6 +16,9 @@ export class DetallePagoService {
 
   procesarDetallePago(pagos: DetallePago[]) {
     return firstValueFrom(this.http.post(`${API}`, pagos))
+  }
 
+  deletePago(detallepago: DetallePago){
+    return firstValueFrom(this.http.delete(API, {body: detallepago}))
   }
 }

@@ -41,7 +41,7 @@
                 <th>Fecha Cumplimiento</th>
                 <th>Forward</th>
                 <th>Valor</th>
-                <!-- <th>Valor x Asignar</th> -->
+                <th>Saldo</th>
                 <th>Estado</th>
                 <th></th>
             </tr>
@@ -54,7 +54,7 @@
                 <td> {{forward.fechacumplimiento | date: 'dd/MM/yyyy' }} </td>
                 <td style="text-align: right;">COP {{forward.tasaforward | number : '1.2-2' }} </td>
                 <td style="text-align: right;">USD {{forward.valorusd | number : '1.2-2' }} </td>
-                <!-- <td style="text-align: right;">USD {{forward.saldoasignacion | number : '1.2-2' }} </td> -->
+                <td style="text-align: right;">USD {{forward.saldo | number : '1.2-2' }} </td>
                 <td>{{forward.estado}}</td>
                 <td>
                     <p-splitButton label="+" [model]="this.items" [appendTo]="card"

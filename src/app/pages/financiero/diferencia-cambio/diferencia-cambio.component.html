@@ -4,7 +4,7 @@
 <div class="card">
     <p-toolbar>
         <div class="p-toolbar-group-left">
-            <p-calendar [(ngModel)]="fechaReporte" view="month" dateFormat="mm/yy" [showIcon]="true" placeholder="Fecha"
+            <p-calendar [(ngModel)]="fechaReporte" view="month" dateFormat="mm/yy" [showIcon]="true" placeholder="Fecha" (onSelect)="getTRMCierre()"
             class="mr-2"></p-calendar>
             <ut-regional (onSelect)="regional = $event" placeholder="Seleccione empresa" [regionales]="sessionService.usuario.regionales"></ut-regional>
         </div>

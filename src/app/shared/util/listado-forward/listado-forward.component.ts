@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { CreditoForward } from '../../models/credito-forward.model';
 import { Credito } from '../../models/credito.model';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'ut-listado-forward',
@@ -11,20 +12,26 @@ export class ListadoForwardComponent implements OnInit {
 
   @Input() viewResume: boolean = false;
   @Input() credito: Credito = new Credito();
+  @Input() canDelete: boolean = false;
   @Output() data: EventEmitter<any> = new EventEmitter<any>();
+
+  public aplAccion: boolean = false;
+  public creditoForward: CreditoForward = new CreditoForward();
+  public dataSelected: any;
+  public display: boolean = false;
+  public header: string = '';
+  public procentajeCubierto: number = 0;
   public totalAsignacion: number = 0;
   public totalSaldo: number = 0;
-  public procentajeCubierto: number = 0;
-  public creditoForward: CreditoForward = new CreditoForward();
-  public display: boolean = false;
   public valorLiberar: number = 0;
-  public header: string = '';
-  public dataSelected: any;
 
-  constructor() { }
+  constructor(
+    private sessionService: SessionService,
+  ) { }
 
   ngOnInit(): void {
     this.totalizarForwards();
+    this.aplAccion = this.sessionService.usuario.menu.role == 'ADMIN' && this.canDelete;
   }
 
   totalizarForwards() {
@@ -47,7 +54,7 @@ export class ListadoForwardComponent implements OnInit {
   }
 
   abrirLiberar(data: any) {
-    if(data.saldoasignacion == 0) {
+    if (data.saldoasignacion == 0) {
       this.creditoForward['error'] = ['El forward no tiene saldo'];
       this.data.emit(this.creditoForward);
       return
