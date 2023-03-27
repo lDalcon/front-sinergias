@@ -14,7 +14,8 @@
         <p-dropdown [options]="estados" [(ngModel)]="estado"></p-dropdown>
     </div>
     <div class="field col-12 md:col-2 button">
-        <button pButton class="p-element p-button p-component" icon="pi pi-search" (click)="listarSolicitudes()"></button>
+        <button pButton class="p-element p-button p-component" icon="pi pi-search"
+            (click)="listarSolicitudes()"></button>
         <button pButton class="p-element p-button p-component" icon="pi pi-plus" (click)="nuevaSolicitud()"></button>
         <!-- <button pButton class="p-element p-button p-component" icon="pi pi-file-excel" (click)="exportExcel()" -->
         <!-- [disabled]="creditos.length == 0"></button> -->
@@ -70,21 +71,21 @@
 <p-dialog #cred [modal]="true" header="Crear Solicitud" *ngIf="display" [(visible)]="display" [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <div class="p-fluid p-formgrid grid">
-        <div class="field col-12 md:col-4">
+        <div class="field col-12 md:col-6">
             <label>Empresa</label>
             <ut-regional [regionales]="usuarioSesion.regionales" [appendTo]="cred"
-                (onSelect)="solicitud.regional = $event">
+                (onSelect)="solicitud.regional = $event; getInfoRegistroSolicitud()">
             </ut-regional>
-        </div>
-        <div class="field col-12 md:col-4">
-            <label>Moneda</label>
-            <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="cred" (onSelect)="solicitud.moneda = $event">
-            </ut-catalogo>
         </div>
         <div class="field col-12 md:col-3">
             <label>Fecha Desembolso</label>
             <p-calendar [appendTo]="cred" [(ngModel)]="solicitud.fechareq" dateFormat="dd/mm/yy" [minDate]="minDate">
             </p-calendar>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label>Moneda</label>
+            <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="cred" (onSelect)="solicitud.moneda = $event">
+            </ut-catalogo>
         </div>
         <div class="field col-12 md:col-3" *ngIf="solicitud.moneda">
             <label>Monto Deuda</label>
@@ -100,6 +101,40 @@
                 [(ngModel)]="solicitud.plazo">
             </p-inputNumber>
         </div>
+        <div class="field col-12 md:col-12" *ngIf="dataRelevante.length > 0">
+            <label>Resumen Deuda</label>
+        </div>
+        <div class="col-12 md:col-12" *ngIf="dataRelevante.length > 0">
+            <p-table [value]="dataRelevante" [rowHover]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Linea de Crédito</th>
+                        <th class="text-center">Saldo COP</th>
+                        <th class="text-center">Saldo USD</th>
+                        <th class="text-center">Vencimiento COP</th>
+                        <th class="text-center">Vencimiento USD</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <th class="text-left">{{ row.tipo}}</th>
+                        <th class="text-right">{{ row.saldocop | currency}}</th>
+                        <th class="text-right">{{ row.saldousd | currency}}</th>
+                        <th class="text-right">{{ row.vencimientocop | currency }}</th>
+                        <th class="text-right">{{ row.vencimientousd | currency }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td class="text-right">Total</td>
+                        <td class="text-right">{{total.saldocop | currency}}</td>
+                        <td class="text-right">{{total.saldousd | currency}}</td>
+                        <td class="text-right">{{total.vencimientocop | currency}}</td>
+                        <td class="text-right">{{total.vencimientousd | currency}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
         <div class="field col-12 md:col-12">
             <label>Observaciones</label>
             <textarea pInputTextarea [(ngModel)]="solicitud.observaciones" rows="3" style="width: 100%;"></textarea>
@@ -107,13 +142,15 @@
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton [icon]="'pi pi-save'" (click)="guardarSolicitud()"  [label]="'Guardar'" class="p-button-outlined"></button>
+        <button pButton [icon]="'pi pi-save'" (click)="guardarSolicitud()" [label]="'Guardar'"
+            class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
 <!-- Crear Solicitud -->
 
 <!-- Detalle Solicitud -->
-<p-dialog #cred [modal]="true" header="Crear Solicitud" *ngIf="displayDetalle" [(visible)]="display" [style]="{width:'90vw'}">
+<p-dialog #cred [modal]="true" header="Crear Solicitud" *ngIf="displayDetalle" [(visible)]="display"
+    [style]="{width:'90vw'}">
     <p-toast [key]="'dialog'"></p-toast>
     <div class="p-fluid p-formgrid grid">
         <div class="field col-12 md:col-4">
@@ -153,7 +190,8 @@
     </div>
 
     <ng-template pTemplate="footer">
-        <button pButton [icon]="'pi pi-save'" (click)="guardarSolicitud()"  [label]="'Guardar'" class="p-button-outlined"></button>
+        <button pButton [icon]="'pi pi-save'" (click)="guardarSolicitud()" [label]="'Guardar'"
+            class="p-button-outlined"></button>
     </ng-template>
 </p-dialog>
 <!-- Detalle Solicitud -->

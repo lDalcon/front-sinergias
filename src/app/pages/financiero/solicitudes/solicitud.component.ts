@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Solicitud } from 'src/app/shared/models/solicitud.model';
 import { Usuario } from 'src/app/shared/models/usuario.model';
+import { ReporteService } from 'src/app/shared/services/reporte.service';
 import { SessionService } from 'src/app/shared/services/session.service';
 import { SolicitudesService } from 'src/app/shared/services/solicitud.service';
 
@@ -26,11 +27,14 @@ export class SolicitudComponent implements OnInit {
   public usuarioSesion: Usuario;
   public header: string;
   public idSolicitudSelect: number;
+  public dataRelevante: any[] = [];
+  public total: any;
 
   constructor(
     private messageService: MessageService,
     private solicitudService: SolicitudesService,
     private sessionService: SessionService,
+    private reporteService: ReporteService,
   ) {
     this.usuarioSesion = this.sessionService.usuario;
   }
@@ -59,6 +63,7 @@ export class SolicitudComponent implements OnInit {
 
   nuevaSolicitud() {
     this.solicitud = new Solicitud();
+    this.dataRelevante = [];
     this.display = true;
   }
 
@@ -96,5 +101,22 @@ export class SolicitudComponent implements OnInit {
         this.messageService.add({ key: 'ext', severity: 'warn', detail: 'Acción no configurada' });
         break;
     }
+  }
+
+  getInfoRegistroSolicitud() {
+    this.reporteService.getInfoRegistroSolicitud(this.solicitud.regional.id)
+      .then(res => {
+        this.total = {saldocop: 0, saldousd: 0, vencimientocop: 0, vencimientousd: 0}
+        res.forEach( x => {
+          this.total.saldocop += x.saldocop
+          this.total.saldousd += x.saldousd
+          this.total.vencimientocop += x.vencimientocop
+          this.total.vencimientousd += x.vencimientousd
+        })
+        this.dataRelevante = res;
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }

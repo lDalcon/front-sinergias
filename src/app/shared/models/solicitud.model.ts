@@ -7,18 +7,9 @@ export class Solicitud {
     periodo: number;
     fechareq: Date;
     moneda: ValorCatalogo;
-    entfinanciera: ValorCatalogo;
     regional: Regional;
-    lineacredito: ValorCatalogo;
-    tipogarantia: ValorCatalogo;
     capital: number;
     plazo: number;
-    indexado: ValorCatalogo;
-    spread: number;
-    tasa: number;
-    tipointeres: ValorCatalogo;
-    amortizacionk: ValorCatalogo;
-    amortizacionint: ValorCatalogo;
     observaciones: string;
     idcredito: number;
     estado: string;

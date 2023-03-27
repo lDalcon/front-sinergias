@@ -19,8 +19,15 @@ export class ReporteService {
       .then((res: any) => <any[]>res.data)
       .then(data => { return data })
   }
-  
-  obtenerDiferenciaCambio(paramentros: { fecha: Date, nick?: string, nit?: string }){
+
+  obtenerDiferenciaCambio(paramentros: { fecha: Date, nick?: string, nit?: string }) {
     return firstValueFrom(this.http.post(`${API}/diferenciacambio`, paramentros))
   }
+
+  getInfoRegistroSolicitud(regional: number) {
+    return firstValueFrom(this.http.get(`${API}/infoRegistroSolicitud/${regional}`))  
+      .then((res: any) => <any[]>res.data)
+      .then(data => { return data })
+  }
+
 }
