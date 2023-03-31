@@ -18,6 +18,10 @@ export class SolicitudesService {
   async listar(filtro: any) {
     return firstValueFrom(this.http.get(API, { params: filtro }))
       .then((res: any) => <any[]>res.data)
+      .then(res => {  
+        res.forEach(sol => sol.fechareq = sol.fechareq.substring(0, 10)) 
+        return res
+      })
   }
 
   async guardar(solicitud: Solicitud) {

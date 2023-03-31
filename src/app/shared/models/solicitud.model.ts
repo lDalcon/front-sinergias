@@ -9,6 +9,8 @@ export class Solicitud {
     moneda: ValorCatalogo;
     regional: Regional;
     capital: number;
+    desembolso: number;
+    desistido: number;
     plazo: number;
     observaciones: string;
     idcredito: number;

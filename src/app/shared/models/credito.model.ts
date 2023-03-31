@@ -32,6 +32,7 @@ export class Credito {
     pagos: DetallePago[] = [];
     periodogracia: number = 0;
     observaciones: string = '';
+    idsolicitud: number = 0;
 }
 
 export class Amortizacion {
