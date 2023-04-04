@@ -4,6 +4,7 @@ import { CreditosComponent } from './creditos/creditos.component';
 import { ForwardComponent } from './forward/forward.component';
 import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
 import { SolicitudComponent } from './solicitudes/solicitud.component';
+import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
 
 const routes: Routes = [
     {
@@ -25,6 +26,10 @@ const routes: Routes = [
     {
         path: 'solicitudes',
         component: SolicitudComponent
+    },
+    {
+        path: 'saldosdiario',
+        component: SaldosdiarioComponent
     }
 ];
 
