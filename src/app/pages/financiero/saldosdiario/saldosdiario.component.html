@@ -2,54 +2,52 @@
 <p-blockUI [blocked]="isLoading"></p-blockUI>
 
 <div class="card">
-    <p-toolbar>
+    <p-toolbar class="mb-2">
         <div class="p-toolbar-group-left">
-            <ut-regional [regionales]="user.regionales" (onSelect)="regional = $event || null"
+            <ut-regional [regionales]="user.regionales" (onSelect)="regional = $event || null; data = []"
                 [placeholder]="'Regional'">
             </ut-regional>
-            <p-calendar *ngIf="regional" [(ngModel)]="range" (onSelect)="createRange()" selectionMode="range"
-                [readonlyInput]="true" inputId="range" dateFormat="dd/mm/yy" placeholder="Fecha"
-                class="ml-2"></p-calendar>
-        </div>
-        <div class="p-toolbar-group-right">
-            <p-button icon="pi pi-search" class="mr-2" (onClick)="listar()"></p-button>
+            <ut-calendario trx="Registro" (onSelect)="mesSeleccionado($event); data = []" class="ml-2"></ut-calendario>
         </div>
     </p-toolbar>
+    <p-calendar *ngIf="regional && data.length > 0" dateFormat="dd/mm/yy" placeholder="Fecha" showOtherMonths="false"
+        class="mt-2" [inline]="true" [(ngModel)]="fechaselecionada" [minDate]="minDate" [maxDate]="maxDate"
+        (onSelect)="fechaSelect()">
+        <ng-template pTemplate="date" let-date>
+            <span [ngStyle]="getStyle(date)">{{date.day}}</span>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <span [ngStyle]="{color: '#d36507'}">Pendiente</span> <br>
+            <span [ngStyle]="{color: '#003dc7'}">Parcial</span> <br>
+            <span [ngStyle]="{color: '#099113'}">Actualizado</span>
+        </ng-template>
+    </p-calendar>
+</div>
 
-
-    <p-table *ngIf="data.length > 0" [value]="data" sortField="entfinanciera" sortMode="single" [scrollable]="true"
-         rowGroupMode="subheader" groupRowsBy="entfinanciera" [tableStyle]="{'min-width': '60rem'}">
+<p-dialog [(visible)]="displayDate" *ngIf="displayDate" [modal]="true" [header]="header">
+    <p-table [value]="datasaldos" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}">
         <ng-template pTemplate="header">
             <tr>
-                <th style="text-align: center; width: 350px;" pFrozenColumn>Numero Cuenta</th>
-                <th style="text-align: center; width: 250px;" *ngFor="let h of headers">
-                    <span style="width: 180px; margin: auto;">{{h | date : 'MMM, E, dd'}}</span>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="groupheader" let-cuenta>
-            <tr pRowGroupHeader>
-                <td [colspan]="colspan" pFrozenColumn>
-                    <span class="font-bold ml-2">{{cuenta.entfinanciera}}</span>
-                </td>
+                <td>Entidad</td>
+                <td>Tipo Cuenta</td>
+                <td># Cuenta</td>
+                <td>Valor</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-cuenta>
             <tr>
-                <td style="width: 350px;" pFrozenColumn>{{cuenta.ncuenta}}</td>
-                <td style="width: 250px;justify-content: flex-end" *ngFor="let h of headers; let i = index"
-                    pEditableColumn>
-                    <p-cellEditor>
-                        <ng-template pTemplate="input">
-                            <input pInputText type="number" [(ngModel)]="cuenta.detalle[i].valor" (focusout)="guardarSaldo(cuenta, i)" (keydown.enter)="guardarSaldo(cuenta, i)"/>
-                        </ng-template>
-                        <ng-template pTemplate="output">
-                            {{cuenta.moneda.config.prefix}} {{ cuenta.detalle[i].valor | number: '1.0-0'}}
-                        </ng-template>
-                    </p-cellEditor>
+                <td>{{cuenta.entfinanciera}}</td>
+                <td>{{cuenta.tipocuenta}}</td>
+                <td>{{cuenta.ncuenta}}</td>
+                <td>
+                    <p-inputNumber [(ngModel)]="cuenta.valor" mode="currency" [currency]="cuenta.moneda.prefix"
+                        [minFractionDigits]="2"></p-inputNumber>
                 </td>
             </tr>
         </ng-template>
     </p-table>
-
-</div>
+    <ng-template pTemplate="footer">
+        <p-button label="Guardar" icon="pi pi-save" (click)="procesarSaldos()"></p-button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>

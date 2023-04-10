@@ -18,7 +18,16 @@ export class SaldosdiarioService {
     return firstValueFrom(this.http.get(API, { params }))
   }
 
+  async listarSaldos(params: any){
+    return firstValueFrom(this.http.get(`${API}/dia`, { params }))
+  }
+
   async guardarSaldo(data: any){
     return firstValueFrom(this.http.post(API, data))
   }
+
+  async procesarSaldos(data: any){
+    return firstValueFrom(this.http.post(`${API}/procesar`, data))
+  }
 }
+

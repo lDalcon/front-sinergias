@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Calendario } from 'src/app/shared/interface/calendario.interface';
 import { Regional } from 'src/app/shared/models/regional.model';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { SaldosdiarioService } from 'src/app/shared/services/saldosdiario.service';
@@ -12,7 +13,7 @@ const dayMs = 1000 * 60 * 60 * 24;
   selector: 'app-saldosdiario',
   templateUrl: './saldosdiario.component.html',
   styleUrls: ['./saldosdiario.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class SaldosdiarioComponent implements OnInit {
 
@@ -21,13 +22,21 @@ export class SaldosdiarioComponent implements OnInit {
   public user: Usuario;
   public range: any;
   public data: any = [];
+  public datasaldos: any = [];
   public headers: any[];
   public colspan: number = 0;
+  public minDate: Date;
+  public maxDate: Date;
+  public mes: Calendario;
+  public fechaselecionada: Date;
+  public displayDate: boolean = false;
+  public header: string = '';
 
   constructor(
+    private confirmationService: ConfirmationService,
     private messageService: MessageService,
+    private saldosdiarioService: SaldosdiarioService,
     public sessionService: SessionService,
-    private saldosdiarioService: SaldosdiarioService
   ) {
     this.user = this.sessionService.usuario;
   }
@@ -54,8 +63,8 @@ export class SaldosdiarioComponent implements OnInit {
     this.colspan = this.headers.length
   }
 
-  listar() {
-    this.saldosdiarioService.listar({ fechainicial: moment(this.range[0]).format('YYYY-MM-DD'), fechafinal: moment(this.range[1]).format('YYYY-MM-DD'), regional: this.regional.id })
+  listar(params: any) {
+    this.saldosdiarioService.listar(params)
       .then((res: any) => {
         this.data = res.data
       })
@@ -73,8 +82,67 @@ export class SaldosdiarioComponent implements OnInit {
       })
       .catch(err => {
         console.log(err)
-        this.messageService.add({ severity: 'err', detail: 'Error al guardar el registro' })
-        this.listar()
+        this.messageService.add({ severity: 'error', detail: 'Error al guardar el registro' })
       })
+  }
+
+  mesSeleccionado(mes: Calendario) {
+    this.minDate = new Date(mes.fechainicial + 'T00:00:00');
+    this.maxDate = new Date(mes.fechafinal + 'T00:00:00');
+    this.fechaselecionada = new Date(mes.fechainicial + 'T00:00:00')
+    this.listar({ fechainicial: mes.fechainicial, fechafinal: mes.fechafinal, regional: this.regional.id })
+  }
+
+  getStyle(date: any) {
+    if (date.otherMonth) return { textDecoration: 'line-through' }
+    switch (this.data[date.day - 1].estado) {
+      case 'PENDIENTE':
+        return { color: '#d36507', textDecoration: 'underline' }
+      case 'PARCIAL':
+        return { color: '#003dc7', textDecoration: 'underline' }
+      case 'OK':
+        return { color: '#099113' }
+      default:
+        return { textDecoration: 'line-through' }
+    }
+  }
+
+  fechaSelect() {
+    this.saldosdiarioService.listarSaldos({ fecha: moment(this.fechaselecionada).format('YYYY-MM-DD'), regional: this.regional.id})
+      .then((res: any) => {
+        this.datasaldos = res.data;
+        if(this.datasaldos.length == 0) return this.messageService.add({ severity: 'warn', detail: 'No existen datos para los filtros aplicados.' })
+        this.header = `${this.regional.nombre} - ${ moment(this.fechaselecionada).format('YYYY-MM-DD')}`
+        this.displayDate = true;
+      })
+      .catch(err => {
+        console.log(err)
+        this.messageService.add({ severity: 'error', detail: 'Error al obtener saldos' })
+      })
+  }
+
+  procesarSaldos(){
+    let saldos = this.datasaldos.filter((x:any)=> x.valor)
+    this.confirmationService.confirm({
+      header: `Atención!`,
+      message: `Esta a punto de almacenar saldos para ${saldos.length} cuenta(s), una vez guardada esta inforación, no será posible actualizarla. Desea continuar?`,
+      closeOnEscape: false,
+      accept: () => {
+        this.saldosdiarioService.procesarSaldos(saldos)
+          .then(()=> {
+            this.messageService.add({severity: 'success', detail: 'Registros almacenados correctamente'})
+            this.data = []
+            this.displayDate = false;
+          })
+          .catch(err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', detail: 'Error al guardar saldos' })
+          })
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', detail: 'Acción cancelada' });
+        this.displayDate = false;
+      }
+    })
   }
 }
