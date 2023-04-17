@@ -4,34 +4,24 @@
 <div class="card">
     <p-toolbar class="mb-2">
         <div class="p-toolbar-group-left">
-            <ut-regional [regionales]="user.regionales" (onSelect)="regional = $event || null; data = []"
+            <ut-regional [regionales]="user.regionales" (onSelect)="regional = $event || null; cambioMes(currentDate)"
                 [placeholder]="'Regional'">
             </ut-regional>
-            <ut-calendario trx="Registro" (onSelect)="mesSeleccionado($event); data = []" class="ml-2"></ut-calendario>
         </div>
     </p-toolbar>
-    <p-calendar *ngIf="regional && data.length > 0" dateFormat="dd/mm/yy" placeholder="Fecha" showOtherMonths="false"
-        class="mt-2" [inline]="true" [(ngModel)]="fechaselecionada" [minDate]="minDate" [maxDate]="maxDate"
-        (onSelect)="fechaSelect()">
-        <ng-template pTemplate="date" let-date>
-            <span [ngStyle]="getStyle(date)">{{date.day}}</span>
-        </ng-template>
-        <ng-template pTemplate="footer">
-            <span [ngStyle]="{color: '#d36507'}">Pendiente</span> <br>
-            <span [ngStyle]="{color: '#003dc7'}">Parcial</span> <br>
-            <span [ngStyle]="{color: '#099113'}">Actualizado</span>
-        </ng-template>
-    </p-calendar>
 </div>
-
+<div class="card" *ngIf="regional">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+</div>
+<!-- Diligenciar Saldos -->
 <p-dialog [(visible)]="displayDate" *ngIf="displayDate" [modal]="true" [header]="header">
     <p-table [value]="datasaldos" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}">
         <ng-template pTemplate="header">
             <tr>
-                <td>Entidad</td>
-                <td>Tipo Cuenta</td>
-                <td># Cuenta</td>
-                <td>Valor</td>
+                <td class="text-center">Entidad</td>
+                <td class="text-center">Tipo Cuenta</td>
+                <td class="text-center"># Cuenta</td>
+                <td class="text-center">Valor</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-cuenta>
@@ -47,7 +37,50 @@
         </ng-template>
     </p-table>
     <ng-template pTemplate="footer">
+        <p-button label="Crear Cuenta" icon="pi pi-plus" (click)="displayDate = false; displayCuenta = true"></p-button>
         <p-button label="Guardar" icon="pi pi-save" (click)="procesarSaldos()"></p-button>
     </ng-template>
 </p-dialog>
+<!-- Diligenciar Saldos -->
+
+<!-- Crear Cuenta -->
+<p-dialog [(visible)]="displayCuenta" *ngIf="displayCuenta" [modal]="true" [header]="'Crear Cuenta'">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12 md:col-4">
+            <label>Empresa</label>
+            <ut-regional [regionales]="user.regionales" [appendTo]="'body'" [disabled]="true"
+                (onSelect)="cuentaBancaria.regional = $event" [default]="regional">
+            </ut-regional>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Entidad</label>
+            <ut-catalogo [idCatalogo]="'ENTFIN'" [appendTo]="'body'"
+                (onSelect)="cuentaBancaria.entfinanciera = $event">
+            </ut-catalogo>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Tipo de Cuenta</label>
+            <ut-catalogo [idCatalogo]="'TIPCUE'" [appendTo]="'body'" (onSelect)="cuentaBancaria.tipocuenta = $event">
+            </ut-catalogo>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Moneda</label>
+            <ut-catalogo [idCatalogo]="'MONEDA'" [appendTo]="'body'" (onSelect)="cuentaBancaria.moneda = $event">
+            </ut-catalogo>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label># Cuenta</label>
+            <input pInputText type="text" [(ngModel)]="cuentaBancaria.ncuenta" />
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Fecha de Apertura</label>
+            <p-calendar [appendTo]="'body'" [(ngModel)]="cuentaBancaria.fechaapertura" dateFormat="dd/mm/yy">
+            </p-calendar>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Guardar" icon="pi pi-save" (click)="guardarCuenta()"></p-button>
+    </ng-template>
+</p-dialog>
+<!-- Crear Cuenta -->
 <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>

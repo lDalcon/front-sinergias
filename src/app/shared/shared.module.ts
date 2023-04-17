@@ -14,6 +14,7 @@ import { DetallePagoComponent } from './util/detalle-pago/detalle-pago.component
 import { ForwardComponent } from './util/forward/forward.component';
 import { ListadoCreditoComponent } from './util/listado-credito/listado-credito.component';
 import { CalendarioComponent } from './util/calendario/calendario.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 
 
@@ -31,11 +32,12 @@ import { CalendarioComponent } from './util/calendario/calendario.component';
     DetallePagoComponent,
     ForwardComponent,
     ListadoCreditoComponent,
-    CalendarioComponent
+    CalendarioComponent,
   ],
   imports: [
     CommonModule,
-    PrimeNgModule
+    PrimeNgModule,
+    FullCalendarModule
   ],
   exports: [
     LayoutComponent,
@@ -51,7 +53,8 @@ import { CalendarioComponent } from './util/calendario/calendario.component';
     DetallePagoComponent,
     ForwardComponent,
     ListadoCreditoComponent,
-    CalendarioComponent
+    CalendarioComponent,
+    FullCalendarModule
   ]
 })
 export class SharedModule { }

@@ -14,8 +14,9 @@ export class SaldosdiarioService {
     private http: HttpClient,
   ) { }
 
-  async listar(params: any) {
+  async listar(params: {fechainicial: string, fechafinal: string, regional: number}) {
     return firstValueFrom(this.http.get(API, { params }))
+      .then((res: any) => <any[]>res.data)
   }
 
   async listarSaldos(params: any){
