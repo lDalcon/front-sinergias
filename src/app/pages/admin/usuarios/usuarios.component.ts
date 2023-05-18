@@ -17,7 +17,7 @@ export class UsuariosComponent implements OnInit {
   public isLoading: boolean = false;
   public items: MenuItem[] = [];
   public regionales: Regional[] = [];
-  public roles: string[] = ['ADMIN', 'TESORERIA']
+  public roles: string[] = ['ADMIN', 'DEUDA', 'SALDOS', 'INFOFIN', 'DEUDASALDOS', 'SALDOSINFOFIN', 'DEUDASALDOSINFOFIN']
   public usuario: Usuario = new Usuario();
   public usuarios: Usuario[] = [];
   public usuarioSelected: Usuario = new Usuario();

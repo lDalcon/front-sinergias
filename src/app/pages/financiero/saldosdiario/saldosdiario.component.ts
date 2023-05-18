@@ -123,7 +123,7 @@ export class SaldosdiarioComponent implements OnInit {
   }
 
   procesarSaldos() {
-    let saldos = this.datasaldos.filter((x: any) => x.valor)
+    let saldos = this.datasaldos.filter((x: any) => x.valor != null)
     this.confirmationService.confirm({
       header: `Atención!`,
       message: `Esta a punto de almacenar saldos para ${saldos.length} cuenta(s), una vez guardada esta información, no será posible actualizarla. Desea continuar?`,

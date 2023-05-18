@@ -7,6 +7,7 @@ import { ForwardComponent } from './forward/forward.component';
 import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
 import { SolicitudComponent } from './solicitudes/solicitud.component';
 import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
+import { InfoRelevanteComponent } from './info-relevante/info-relevante.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
     ForwardComponent,
     DiferenciaCambioComponent,
     SolicitudComponent,
-    SaldosdiarioComponent
+    SaldosdiarioComponent,
+    InfoRelevanteComponent
   ],
   imports: [
     CommonModule,

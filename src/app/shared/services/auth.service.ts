@@ -6,44 +6,58 @@ import { firstValueFrom } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
 import { Router } from '@angular/router';
 
-const API = environment.apiIntegracion + 'auth'
+const API = environment.apiIntegracion + 'auth';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
     private router: Router
-  ) { }
+  ) {}
 
-  login(params: { nick: string, password: string }) {
+  login(params: { nick: string; password: string }) {
     return firstValueFrom(this.http.post(`${API}`, params))
       .then((res: any) => {
         this.sessionService.guardarToken(res.token);
         return <Usuario>res.data;
       })
-      .then(usuario => {
+      .then((usuario) => {
         this.sessionService.usuario = usuario;
-        this.sessionService.guardarUsuario(usuario)
+        this.sessionService.guardarUsuario(usuario);
         switch (usuario.menu.role) {
           case 'ADMIN':
-            this.router.navigateByUrl('/admin')
+            this.router.navigateByUrl('/admin');
             break;
-          case 'TESORERIA':
-            this.router.navigateByUrl('/dashboard/financiero')
+          case 'DEUDA':
+            this.router.navigateByUrl('/dashboard/financiero');
+            break;
+          case 'SALDOS':
+            this.router.navigateByUrl('/financiero/saldosdiario');
+            break;
+          case 'INFOFIN':
+            this.router.navigateByUrl('/financiero/inforelevante');
+            break;
+          case 'DEUDASALDOS':
+            this.router.navigateByUrl('/financiero/saldosdiario');
+            break;
+          case 'SALDOSINFOFIN':
+            this.router.navigateByUrl('/financiero/saldosdiario');
+            break;
+          case 'DEUDASALDOSINFOFIN':
+            this.router.navigateByUrl('/dashboard/financiero');
             break;
           default:
             break;
         }
         //TODO: cambiar path origen
-      })
+      });
   }
 
   logOut() {
     sessionStorage.clear();
-    this.router.navigate(['auth', 'login'])
+    this.router.navigate(['auth', 'login']);
   }
 }

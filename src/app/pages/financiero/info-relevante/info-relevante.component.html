@@ -1,0 +1,41 @@
+<p-toast></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+<p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div class="card">
+    <p-toolbar class="mb-2">
+        <div class="p-toolbar-group-left">
+            <ut-regional [regionales]="user.regionales" (onSelect)="regional = $event || null; cambioMes(currentDate)"
+                [placeholder]="'Regional'">
+            </ut-regional>
+        </div>
+    </p-toolbar>
+</div>
+<div class="card" *ngIf="regional">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+</div>
+
+<!-- Diligenciar Saldos -->
+<p-dialog [(visible)]="displayDate" *ngIf="displayDate" [modal]="true" [header]="header">
+    <p-table [value]="datasaldos" scrollHeight="400px" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <td class="text-center">Concepto</td>
+                <td class="text-center">Valor</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-concepto>
+            <tr>
+                <td>{{concepto.descripcion}}</td>
+                <td>
+                    <p-inputNumber [(ngModel)]="concepto.valor" mode="currency" [currency]="regional.config.monedalocal"
+                        [minFractionDigits]="2"></p-inputNumber>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>      
+    <ng-template pTemplate="footer">
+        <p-button label="Guardar" icon="pi pi-save" (click)="procesarInforelevante()"></p-button>
+    </ng-template>
+</p-dialog>
+<!-- Diligenciar Saldos -->

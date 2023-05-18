@@ -5,6 +5,7 @@ import { ForwardComponent } from './forward/forward.component';
 import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio.component';
 import { SolicitudComponent } from './solicitudes/solicitud.component';
 import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
+import { InfoRelevanteComponent } from './info-relevante/info-relevante.component';
 
 const routes: Routes = [
     {
@@ -30,6 +31,10 @@ const routes: Routes = [
     {
         path: 'saldosdiario',
         component: SaldosdiarioComponent
+    },
+    {
+        path: 'inforelevante',
+        component: InfoRelevanteComponent
     }
 ];
 
