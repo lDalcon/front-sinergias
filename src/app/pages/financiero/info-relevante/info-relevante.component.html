@@ -12,6 +12,7 @@
     </p-toolbar>
 </div>
 <div class="card" *ngIf="regional">
+    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
     <full-calendar #calendar [options]="calendarOptions"></full-calendar>
 </div>
 

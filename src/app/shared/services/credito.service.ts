@@ -66,4 +66,8 @@ export class CreditoService {
     return firstValueFrom(this.http.put(`${API}`, credito));
   }
 
+  async anular(credito: Credito){
+    return firstValueFrom(this.http.delete(`${API}`, {body: credito}));
+  }
+
 }

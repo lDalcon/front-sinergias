@@ -3,7 +3,7 @@ import { Regional } from 'src/app/shared/models/regional.model';
 import { Usuario } from 'src/app/shared/models/usuario.model';
 import { CalendarOptions, DateSelectArg, EventInput } from '@fullcalendar/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { SessionService } from 'src/app/shared/services/session.service';
@@ -17,6 +17,7 @@ import { InfoRelevanteService } from 'src/app/shared/services/info-relevante.ser
 })
 export class InfoRelevanteComponent implements OnInit {
 
+  public messages: Message[];
   public regional: Regional;
   public isLoading: boolean = false;
   public user: Usuario;
@@ -62,6 +63,7 @@ export class InfoRelevanteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.messages = [{severity: 'warn', summary: 'Recordatorio', detail: 'No diligenciar el último día del mes hasta no haber realizado el cierre contable, estos datos ya deben ser los definitivos'}]
   }
 
   fechaSelect(selectInfo: DateSelectArg) {

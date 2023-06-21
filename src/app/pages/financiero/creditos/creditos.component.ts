@@ -365,7 +365,22 @@ export class CreditosComponent implements OnInit {
       })
       .catch(err => {
         this.isLoading = false;
-        this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al crear el crédito.' })
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al actualizar el crédito.' })
+      })
+  }
+
+  anularCredito() {
+    this.isLoading = true;
+    this.creditoService.anular(this.credito)
+      .then((res: any) => {
+        this.isLoading = false;
+        this.displayDetalle = false;
+        this.messageService.add({ key: 'ext', severity: 'success', detail: res.message });
+        this.listarCreditos();
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.messageService.add({ key: 'ext', severity: 'error', detail: err?.error?.message || 'Error al anular el crédito.' })
       })
   }
 
@@ -377,7 +392,7 @@ export class CreditosComponent implements OnInit {
   procesarAnulacion() {
     if (!this.validarCreditoAnular()) return;
     this.actualizarDatosAnulacion();
-    this.actualizarCredito();
+    this.anularCredito();
   }
 
   liberarForward(data: any) {
