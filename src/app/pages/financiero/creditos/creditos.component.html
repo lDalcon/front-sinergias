@@ -381,7 +381,7 @@
         <div class="field col-12 md:col-2">
             <label>Pago a</label>
             <p-dropdown [options]="['Capital', 'Interes']" [(ngModel)]="detallePago.tipopago"
-                placeholder="Seleccione una opción" [appendTo]="credPago"></p-dropdown>
+                placeholder="Seleccione una opción" [appendTo]="credPago" (onChange)="setValorMaxPago()"></p-dropdown>
         </div>
         <div class="field col-12 md:col-2">
             <label>Fecha de Pago</label>

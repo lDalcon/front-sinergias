@@ -93,7 +93,6 @@ export class CreditosComponent implements OnInit {
         if (this.credito.saldo <= 0) return this.messageService.add({ severity: 'warn', detail: 'El credito se encuentra saldado', key: 'ext' });
         this.detallePago = new DetallePago();
         this.pagos = [];
-        this.valorMaxPago = this.credito.saldo;
         this.maxDate = new Date();
         this.displayPago = true;
         break;
@@ -423,5 +422,9 @@ export class CreditosComponent implements OnInit {
         console.log(err)
         this.messageService.add({ key: 'ext', severity: 'warn', detail: err?.error?.message || 'Error no controlado, por favor contacte al admin' })
       })
+  }
+
+  setValorMaxPago(){
+    this.valorMaxPago = this.detallePago.tipopago == 'Capital' ? this.credito.saldo : this.credito.capital;
   }
 }
