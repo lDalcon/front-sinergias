@@ -1,48 +1,18 @@
-<p-toast [key]="'ext'"></p-toast>
+<p-toast></p-toast>
 <p-blockUI [blocked]="isLoading"></p-blockUI>
 
-
-<!-- <div class="card" #card>
-    <p-table #dt [value]="forwards" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
-        [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
-        [filterDelay]="0" [globalFilterFields]="['regional','entfinanciera','estado']">
-        <ng-template pTemplate="caption">
-            <div class="flex justify-content-between flex-column sm:flex-row">
-                <span class="p-input-icon-right">
-                    <p-button label="Crear Forward" icon="pi pi-plus" (onClick)="agregarForward()"></p-button>
-                </span>
-                <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Busqueda" />
-                </span>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th>#</th>
-                <th>Regional</th>
-                <th>Entidad</th>
-                <th>Valor</th>
-                <th>Fecha Operación</th>
-                <th>Estado</th>
-                <th></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-forward>
-            <tr>
-                <td> {{forward.id }} </td>
-                <td> {{forward.regional }} </td>
-                <td> {{forward.entfinanciera }} </td>
-                <td style="text-align: right;"> {{forward.valorusd | currency }} </td>
-                <td> {{forward.fechaoperacion | date: 'dd/MM/yyyy' }} </td>
-                <td> {{forward.estado }} </td>
-                <td>
-                    <p-splitButton label="+" [model]="this.items" [appendTo]="card"
-                        (onDropdownClick)="idforwardSelect = forward.id"></p-splitButton>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</div> -->
+<div class="card">
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <p-fileUpload #fileupload
+        mode="basic"
+        chooseLabel="Archivo"
+        accept=".xls, .xlsx"
+        (onSelect)="onSelectFile($event)"
+        [auto]="false"
+        (onBeforeUpload)="onBeforeUpload()"
+      ></p-fileUpload>
+    </div>
+  </p-toolbar>
+</div>
+<p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>

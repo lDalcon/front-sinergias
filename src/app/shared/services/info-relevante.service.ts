@@ -31,4 +31,8 @@ export class InfoRelevanteService {
   async procesarInforelevante(data: any){
     return firstValueFrom(this.http.post(`${API}/procesar`, data))
   }
+
+  async borrarInfoDia(data: any){
+    return firstValueFrom(this.http.delete(`${API}`, {body: data}));
+  }
 }

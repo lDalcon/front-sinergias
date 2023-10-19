@@ -31,6 +31,7 @@ export class InfoRelevanteComponent implements OnInit {
   public displayCuenta: boolean = false;
   public header: string = '';
   public existData: boolean = false;
+  public dataAux: any[] = []
   public calendarOptions: CalendarOptions = {
     plugins: [
       interactionPlugin,
@@ -67,22 +68,52 @@ export class InfoRelevanteComponent implements OnInit {
   }
 
   fechaSelect(selectInfo: DateSelectArg) {
+    if(this.sessionService.usuario.menu.role !='ADMIN') this.obtenerInfo(selectInfo);
+    else this.borrarInfo(selectInfo);
+  }
+
+  borrarInfo(selectInfo: DateSelectArg){
+    if(this.dataAux.find(x=> x.fecha == selectInfo.startStr)?.estado != 'OK') return;
+    this.confirmationService.confirm({
+      header: `Atención!`,
+      message: `Esta a punto de borrar la información del dia ${selectInfo.startStr}, una vez borrada no será posible recuperarla. Desea continuar?`,
+      closeOnEscape: false,
+      accept: () => {
+        this.infoRelevanteService.borrarInfoDia({fecha: selectInfo.startStr, regional: this.regional.id})
+          .then((res:any) => {
+            this.messageService.add({ severity: 'success', detail: res.message })
+            this.cambioMes(this.currentDate);
+          })
+          .catch(err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', detail: 'Error al borrar saldos.' })
+          })
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', detail: 'Acción cancelada' });
+        this.displayDate = false;
+      }
+    })
+  }
+
+  obtenerInfo(selectInfo: DateSelectArg){
     const calendarApi = selectInfo.view.calendar;
     this.infoRelevanteService.listarInfoRelevante({ fecha: selectInfo.startStr, regional: this.regional.id })
-      .then((res: any) => {
-        this.datasaldos = res.data;
-        if (this.datasaldos.length == 0) return this.messageService.add({ severity: 'warn', detail: 'No existen datos para los filtros aplicados.' })
-        this.header = `${this.regional.nombre} - ${selectInfo.startStr}`
-        this.displayDate = true;
-        calendarApi.unselect();
-      })
-      .catch(err => {
-        console.log(err)
-        this.messageService.add({ severity: 'error', detail: 'Error al obtener saldos' })
-        calendarApi.unselect();
-
-      })
+    .then((res: any) => {
+      this.datasaldos = res.data;
+      if (this.datasaldos.length == 0) return this.messageService.add({ severity: 'warn', detail: 'No existen datos para los filtros aplicados.' })
+      this.header = `${this.regional.nombre} - ${selectInfo.startStr}`
+      this.displayDate = true;
+      calendarApi.unselect();
+    })
+    .catch(err => {
+      console.log(err)
+      this.messageService.add({ severity: 'error', detail: 'Error al obtener saldos' })
+      calendarApi.unselect();
+    })
   }
+
+
   cambioMes(info: any) {
     this.currentDate = info
     this.listar({ fechainicial: info.startStr, fechafinal: info.endStr, regional: this.regional.id })
@@ -92,6 +123,7 @@ export class InfoRelevanteComponent implements OnInit {
     this.isLoading = true;
     this.infoRelevanteService.listar(params)
       .then(res => {
+        this.dataAux = res;
         this.cargarInfo(res)
         this.isLoading = false;
       })

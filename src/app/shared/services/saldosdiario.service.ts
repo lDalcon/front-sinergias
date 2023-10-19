@@ -30,5 +30,9 @@ export class SaldosdiarioService {
   async procesarSaldos(data: any){
     return firstValueFrom(this.http.post(`${API}/procesar`, data))
   }
+
+  async borrarInfoDia(data: any){
+    return firstValueFrom(this.http.delete(`${API}`, {body: data}));
+  }
 }
 

@@ -30,4 +30,8 @@ export class MacroeconomicosService {
       .then((res: any) => <MacroEconomicos>res.data)
       .then(data => { return data; })
   }
+
+  import(data: any[]){
+    return firstValueFrom(this.http.post(`${API}/importar`, data))
+  }
 }

@@ -33,6 +33,7 @@ export class SaldosdiarioComponent implements OnInit {
   public displayCuenta: boolean = false;
   public header: string = '';
   public existData: boolean = false;
+  public dataAux: any[] = []
   public calendarOptions: CalendarOptions = {
     plugins: [
       interactionPlugin,
@@ -73,6 +74,7 @@ export class SaldosdiarioComponent implements OnInit {
     this.isLoading = true;
     this.saldosdiarioService.listar(params)
       .then(res => {
+        this.dataAux = res;
         this.cargarSaldos(res)
         this.isLoading = false;
       })
@@ -105,6 +107,11 @@ export class SaldosdiarioComponent implements OnInit {
   }
 
   fechaSelect(selectInfo: DateSelectArg) {
+    if(this.sessionService.usuario.menu.role !='ADMIN') this.obtenerInfo(selectInfo);
+    else this.borrarInfo(selectInfo);
+  }
+  
+  obtenerInfo(selectInfo: DateSelectArg) {
     const calendarApi = selectInfo.view.calendar;
     this.saldosdiarioService.listarSaldos({ fecha: selectInfo.startStr, regional: this.regional.id })
       .then((res: any) => {
@@ -121,6 +128,31 @@ export class SaldosdiarioComponent implements OnInit {
 
       })
   }
+
+  borrarInfo(selectInfo: DateSelectArg){
+    if(this.dataAux.find(x=> x.fecha == selectInfo.startStr)?.estado != 'OK') return;
+    this.confirmationService.confirm({
+      header: `Atención!`,
+      message: `Esta a punto de borrar la información del dia ${selectInfo.startStr}, una vez borrada no será posible recuperarla. Desea continuar?`,
+      closeOnEscape: false,
+      accept: () => {
+        this.saldosdiarioService.borrarInfoDia({fecha: selectInfo.startStr, regional: this.regional.id})
+          .then((res:any) => {
+            this.messageService.add({ severity: 'success', detail: res.message })
+            this.cambioMes(this.currentDate);
+          })
+          .catch(err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', detail: 'Error al borrar saldos.' })
+          })
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', detail: 'Acción cancelada' });
+        this.displayDate = false;
+      }
+    })
+  }
+
 
   procesarSaldos() {
     let saldos = this.datasaldos.filter((x: any) => x.valor != null)
