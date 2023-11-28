@@ -32,24 +32,20 @@ export class AuthService {
             this.router.navigateByUrl('/admin');
             break;
           case 'DEUDA':
+          case 'DEUDAINFOFIN':
+          case 'DEUDASALDOSINFOFIN':
             this.router.navigateByUrl('/dashboard/financiero');
             break;
           case 'SALDOS':
+          case 'DEUDASALDOS':
+          case 'SALDOSINFOFIN':
             this.router.navigateByUrl('/financiero/saldosdiario');
             break;
           case 'INFOFIN':
             this.router.navigateByUrl('/financiero/inforelevante');
             break;
-          case 'DEUDASALDOS':
-            this.router.navigateByUrl('/financiero/saldosdiario');
-            break;
-          case 'SALDOSINFOFIN':
-            this.router.navigateByUrl('/financiero/saldosdiario');
-            break;
-          case 'DEUDASALDOSINFOFIN':
-            this.router.navigateByUrl('/dashboard/financiero');
-            break;
           default:
+            console.log(`Perfil ${usuario.menu.role} no configurado.`)
             break;
         }
         //TODO: cambiar path origen
