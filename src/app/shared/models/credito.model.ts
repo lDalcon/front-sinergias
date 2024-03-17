@@ -1,4 +1,5 @@
 import { DetallePago } from "./detalle-pago.model";
+import { Empresa } from "./empresa.model";
 import { Regional } from "./regional.model";
 import { ValorCatalogo } from "./valor-catalogo";
 export class Credito {
@@ -33,6 +34,9 @@ export class Credito {
     periodogracia: number = 0;
     observaciones: string = '';
     idsolicitud: number = 0;
+    aval1: Empresa = new Empresa();
+    aval2: Empresa = new Empresa();
+    aval3: Empresa = new Empresa();
 }
 
 export class Amortizacion {

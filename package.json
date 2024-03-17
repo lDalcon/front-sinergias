@@ -8,7 +8,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve -o",
+    "start:dev": "ng serve -o",
     "build": "npm --no-git-tag-version version patch && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

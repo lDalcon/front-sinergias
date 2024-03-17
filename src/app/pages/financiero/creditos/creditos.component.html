@@ -104,14 +104,32 @@
                         (focusout)="validarPagare()" />
                 </div>
                 <div class="field col-12 md:col-3">
+                    <label>Fecha Desembolso</label>
+                    <p-calendar [appendTo]="cred" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy">
+                    </p-calendar>
+                </div>
+                <div class="field col-12 md:col-3">
                     <label>Tipo de Garantía</label>
                     <ut-catalogo [idCatalogo]="'TIPGAR'" [appendTo]="cred" (onSelect)="credito.tipogarantia = $event">
                     </ut-catalogo>
                 </div>
-                <div class="field col-12 md:col-3">
-                    <label>Fecha Desembolso</label>
-                    <p-calendar [appendTo]="cred" [(ngModel)]="credito.fechadesembolso" dateFormat="dd/mm/yy">
-                    </p-calendar>
+                <div class="field col-12 md:col-4">
+                    <label>Aval 1</label>
+                    <ut-empresa [appendTo]="cred" [empresas]="empresas" [disabled]="credito?.tipogarantia?.id != '545'"
+                        (onSelect)="credito.aval1 = $event">
+                    </ut-empresa>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Aval 2</label>
+                    <ut-empresa [appendTo]="cred" [empresas]="empresas" [disabled]="credito?.tipogarantia?.id != '545'"
+                        (onSelect)="credito.aval2 = $event">
+                    </ut-empresa>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Aval 3</label>
+                    <ut-empresa [appendTo]="cred" [empresas]="empresas" [disabled]="credito?.tipogarantia?.id != '545'"
+                        (onSelect)="credito.aval3 = $event">
+                    </ut-empresa>
                 </div>
                 <div class="field col-12 md:col-3" *ngIf="credito.moneda">
                     <label>Monto Deuda</label>

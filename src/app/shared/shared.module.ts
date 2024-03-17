@@ -15,46 +15,43 @@ import { ForwardComponent } from './util/forward/forward.component';
 import { ListadoCreditoComponent } from './util/listado-credito/listado-credito.component';
 import { CalendarioComponent } from './util/calendario/calendario.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
-
-
+import { EmpresaComponent } from './util/empresa/empresa.component';
 
 @NgModule({
   declarations: [
+    AmortizacionComponent,
+    CalendarioComponent,
+    CatalogoComponent,
+    CreditoComponent,
+    DetallePagoComponent,
+    EmpresaComponent,
+    ForwardComponent,
     LayoutComponent,
-    TopbarComponent,
+    ListadoCreditoComponent,
+    ListadoForwardComponent,
     MenuComponent,
     MenuItemComponent,
-    CatalogoComponent,
     RegionalComponent,
-    AmortizacionComponent,
-    CreditoComponent,
-    ListadoForwardComponent,
-    DetallePagoComponent,
-    ForwardComponent,
-    ListadoCreditoComponent,
-    CalendarioComponent,
+    TopbarComponent,
   ],
-  imports: [
-    CommonModule,
-    PrimeNgModule,
-    FullCalendarModule
-  ],
+  imports: [CommonModule, PrimeNgModule, FullCalendarModule],
   exports: [
-    LayoutComponent,
-    TopbarComponent,
-    MenuComponent,
-    PrimeNgModule,
-    MenuItemComponent,
-    CatalogoComponent,
-    RegionalComponent,
     AmortizacionComponent,
-    CreditoComponent,
-    ListadoForwardComponent,
-    DetallePagoComponent,
-    ForwardComponent,
-    ListadoCreditoComponent,
     CalendarioComponent,
-    FullCalendarModule
-  ]
+    CatalogoComponent,
+    CreditoComponent,
+    DetallePagoComponent,
+    EmpresaComponent,
+    ForwardComponent,
+    FullCalendarModule,
+    LayoutComponent,
+    ListadoCreditoComponent,
+    ListadoForwardComponent,
+    MenuComponent,
+    MenuItemComponent,
+    PrimeNgModule,
+    RegionalComponent,
+    TopbarComponent,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

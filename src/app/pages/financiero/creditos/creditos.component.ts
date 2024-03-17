@@ -13,6 +13,8 @@ import { Usuario } from 'src/app/shared/models/usuario.model';
 import { ValorCatalogo } from 'src/app/shared/models/valor-catalogo';
 import * as moment from 'moment';
 import { ForwardService } from 'src/app/shared/services/forward.service';
+import { Empresa } from 'src/app/shared/models/empresa.model';
+import { EmpresaService } from 'src/app/shared/services/empresa.service';
 @Component({
   selector: 'app-creditos',
   templateUrl: './creditos.component.html',
@@ -26,6 +28,7 @@ export class CreditosComponent implements OnInit {
   public canEditTRM: boolean = false;
   public credito: Credito = new Credito();
   public creditos: ICredito[] = [];
+  public empresas: Empresa[] = [];
   public detallePago: DetallePago = new DetallePago();
   public display: boolean = false;
   public displayDetalle: boolean = false;
@@ -52,11 +55,12 @@ export class CreditosComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private creditoService: CreditoService,
     private detallePagoService: DetallePagoService,
+    private empresaService: EmpresaService,
     private excelService: ExcelService,
     private forwardService: ForwardService,
     private macroeconomicosService: MacroeconomicosService,
     private messageService: MessageService,
-    private sessionService: SessionService,
+    private sessionService: SessionService
   ) {
     this.usuarioSesion = this.sessionService.usuario;
   }
@@ -70,6 +74,7 @@ export class CreditosComponent implements OnInit {
       this.items.push({ label: 'Editar', icon: 'pi pi-pencil', command: () => this.ejecutarAccion('editar') })
       this.items.push({ label: 'Anular', icon: 'pi pi-times', command: () => this.ejecutarAccion('anular') })
     }
+    this.loadEmpresas();
   }
 
   async ejecutarAccion(accion: string) {
@@ -231,6 +236,8 @@ export class CreditosComponent implements OnInit {
     if (!this.credito.lineacredito) error.push('La linea de credito es obligatoria');
     if (!this.credito.pagare) error.push('El pagaré es obligatoria');
     if (!this.credito.tipogarantia) error.push('El tipo de garantia es obligatoria');
+    else if (this.credito.tipogarantia.id == 545 && this.credito.aval1.razonsocial == '')
+      error.push('La empresa avaladora es obligatoria.')
     if (!this.credito.fechadesembolso) error.push('La fecha de desembolso es obligatoria');
     if (!this.credito.capital) error.push('El valor de desembolso es obligatoria');
     if (!this.credito.plazo) error.push('El plazo es obligatoria');
@@ -426,5 +433,11 @@ export class CreditosComponent implements OnInit {
 
   setValorMaxPago(){
     this.valorMaxPago = this.detallePago.tipopago == 'Capital' ? this.credito.saldo : this.credito.capital;
+  }
+
+  loadEmpresas() {
+    this.empresaService.getAll().then((res) => {
+      this.empresas = res;
+    });
   }
 }
