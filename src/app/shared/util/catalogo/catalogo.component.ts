@@ -25,6 +25,7 @@ export class CatalogoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.default) this.valorCatalogo = this.default;
     this.getCatalogoById();
   }
 
@@ -33,7 +34,6 @@ export class CatalogoComponent implements OnInit {
       .then(res => {
         if (this.filter != '') this.catalogo = this.filtrar(res);
         else this.catalogo = res;
-        if (this.default) this.valorCatalogo = this.default;
       })
       .catch(err => console.log(err))
   }
