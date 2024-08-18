@@ -8,6 +8,7 @@ import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio
 import { SolicitudComponent } from './solicitudes/solicitud.component';
 import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
 import { InfoRelevanteComponent } from './info-relevante/info-relevante.component';
+import { ConstructorComponent } from './constructor/constructor.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { InfoRelevanteComponent } from './info-relevante/info-relevante.componen
     DiferenciaCambioComponent,
     SolicitudComponent,
     SaldosdiarioComponent,
-    InfoRelevanteComponent
+    InfoRelevanteComponent,
+    ConstructorComponent
   ],
   imports: [
     CommonModule,

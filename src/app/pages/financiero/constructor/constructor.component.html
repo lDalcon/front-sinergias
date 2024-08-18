@@ -1,0 +1,47 @@
+<p-toast [key]="'ext'"></p-toast>
+<p-blockUI [blocked]="isLoading"></p-blockUI>
+
+<!-- Tablero -->
+<div class="card" #card>
+  <h4>Créditos Constructor</h4>
+  <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
+      [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
+      [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda', 'pagare']">
+      <ng-template pTemplate="caption">
+          <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                      placeholder="Busqueda" />
+              </span>
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="text-align: center;">#</th>
+              <th style="text-align: center;">Regional</th>
+              <th style="text-align: center;">Entidad</th>
+              <th style="text-align: center;">Moneda</th>
+              <th style="text-align: center;">Pagaré</th>
+              <th style="text-align: center;">Cápital</th>
+              <th></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-credito>
+          <tr>
+              <td> {{credito.id }} </td>
+              <td> {{credito.regional }} </td>
+              <td> {{credito.entfinanciera }} </td>
+              <td> {{credito.moneda }} </td>
+              <td> {{credito.pagare }} </td>
+              <td style="text-align: right;"> {{credito.capital | currency }} </td>
+              <td>
+                  <p-splitButton label="+" [model]="items" [appendTo]="card"
+                      (onDropdownClick)="idCreditoSelect = credito.id"></p-splitButton>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+<!-- Tablero -->

@@ -6,6 +6,7 @@ import { DiferenciaCambioComponent } from './diferencia-cambio/diferencia-cambio
 import { SolicitudComponent } from './solicitudes/solicitud.component';
 import { SaldosdiarioComponent } from './saldosdiario/saldosdiario.component';
 import { InfoRelevanteComponent } from './info-relevante/info-relevante.component';
+import { ConstructorComponent } from './constructor/constructor.component';
 
 const routes: Routes = [
     {
@@ -35,6 +36,10 @@ const routes: Routes = [
     {
         path: 'inforelevante',
         component: InfoRelevanteComponent
+    },
+    {
+        path: 'constructor',
+        component: ConstructorComponent
     }
 ];
 
