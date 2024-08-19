@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MessageService } from 'primeng/api';
@@ -18,7 +16,6 @@ export class LoginComponent implements OnInit {
   public nick: string = '';
 
   constructor(
-    private router: Router,
     private authService: AuthService,
     private messageService: MessageService
   ) {

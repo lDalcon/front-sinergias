@@ -32,7 +32,6 @@ export class CreditoService {
   }
 
   async listarCreditos(params?: any) {
-    console.log(params)
     return firstValueFrom(this.http.get(`${API}`, { params }))
       .then((res: any) => <any[]>res.data)
       .then(creditos => {

@@ -18,7 +18,7 @@ export class AuthService {
     private router: Router
   ) {}
 
-  login(params: { nick: string; password: string }) {
+  async login(params: { nick: string; password: string }) {
     return firstValueFrom(this.http.post(`${API}`, params))
       .then((res: any) => {
         this.sessionService.guardarToken(res.token);
@@ -34,6 +34,7 @@ export class AuthService {
           case 'DEUDA':
           case 'DEUDAINFOFIN':
           case 'DEUDASALDOSINFOFIN':
+          case 'DEUDASALDOSINFOFINCONS':
             this.router.navigateByUrl('/dashboard/financiero');
             break;
           case 'SALDOS':

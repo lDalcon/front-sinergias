@@ -4,44 +4,124 @@
 <!-- Tablero -->
 <div class="card" #card>
   <h4>Créditos Constructor</h4>
-  <p-table #dt [value]="creditos" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
-      [rowsPerPageOptions]="[10,25,50]" styleClass="mt-3" [loading]="isLoading" responsiveLayout="scroll"
-      [paginator]="true" currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
-      [filterDelay]="0" [globalFilterFields]="['id','regional','entfinanciera','moneda', 'pagare']">
-      <ng-template pTemplate="caption">
-          <div class="flex justify-content-between flex-column sm:flex-row">
-              <span class="p-input-icon-left">
-                  <i class="pi pi-search"></i>
-                  <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                      placeholder="Busqueda" />
-              </span>
-          </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-          <tr>
-              <th style="text-align: center;">#</th>
-              <th style="text-align: center;">Regional</th>
-              <th style="text-align: center;">Entidad</th>
-              <th style="text-align: center;">Moneda</th>
-              <th style="text-align: center;">Pagaré</th>
-              <th style="text-align: center;">Cápital</th>
-              <th></th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-credito>
-          <tr>
-              <td> {{credito.id }} </td>
-              <td> {{credito.regional }} </td>
-              <td> {{credito.entfinanciera }} </td>
-              <td> {{credito.moneda }} </td>
-              <td> {{credito.pagare }} </td>
-              <td style="text-align: right;"> {{credito.capital | currency }} </td>
-              <td>
-                  <p-splitButton label="+" [model]="items" [appendTo]="card"
-                      (onDropdownClick)="idCreditoSelect = credito.id"></p-splitButton>
-              </td>
-          </tr>
-      </ng-template>
+  <p-table
+    #dt
+    [value]="creditos"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    styleClass="mt-3"
+    [loading]="isLoading"
+    responsiveLayout="scroll"
+    [paginator]="true"
+    currentPageReportTemplate="Obligación {first} al {last} de {totalRecords} obligaciones"
+    [filterDelay]="0"
+    [globalFilterFields]="[
+      'id',
+      'regional',
+      'entfinanciera',
+      'moneda',
+      'pagare'
+    ]"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between flex-column sm:flex-row">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Busqueda"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="text-align: center">#</th>
+        <th style="text-align: center">Regional</th>
+        <th style="text-align: center">Entidad</th>
+        <th style="text-align: center">Fecha D.</th>
+        <th style="text-align: center">Moneda</th>
+        <th style="text-align: center">Pagaré</th>
+        <th style="text-align: center">Cápital</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-credito>
+      <tr>
+        <td>{{ credito.id }}</td>
+        <td>{{ credito.regional }}</td>
+        <td>{{ credito.entfinanciera }}</td>
+        <td>{{ credito.fechadesembolso | date: 'dd/MM/yyyy'}}</td>
+        <td>{{ credito.moneda }}</td>
+        <td>{{ credito.pagare }}</td>
+        <td style="text-align: right">{{ credito.capital | currency }}</td>
+        <td>
+          <p-splitButton
+            label="+"
+            [model]="items"
+            [appendTo]="card"
+            (onDropdownClick)="idCreditoSelected = credito.id"
+          ></p-splitButton>
+        </td>
+      </tr>
+    </ng-template>
   </p-table>
 </div>
 <!-- Tablero -->
+
+<!-- Crear aumentoCapital -->
+<p-dialog
+  #ca
+  [modal]="true"
+  [header]="header"
+  *ngIf="displayDesembolsar"
+  [(visible)]="displayDesembolsar"
+  [style]="{ width: '60vw' }"
+>
+  <p-toast [key]="'dialog'"></p-toast>
+
+  <div class="p-fluid p-formgrid grid">
+    <div class="field col-12 md:col-6">
+      <label>Fecha</label>
+      <p-calendar
+        [appendTo]="ca"
+        [(ngModel)]="aumentoCapital.fecha"
+        dateFormat="dd/mm/yy"
+      ></p-calendar>
+    </div>
+    <div class="field col-12 md:col-6" *ngIf="credito.moneda">
+      <label>Valor</label>
+      <p-inputNumber
+        inputId="currency-us"
+        mode="currency"
+        [currency]="credito.moneda.config.prefix"
+        [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
+        [(ngModel)]="aumentoCapital.valor"
+      >
+      </p-inputNumber>
+    </div>
+    <div class="field col-12 md:col-12">
+      <label>Observaciones</label>
+      <textarea
+        pInputTextarea
+        [(ngModel)]="aumentoCapital.observaciones"
+        rows="3"
+        style="width: 100%"
+      ></textarea>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      [icon]="'pi pi-save'"
+      (click)="guardar()"
+      [label]="'Guardar'"
+      class="p-button-outlined"
+    ></button>
+  </ng-template>
+</p-dialog>
+<!-- Crear aumentoCapital -->
