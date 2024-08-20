@@ -19,4 +19,12 @@ export class AumentoCapitalService {
         return data;
       });
   }
+
+  async listar(idcredito: number) {
+    return firstValueFrom(this.http.get(API, { params: { idcredito } }))
+      .then((res: any) => <{ ok: boolean; data: IAumentoCapital[] }>res)
+      .then((data) => {
+        return data;
+      });
+  }
 }

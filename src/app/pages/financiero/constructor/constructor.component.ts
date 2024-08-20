@@ -25,7 +25,9 @@ export class ConstructorComponent implements OnInit {
   public items: MenuItem[] = [];
   public displayDesembolsar: boolean = false;
   public displayRevalorizar: boolean = false;
+  public displayDetalle: boolean = false;
   public aumentoCapital: IAumentoCapital;
+  public detalleAumentoCap: IAumentoCapital[] = [];
   public header: string = '';
 
   constructor(
@@ -71,9 +73,11 @@ export class ConstructorComponent implements OnInit {
     this.credito = await this.creditoService.obtenerCredito(this.idCreditoSelected);
     switch (accion) {
       case 'detalle':
+        this.header = `Detalle (${this.idCreditoSelected})`;
+        this.listarAumentoCapital(this.idCreditoSelected);
         break;
       case 'desembolso':
-        this.header = 'Crear desembolso';
+        this.header = `Crear desembolso (${this.idCreditoSelected})`;
         this.aumentoCapital = {
           tipo: EAumCapital.DESEMBOLSO,
           idcredito: this.credito.id
@@ -81,6 +85,12 @@ export class ConstructorComponent implements OnInit {
         this.displayDesembolsar = true;
         break;
       case 'revalorizar':
+        this.header = `Revalorizar deuda (${this.idCreditoSelected})`;
+        this.aumentoCapital = {
+          tipo: EAumCapital.REVALORIZAR,
+          idcredito: this.credito.id,
+        }
+        this.displayRevalorizar = true;
         break;
       default:
         this.messageService.add({
@@ -97,7 +107,7 @@ export class ConstructorComponent implements OnInit {
     this.isLoading = true;
     this.aumentoCapitalService.guardar(this.aumentoCapital)
       .then(res=> this.messageService.add({ severity: 'success', key: 'ext', detail: res.message }))
-      .catch(err => this.messageService.add({ severity: 'warn', key: 'ext', detail: err.error.message }))
+      .catch(err => this.messageService.add({ severity: 'warn', key: 'ext', detail: err.error.message || err.message }))
       .finally(()=> {
         this.isLoading = false;
         this.displayDesembolsar = false;
@@ -113,6 +123,24 @@ export class ConstructorComponent implements OnInit {
     if (!this.aumentoCapital.valor) err.push('El valor es obligatorio.');
     if (moment(this.credito.fechadesembolso).diff(this.aumentoCapital.fecha, 'day') > 0) err.push(`La fecha del nuevo desembolso no puede ser menor al desembolso inicial.`) 
     if (err.length > 0 ) this.messageService.add({ severity: 'warn', key: 'dialog', detail: err.join('. ') })
+    else {
+      this.aumentoCapital.fecha = 
+        this.aumentoCapital.tipo === EAumCapital.REVALORIZAR ? 
+        moment(this.aumentoCapital.fecha).endOf('M').format('YYYY-MM-DD') : 
+        moment(this.aumentoCapital.fecha).format('YYYY-MM-DD');
+    }
     return err.length == 0;
+  }
+
+  listarAumentoCapital(idcredito: number) {
+    this.isLoading = true;
+    this.aumentoCapitalService.listar(idcredito)
+      .then((res) => {
+        if (res.data.length === 0 ) return this.messageService.add({ severity: 'info', key: 'ext', detail: 'No existen detalles asociados al credito.'})
+        this.detalleAumentoCap = res.data;
+        this.displayDetalle = true;
+      })
+      .catch(err => this.messageService.add({ severity: 'warn', key: 'ext', detail: err.error.message || err.message }))
+      .finally(()=> this.isLoading = false)
   }
 }
