@@ -46,7 +46,7 @@
         <th style="text-align: center">Fecha D.</th>
         <th style="text-align: center">Moneda</th>
         <th style="text-align: center">Pagaré</th>
-        <th style="text-align: center">Cápital</th>
+        <th style="text-align: center">Saldo</th>
         <th></th>
       </tr>
     </ng-template>
@@ -58,7 +58,7 @@
         <td>{{ credito.fechadesembolso | date : "dd/MM/yyyy" }}</td>
         <td>{{ credito.moneda }}</td>
         <td>{{ credito.pagare }}</td>
-        <td style="text-align: right">{{ credito.capital | currency }}</td>
+        <td style="text-align: right">{{ credito.saldo | currency }}</td>
         <td>
           <p-splitButton
             label="+"
@@ -133,12 +133,12 @@
   [header]="header"
   *ngIf="displayRevalorizar"
   [(visible)]="displayRevalorizar"
-  [style]="{ width: '60vw' }"
+  [style]="{ width: '80vw' }"
 >
   <p-toast [key]="'dialog'"></p-toast>
 
   <div class="p-fluid p-formgrid grid">
-    <div class="field col-12 md:col-6">
+    <div class="field col-12 md:col-3">
       <label>Fecha</label>
       <p-calendar
         [appendTo]="re"
@@ -147,7 +147,19 @@
         dateFormat="mm/yy"
       ></p-calendar>
     </div>
-    <div class="field col-12 md:col-6" *ngIf="credito.moneda">
+    <div class="field col-12 md:col-3">
+      <label>Saldo</label>
+      <p-inputNumber
+        inputId="currency-us"
+        mode="currency"
+        [currency]="credito.moneda.config.prefix"
+        [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
+        [(ngModel)]="credito.saldo"
+        [disabled]="true"
+      >
+      </p-inputNumber>
+    </div>
+    <div class="field col-12 md:col-3">
       <label>Valor</label>
       <p-inputNumber
         inputId="currency-us"
@@ -155,6 +167,19 @@
         [currency]="credito.moneda.config.prefix"
         [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
         [(ngModel)]="aumentoCapital.valor"
+        (onBlur)="totalDeuda = aumentoCapital.valor + credito.saldo"
+      >
+      </p-inputNumber>
+    </div>
+    <div class="field col-12 md:col-3">
+      <label>Total Deuda</label>
+      <p-inputNumber
+        inputId="currency-us"
+        mode="currency"
+        [currency]="credito.moneda.config.prefix"
+        [maxFractionDigits]="credito.moneda.config.maxFractionDigits"
+        [(ngModel)]="totalDeuda"
+        [disabled]="true"
       >
       </p-inputNumber>
     </div>

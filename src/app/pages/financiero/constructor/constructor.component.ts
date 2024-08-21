@@ -29,6 +29,7 @@ export class ConstructorComponent implements OnInit {
   public aumentoCapital: IAumentoCapital;
   public detalleAumentoCap: IAumentoCapital[] = [];
   public header: string = '';
+  public totalDeuda: number = 0;
 
   constructor(
     private sessionService: SessionService,
@@ -90,6 +91,7 @@ export class ConstructorComponent implements OnInit {
           tipo: EAumCapital.REVALORIZAR,
           idcredito: this.credito.id,
         }
+        this.totalDeuda = this.credito.saldo;
         this.displayRevalorizar = true;
         break;
       default:
@@ -111,6 +113,7 @@ export class ConstructorComponent implements OnInit {
       .finally(()=> {
         this.isLoading = false;
         this.displayDesembolsar = false;
+        this.displayRevalorizar = false;
         this.listarCreditos();
       })
 
